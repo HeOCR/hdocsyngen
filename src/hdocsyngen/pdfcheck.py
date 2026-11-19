@@ -12,13 +12,15 @@
   4. **pixels:** a block with text-layer characters but no pixels of its colour in the rendered twin is
      `not_rendered` (clipped or hidden).
 
-Needs pdfminer.six and pypdfium2 (the `pdf` extra).
+Characters are read with pdfium (pypdfium2); document structure (fonts, ToUnicode, StructTreeRoot) with pdfminer.six
+(the `pdf` extra).
 """
 from __future__ import annotations
 
 import re
 import unicodedata
 from collections import Counter, defaultdict
+from dataclasses import dataclass
 from pathlib import Path
 
 from .tree import Document, colour_index, iter_paragraphs, text_of, twin_colours
@@ -31,12 +33,34 @@ FINALS = set("ךםןףץ")
 _WORD = re.compile(r"[א-ת]+")
 
 
-def _chars(pdf: Path):
-    """(page_no, LTChar) in content-stream order.
+@dataclass
+class Glyph:
+    """One character as pdfium reads it: text, box (PDF points, origin bottom-left), origin, fill colour, font."""
+    text: str
+    x0: float
+    y0: float
+    x1: float
+    y1: float
+    origin: tuple[float, float]
+    rgb: tuple[int, int, int] | None
+    fontname: str
+    size: float
+    unicode_error: bool
 
-    pdfminer's `extract_pages` always runs layout analysis (`laparams=None` is replaced by the defaults), which groups
-    characters into lines and boxes and can reorder them; the census's stream-order signal needs the order the
-    producer wrote. A page aggregator with `laparams=None` keeps it.
+    def get_text(self) -> str:
+        return self.text
+
+    @property
+    def matrix(self) -> tuple[float, ...]:
+        return (1.0, 0.0, 0.0, 1.0, self.origin[0], self.origin[1])
+
+
+def _stream_chars(pdf: Path):
+    """(page_no, LTChar) in content-stream order, for order signals only (the census's T2 signal and glyph runs).
+
+    pdfminer's interpreter emits characters in the order the producer wrote them (a page aggregator with
+    laparams=None; extract_pages always runs layout analysis). Its glyph positions are not used: in Quartz PDFs it
+    misplaces Hebrew glyphs (by up to 200 pt, found on pilot v0's Word PDFs).
     """
     from pdfminer.converter import PDFPageAggregator
     from pdfminer.layout import LTChar
@@ -60,7 +84,49 @@ def _chars(pdf: Path):
                 yield page_no, ch
 
 
+def _chars(pdf: Path):
+    """(page_no, Glyph) read with pdfium (heocr's text engine), for positions, colours, fonts and text.
+
+    pdfium places glyphs correctly where pdfminer does not (Quartz PDFs), but its text page reorders right-to-left
+    text, so its order is not the stream order (use `_stream_chars` for that). Characters pdfium generates itself
+    (spaces and line breaks it infers) are skipped.
+    """
+    import ctypes
+    import pypdfium2 as pdfium
+    import pypdfium2.raw as R
+
+    doc = pdfium.PdfDocument(str(pdf))
+    try:
+        for page_no in range(1, len(doc) + 1):
+            tp = doc[page_no - 1].get_textpage()
+            raw = tp.raw
+            buf = ctypes.create_string_buffer(256)
+            flags = ctypes.c_int()
+            for i in range(tp.count_chars()):
+                if R.FPDFText_IsGenerated(raw, i) == 1:
+                    continue
+                u = R.FPDFText_GetUnicode(raw, i)
+                if u in (0, 0xFFFE, 0xFFFF) or u in (10, 13):
+                    continue
+                l, rgt, b, t = (ctypes.c_double() for _ in range(4))
+                R.FPDFText_GetCharBox(raw, i, l, rgt, b, t)
+                ox, oy = ctypes.c_double(), ctypes.c_double()
+                R.FPDFText_GetCharOrigin(raw, i, ox, oy)
+                cr, cg, cb, ca = (ctypes.c_uint() for _ in range(4))
+                ok = R.FPDFText_GetFillColor(raw, i, cr, cg, cb, ca)
+                n = R.FPDFText_GetFontInfo(raw, i, buf, len(buf), flags)
+                name = buf.raw[: max(0, n - 1)].decode("latin-1") if n else ""
+                yield page_no, Glyph(chr(u), l.value, b.value, rgt.value, t.value, (ox.value, oy.value),
+                                     (cr.value, cg.value, cb.value) if ok else None, name,
+                                     R.FPDFText_GetFontSize(raw, i), bool(R.FPDFText_HasUnicodeMapError(raw, i)))
+    finally:
+        doc.close()
+
+
 def _rgb255(ch) -> tuple[int, int, int] | None:
+    """The fill colour as 0-255 RGB, from a pdfium Glyph or a pdfminer LTChar."""
+    if isinstance(ch, Glyph):
+        return ch.rgb
     col = ch.graphicstate.ncolor
     if col is None:
         return (0, 0, 0)
@@ -116,7 +182,7 @@ def _doc_info(pdf: Path) -> dict:
 def census(pdf: Path) -> dict:
     info = _doc_info(pdf)
     per_page = defaultdict(list)
-    for page_no, ch in _chars(pdf):
+    for page_no, ch in _stream_chars(pdf):
         per_page[page_no].append(ch)
     pages = []
     for i, fonts in enumerate(info["page_fonts"], start=1):
@@ -131,7 +197,7 @@ def census(pdf: Path) -> dict:
         runs, run = [], 0
         prev = None
         for c in chs:
-            same = prev is not None and c.fontname == prev.fontname and abs(c.y0 - prev.y0) < 0.5
+            same = prev is not None and c.fontname == prev.fontname and abs(c.matrix[5] - prev.matrix[5]) < 0.5
             run = run + 1 if same else 1
             if not same and prev is not None:
                 runs.append(prev_run)
@@ -216,14 +282,14 @@ def _page_values(doc: Document, twin_raw, colours: dict[int, str]) -> dict[str, 
         fields = _fields(furn[pid])
         if not fields:
             continue
-        baselines = {round(c.y0, 1) for c in chs}
+        baselines = {round(c.matrix[5], 1) for c in chs}
         mine = [c for c in chs if c.get_text().isdigit()]
-        mine += [c for c in loose.get(page_no, []) if any(abs(c.y0 - y) < 1.0 for y in baselines)]
-        digits = sorted(mine, key=lambda c: (round(c.y0), c.x0))
+        mine += [c for c in loose.get(page_no, []) if any(abs(c.matrix[5] - y) < 1.0 for y in baselines)]
+        digits = sorted(mine, key=lambda c: (round(c.matrix[5]), c.x0))
         clusters: list[list] = []
         for c in digits:
             last = clusters[-1][-1] if clusters else None
-            if last is not None and abs(c.y0 - last.y0) < 1 and 0 <= c.x0 - last.x1 < 0.5 * max(1.0, c.size):
+            if last is not None and abs(c.matrix[5] - last.matrix[5]) < 1 and -0.5 <= c.x0 - last.x1 < 0.5 * max(1.0, c.size):
                 clusters[-1].append(c)
             else:
                 clusters.append([c])
@@ -255,9 +321,9 @@ def verify_pdf(doc: Document, plain: Path, twin: Path, allowed_fonts: set[str]) 
     problems = sorted(set(problems))
     colours = {colour_index(c): pid for pid, c in twin_colours(doc).items()}
     furniture = {p.id for p in doc.furniture.header + doc.furniture.footer}
-    plain_chars = [(p, round(c.x0, 1), round(c.y0, 1), c.get_text()) for p, c in _chars(plain)]
+    plain_chars = [(p, round(c.origin[0], 1), round(c.origin[1], 1), c.get_text()) for p, c in _chars(plain)]
     twin_raw = list(_chars(twin))
-    twin_chars = [(p, round(c.x0, 1), round(c.y0, 1), c.get_text()) for p, c in twin_raw]
+    twin_chars = [(p, round(c.origin[0], 1), round(c.origin[1], 1), c.get_text()) for p, c in twin_raw]
     # Per block: the largest shift of its glyphs between the plain PDF and the twin (eval, review of #2). Text gold does
     # not depend on colour, so only a different glyph multiset per page (a block changed page, or glyphs differ)
     # fails the document. A shift over SHIFT_RECORD_PT is recorded; over GEOMETRY_OK_PT the block's twin geometry is
@@ -270,7 +336,8 @@ def verify_pdf(doc: Document, plain: Path, twin: Path, allowed_fonts: set[str]) 
         grid[(pg, ch)].append((x, y))
     moved: dict[str, float] = {}
     shifted = 0
-    if Counter((a[0], a[3]) for a in plain_chars) != Counter((b[0], b[3]) for b in twin_chars):
+    if Counter((a[0], a[3]) for a in plain_chars if not a[3].isspace()) != \
+            Counter((b[0], b[3]) for b in twin_chars if not b[3].isspace()):
         problems.append("geometry: the twin's glyph multiset per page differs from the plain PDF's")
     for (pg, x, y, ch), pid in zip(twin_chars, owner):
         if pid is None or pid in furniture or ch.isspace():
@@ -280,10 +347,13 @@ def verify_pdf(doc: Document, plain: Path, twin: Path, allowed_fonts: set[str]) 
         if d > SHIFT_RECORD_PT:
             shifted += 1
             moved[pid] = max(moved.get(pid, 0.0), round(d, 2) if d != float("inf") else 999.0)
+    # Text, pages and page values by colour: read with pdfminer, whose fill colours are exact (pdfium sometimes gives
+    # a Type3 glyph the colour of a neighbouring text object). Its glyph positions are used only within one PDF.
+    twin_stream = list(_stream_chars(twin))
     got_text: dict[str, list[str]] = defaultdict(list)
     pages: dict[str, set[int]] = defaultdict(set)
     unattributed = Counter()
-    for page_no, ch in twin_raw:
+    for page_no, ch in twin_stream:
         rgb = _rgb255(ch)
         k = colour_index(rgb) if rgb else -1
         pid = colours.get(k)
@@ -292,7 +362,7 @@ def verify_pdf(doc: Document, plain: Path, twin: Path, allowed_fonts: set[str]) 
             continue
         got_text[pid].append(ch.get_text())
         pages[pid].add(page_no)
-    page_values = _page_values(doc, twin_raw, colours)
+    page_values = _page_values(doc, twin_stream, colours)
     pixels = _pixel_counts(twin)
     blocks, not_rendered = {}, []
     density: dict[str, float] = {}
@@ -308,6 +378,10 @@ def verify_pdf(doc: Document, plain: Path, twin: Path, allowed_fonts: set[str]) 
         # (the glyph drawn in RTL) is recorded per block (`brackets`).
         missing = _fold_brackets(exp) - _fold_brackets(got)
         extra = _fold_brackets(got) - _fold_brackets(exp)
+        # Survival only (eval): a block that matches only after NFKC folding is recorded; scoring keeps line_fold_v1.
+        exp_nfc = _fold_brackets(Counter(c for c in unicodedata.normalize("NFC", text_of(p)) if not c.isspace()))
+        got_nfc = _fold_brackets(Counter(c for c in unicodedata.normalize("NFC", "".join(got_text.get(p.id, [])))
+                                         if not c.isspace()))
         bexp = {b: exp[b] for b in MIRROR if exp[b]}
         bgot = {b: got[b] for b in MIRROR if got[b]}
         entry = {"pages": sorted(pages.get(p.id, ())), "missing_chars": sum(missing.values()),
@@ -315,6 +389,8 @@ def verify_pdf(doc: Document, plain: Path, twin: Path, allowed_fonts: set[str]) 
                  "geometry_ok": moved.get(p.id, 0.0) <= GEOMETRY_OK_PT}
         if bexp and bexp != bgot:
             entry["brackets"] = {"gold": bexp, "layer": bgot}
+        if not missing and exp_nfc - got_nfc:
+            entry["nfkc_only"] = True
         ligs = sum(1 for ch in got_text.get(p.id, []) if unicodedata.normalize("NFKC", ch) != ch and len(unicodedata.normalize("NFKC", ch)) > 1)
         if ligs:
             entry["ligatures"] = ligs
@@ -347,3 +423,65 @@ def verify_pdf(doc: Document, plain: Path, twin: Path, allowed_fonts: set[str]) 
             "moved_blocks": moved, "page_values": page_values,
             "unattributed_chars": sum(unattributed.values()),
             "unattributed_sample": "".join(sorted(unattributed))[:60]}
+
+
+def verify_chain(doc: Document, input_plain: Path, input_twin: Path, output: Path) -> dict:
+    """Gold survival through a chain step that may change colours or fonts (P8 Ghostscript, design note §1).
+
+    The step's own twin is not trusted (a colour conversion breaks it). Each output glyph is attributed instead by
+    position: to the nearest input glyph (same page, glyph origin within 1.5 pt) whose block is known from the input's twin. The
+    result is an observation, not a pass or fail: the output's text-layer state and each block's survival.
+    - `text_layer`: `none` (no characters), `broken` (characters come out, but over 20% are unknown codes or under 90%
+      of blocks survive whole), or `intact`;
+    - per block: characters found, missing and extra (multiset, brackets and NFKC folded, as verify_pdf).
+    """
+    colours = {colour_index(c): pid for pid, c in twin_colours(doc).items()}
+    owner_at: dict[int, list[tuple[float, float, str]]] = defaultdict(list)
+    plain_in = list(_chars(input_plain))
+    twin_in = list(_chars(input_twin))
+    # the input twin attributes positions to blocks; the input plain has the same glyph positions (verify_pdf)
+    for (pg, c) in twin_in:
+        pid = colours.get(colour_index(_rgb255(c) or (255, 255, 255)))
+        if pid is not None:
+            # the glyph origin (pdfium): independent of the font's metrics, which a chain step may change
+            owner_at[pg].append((c.origin[0], c.origin[1], pid))
+    out_chars = list(_chars(output))
+    got: dict[str, list[str]] = defaultdict(list)
+    unmapped = Counter()
+    unknown = 0
+    for pg, c in out_chars:
+        t = c.get_text()
+        if t.startswith("(cid:") or (len(t) == 1 and 0xE000 <= ord(t) <= 0xF8FF):
+            unknown += 1
+        best, bd = None, 1.5
+        ox, oy = c.origin
+        for x, y, pid in owner_at.get(pg, ()):
+            d = max(abs(x - ox), abs(y - oy))
+            if d < bd:
+                best, bd = pid, d
+        if best is None:
+            unmapped[t] += 1
+        else:
+            got[best].append(t)
+    n = len(out_chars)
+    blocks = {}
+    survived = 0
+    for container, p in iter_paragraphs(doc):
+        if container in ("header", "footer"):
+            continue
+        exp = _fold_brackets(_fold(text_of(p)))
+        g = _fold_brackets(_fold("".join(got.get(p.id, []))))
+        missing, extra = exp - g, g - exp
+        blocks[p.id] = {"missing_chars": sum(missing.values()), "extra_chars": sum(extra.values())}
+        survived += int(not missing)
+    in_n = len(plain_in)
+    # `broken`: characters come out, but most blocks lose some (lost or wrong ToUnicode, cid codes, private use)
+    if n == 0:
+        state = "none"
+    elif unknown > 0.2 * n or survived < 0.9 * max(1, len(blocks)):
+        state = "broken"
+    else:
+        state = "intact"
+    return {"text_layer": state, "chars_in": in_n, "chars_out": n, "unknown_chars": unknown,
+            "unmapped_chars": sum(unmapped.values()), "blocks_survived": survived, "blocks": blocks,
+            "fonts": [f for pf in _doc_info(output)["page_fonts"] for f in pf]}

@@ -45,13 +45,14 @@ producers and the checks. They are not a claim about any reader (design note §7
 | producer labels = model labels | 2,449 / 2,450 | 2,311, plus 125 bullets equal as a class, of 2,437 | n/a (CSS counters) |
 | page numbers read back correctly (`page_values`) | 93 / 93 | 91 / 91 | 160 / 160 |
 | blocks `not_rendered` / `partially_rendered` | 0 / 0 | 0 / 0 | 0 / 0 |
-| blocks with twin shift over 1 pt (`geometry_ok: false`) | 0 | **171** of 5,691 | 0 |
+| blocks with twin shift over 1 pt (`geometry_ok: false`) | 0 | **19** of 5,691 (corrected from 171, see P8 report) | 0 |
 
 - **The one label disagreement** (the same block in both producers) is a matcher artefact. A short bullet's text is
   also the end of an earlier line, so the matcher took the wrong line. It is a known limitation of order-based
   matching.
-- **LibreOffice's twin is not a faithful layout twin** for about 3% of blocks: changing their colour moves them by
-  more than 1 pt. Those blocks are marked, and their boxes from the twin are not trusted.
+- **LibreOffice's twin moves 19 blocks (0.3%)** by more than 1 pt when their colour changes. Those blocks are marked,
+  and their boxes from the twin are not trusted. (Corrected from 171 / 3%: pdfminer misplaced glyphs; see
+  `p8_report.md`, "Reader notes".)
 
 ## Census (true content-stream order, #3)
 
@@ -93,9 +94,11 @@ LibreOffice and Chrome write visual order. That is the opposite of the folklore,
    - **LibreOffice:** visual order, with the logical characters.
 
    A T2 repair that reverses a line must mirror brackets for Chrome-like layers and not for LibreOffice-like ones.
-   Word-like layers need mirroring without reversal.
+   Word-like layers need mirroring without reversal. This is what the producers *store*. Read through pdfium
+   (heocr's engine), which applies its own bidi, it reverses: Word's look logical, LibreOffice's and Chrome's
+   mirrored (`p8_report.md`).
 2. **Ligatures in the text layer:** all three producers write `ﬁ`-type ligature characters for Latin runs (e-mail
-   addresses and URLs). The checks fold them (NFKC) and count them.
+   addresses and URLs). The checks fold them (NFKC) and count them. pdfium decomposes them on reading.
 3. **Variable fonts:**
    - Producers name instances by style, for example `MiriamLibre-Bold`, `AssistantRoman-Bold` and `Rubik-Light_Bold`.
      Word synthesises bold for some (`_Bold`).
