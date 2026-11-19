@@ -124,7 +124,19 @@ def _chars(pdf: Path):
 
 
 def _rgb255(ch) -> tuple[int, int, int] | None:
-    return ch.rgb
+    """The fill colour as 0-255 RGB, from a pdfium Glyph or a pdfminer LTChar."""
+    if isinstance(ch, Glyph):
+        return ch.rgb
+    col = ch.graphicstate.ncolor
+    if col is None:
+        return (0, 0, 0)
+    if isinstance(col, (int, float)):
+        col = (col, col, col)
+    if len(col) == 1:
+        col = (col[0],) * 3
+    if len(col) != 3:
+        return None
+    return tuple(int(round(float(c) * 255)) for c in col)
 
 
 def _doc_info(pdf: Path) -> dict:
@@ -270,14 +282,14 @@ def _page_values(doc: Document, twin_raw, colours: dict[int, str]) -> dict[str, 
         fields = _fields(furn[pid])
         if not fields:
             continue
-        baselines = {round(c.origin[1], 1) for c in chs}
+        baselines = {round(c.matrix[5], 1) for c in chs}
         mine = [c for c in chs if c.get_text().isdigit()]
-        mine += [c for c in loose.get(page_no, []) if any(abs(c.origin[1] - y) < 1.0 for y in baselines)]
-        digits = sorted(mine, key=lambda c: (round(c.origin[1]), c.x0))
+        mine += [c for c in loose.get(page_no, []) if any(abs(c.matrix[5] - y) < 1.0 for y in baselines)]
+        digits = sorted(mine, key=lambda c: (round(c.matrix[5]), c.x0))
         clusters: list[list] = []
         for c in digits:
             last = clusters[-1][-1] if clusters else None
-            if last is not None and abs(c.origin[1] - last.origin[1]) < 1 and -0.5 <= c.x0 - last.x1 < 0.5 * max(1.0, c.size):
+            if last is not None and abs(c.matrix[5] - last.matrix[5]) < 1 and -0.5 <= c.x0 - last.x1 < 0.5 * max(1.0, c.size):
                 clusters[-1].append(c)
             else:
                 clusters.append([c])
@@ -335,10 +347,13 @@ def verify_pdf(doc: Document, plain: Path, twin: Path, allowed_fonts: set[str]) 
         if d > SHIFT_RECORD_PT:
             shifted += 1
             moved[pid] = max(moved.get(pid, 0.0), round(d, 2) if d != float("inf") else 999.0)
+    # Text, pages and page values by colour: read with pdfminer, whose fill colours are exact (pdfium sometimes gives
+    # a Type3 glyph the colour of a neighbouring text object). Its glyph positions are used only within one PDF.
+    twin_stream = list(_stream_chars(twin))
     got_text: dict[str, list[str]] = defaultdict(list)
     pages: dict[str, set[int]] = defaultdict(set)
     unattributed = Counter()
-    for page_no, ch in twin_raw:
+    for page_no, ch in twin_stream:
         rgb = _rgb255(ch)
         k = colour_index(rgb) if rgb else -1
         pid = colours.get(k)
@@ -347,7 +362,7 @@ def verify_pdf(doc: Document, plain: Path, twin: Path, allowed_fonts: set[str]) 
             continue
         got_text[pid].append(ch.get_text())
         pages[pid].add(page_no)
-    page_values = _page_values(doc, twin_raw, colours)
+    page_values = _page_values(doc, twin_stream, colours)
     pixels = _pixel_counts(twin)
     blocks, not_rendered = {}, []
     density: dict[str, float] = {}
@@ -416,8 +431,8 @@ def verify_chain(doc: Document, input_plain: Path, input_twin: Path, output: Pat
     The step's own twin is not trusted (a colour conversion breaks it). Each output glyph is attributed instead by
     position: to the nearest input glyph (same page, glyph origin within 1.5 pt) whose block is known from the input's twin. The
     result is an observation, not a pass or fail: the output's text-layer state and each block's survival.
-    - `text_layer`: `none` (no characters), `broken` (most characters unmapped: lost ToUnicode, `(cid:N)` or
-      private-use), or `intact`;
+    - `text_layer`: `none` (no characters), `broken` (characters come out, but over 20% are unknown codes or under 90%
+      of blocks survive whole), or `intact`;
     - per block: characters found, missing and extra (multiset, brackets and NFKC folded, as verify_pdf).
     """
     colours = {colour_index(c): pid for pid, c in twin_colours(doc).items()}
@@ -449,12 +464,6 @@ def verify_chain(doc: Document, input_plain: Path, input_twin: Path, output: Pat
         else:
             got[best].append(t)
     n = len(out_chars)
-    if n == 0:
-        state = "none"
-    elif unknown > 0.2 * n:
-        state = "broken"
-    else:
-        state = "intact"
     blocks = {}
     survived = 0
     for container, p in iter_paragraphs(doc):
@@ -466,6 +475,13 @@ def verify_chain(doc: Document, input_plain: Path, input_twin: Path, output: Pat
         blocks[p.id] = {"missing_chars": sum(missing.values()), "extra_chars": sum(extra.values())}
         survived += int(not missing)
     in_n = len(plain_in)
+    # `broken`: characters come out, but most blocks lose some (lost or wrong ToUnicode, cid codes, private use)
+    if n == 0:
+        state = "none"
+    elif unknown > 0.2 * n or survived < 0.9 * max(1, len(blocks)):
+        state = "broken"
+    else:
+        state = "intact"
     return {"text_layer": state, "chars_in": in_n, "chars_out": n, "unknown_chars": unknown,
             "unmapped_chars": sum(unmapped.values()), "blocks_survived": survived, "blocks": blocks,
             "fonts": [f for pf in _doc_info(output)["page_fonts"] for f in pf]}
