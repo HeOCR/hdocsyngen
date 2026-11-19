@@ -32,9 +32,16 @@ _WORD = re.compile(r"[א-ת]+")
 
 
 def _chars(pdf: Path):
-    """(page_no, LTChar) in content-stream order (no layout analysis)."""
-    from pdfminer.high_level import extract_pages
+    """(page_no, LTChar) in content-stream order.
+
+    pdfminer's `extract_pages` always runs layout analysis (`laparams=None` is replaced by the defaults), which groups
+    characters into lines and boxes and can reorder them; the census's stream-order signal needs the order the
+    producer wrote. A page aggregator with `laparams=None` keeps it.
+    """
+    from pdfminer.converter import PDFPageAggregator
     from pdfminer.layout import LTChar
+    from pdfminer.pdfinterp import PDFPageInterpreter, PDFResourceManager
+    from pdfminer.pdfpage import PDFPage
 
     def walk(o):
         if isinstance(o, LTChar):
@@ -43,9 +50,14 @@ def _chars(pdf: Path):
             for c in o:
                 yield from walk(c)
 
-    for page_no, page in enumerate(extract_pages(str(pdf), laparams=None), start=1):
-        for ch in walk(page):
-            yield page_no, ch
+    rm = PDFResourceManager()
+    dev = PDFPageAggregator(rm, laparams=None)
+    interp = PDFPageInterpreter(rm, dev)
+    with open(pdf, "rb") as fh:
+        for page_no, page in enumerate(PDFPage.get_pages(fh), start=1):
+            interp.process_page(page)
+            for ch in walk(dev.get_result()):
+                yield page_no, ch
 
 
 def _rgb255(ch) -> tuple[int, int, int] | None:
