@@ -15,7 +15,7 @@ from . import __version__
 from .numbering import model_labels
 from .tree import Document, Heading, PageBreak, Paragraph, Table, text_of
 
-GOLD_SCHEMA = "hdoc_gold.v1-draft"
+GOLD_SCHEMA = "hdoc_gold.v1"
 # D-bench's number tokens (measures.NUM): digits with separators, and an optional percent sign.
 NUM = re.compile(r"\d+(?:[.,/]\d+)*%?")
 

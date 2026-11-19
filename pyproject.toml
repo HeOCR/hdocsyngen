@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "hdocsyngen"
-version = "0.0.1"
+version = "0.0.2"
 description = "Synthetic Hebrew documents with exact gold, rendered by real producers (HeOCR)"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -19,6 +19,8 @@ dependencies = []
 
 [project.optional-dependencies]
 test = ["pytest>=8"]
+fonts = ["fonttools==4.68.0"]
+pdf = ["pdfminer.six==20260107", "pypdfium2==5.15.2", "numpy>=2", "pillow>=11"]
 
 [project.scripts]
 hdocsyngen = "hdocsyngen.cli:main"

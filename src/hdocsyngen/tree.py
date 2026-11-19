@@ -1,9 +1,9 @@
-"""The source tree (`hdoc_tree.v1`, draft) and the gold it implies.
+"""The source tree (`hdoc_tree.v1`) and the gold it implies.
 
 A document is a tree of blocks. The tree is the single source of truth: every writer (DOCX, HTML, ...) renders it, and
 the gold is computed from it, never from a writer's output. Text is stored in logical order, NFC.
 
-The gold format is owned by heocr-eval; this module is the draft that eval reviews. See docs/hdoc_tree_v1.md.
+The gold format is owned by heocr-eval, who signed off v1 on 2026-11-19 (review of hdocsyngen#2). See docs/hdoc_tree_v1.md.
 """
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ import unicodedata
 from dataclasses import asdict, dataclass, field
 from typing import Literal, Union
 
-SCHEMA = "hdoc_tree.v1-draft"
+SCHEMA = "hdoc_tree.v1"
 
 Lang = Literal["he", "en", "num"]
 # Value kinds carried by runs, so number measures can find them without a pattern.
@@ -188,7 +188,8 @@ def _block(d: dict) -> Block:
 
 
 def from_dict(d: dict) -> Document:
-    if d.get("schema") != SCHEMA:
+    # "-draft" trees (written before eval's sign-off) have the same structure and load as v1.
+    if d.get("schema") not in (SCHEMA, SCHEMA + "-draft"):
         raise ValueError(f"schema {d.get('schema')!r}, expected {SCHEMA!r}")
     return Document(
         doc_id=d["doc_id"], meta=Meta(**d["meta"]), body=[_block(b) for b in d["body"]],
@@ -292,3 +293,24 @@ def validate(doc: Document) -> list[str]:
             if b.col_widths and len(b.col_widths) != b.cols:
                 problems.append(f"{b.id}: {len(b.col_widths)} widths for {b.cols} columns")
     return problems
+
+
+# ---------------------------------------------------------------- colour twin (design note §3.3, check 1)
+
+def twin_colours(doc: Document) -> dict[str, tuple[int, int, int]]:
+    """A unique near-black colour per paragraph-like block (body, cells, notes, furniture), by document order.
+
+    Index k is coded as (r, g, b) with each channel in 0..31 (15 bits, 32,767 blocks); index 0 is never used, so plain
+    black (0, 0, 0) means "not ours". The colours are invisible to a reader and do not change layout.
+    """
+    out = {}
+    for k, (_, p) in enumerate(iter_paragraphs(doc), start=1):
+        if k >= 1 << 15:
+            raise ValueError("too many blocks for the colour twin")
+        out[p.id] = ((k >> 10) & 31, (k >> 5) & 31, k & 31)
+    return out
+
+
+def colour_index(rgb: tuple[int, int, int]) -> int:
+    r, g, b = rgb
+    return (r << 10) | (g << 5) | b if max(rgb) <= 31 else -1

@@ -7,8 +7,8 @@ Ghostscript, print-to-image and OCR layers). Part of [HeOCR](https://github.com/
 and prove that the gold survived each program. The gold is exact because we wrote the source. The design is
 [hocrsyngen docs/document_generator_design.md](https://github.com/HeOCR/hocrsyngen/blob/main/docs/document_generator_design.md).
 
-**Status:** 0.0.1, pilot build. This release contains:
-- the source tree and its gold (`hdoc_tree.v1`, a **draft** owned by heocr-eval, see [docs/hdoc_tree_v1.md](docs/hdoc_tree_v1.md));
+**Status:** pilot build. The producers, checks and pilot runner are in [docs/producers.md](docs/producers.md). This release contains:
+- the source tree and its gold (`hdoc_tree.v1` and `hdoc_gold.v1`, owned and signed off by heocr-eval, see [docs/hdoc_tree_v1.md](docs/hdoc_tree_v1.md));
 - Hebrew counting and the `model` numbering labels;
 - generated values;
 - the `tender` and `report` templates;
