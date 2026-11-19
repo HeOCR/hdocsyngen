@@ -11,6 +11,8 @@ Needs fontTools (the `fonts` extra).
 from __future__ import annotations
 
 import hashlib
+import json
+import os
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -27,6 +29,24 @@ OPEN_FAMILIES = {
     "Keter YG": "GPL-2.0-with-font-exception", "Ellinia CLM": "GPL-2.0-with-font-exception",
     "Drugulin CLM": "GPL-2.0-with-font-exception", "Aharoni CLM": "GPL-2.0-with-font-exception",
 }
+
+
+# Held out for HeOCR evaluation (niqqud print test, 2026-11-19): never in a training render. The list is shared with
+# hocrsyngen (data/fonts_excluded.json, schema heocr_font_exclusion.v1). Eval's gate-set renders may opt in with
+# HDOCSYNGEN_EVAL_RENDER=1 for that run only.
+EXCLUSION_PATH = Path(__file__).with_name("data") / "fonts_excluded.json"
+EVAL_ENV = "HDOCSYNGEN_EVAL_RENDER"
+_EXCLUDED = json.loads(EXCLUSION_PATH.read_text(encoding="utf-8"))
+HELD_OUT_FAMILIES = frozenset(f["family"] for f in _EXCLUDED["families"])
+HELD_OUT_SHA256 = frozenset(x["sha256"] for f in _EXCLUDED["families"] for x in f["files"])
+
+
+class HeldOutFontError(ValueError):
+    """A held-out family was requested for a training render."""
+
+
+def eval_render() -> bool:
+    return os.environ.get(EVAL_ENV) == "1"
 
 
 @dataclass
@@ -60,6 +80,9 @@ class Registry:
                 fam = n.getDebugName(16) or n.getDebugName(1) or ""
                 if fam not in OPEN_FAMILIES:
                     continue
+                sha = hashlib.sha256(p.read_bytes()).hexdigest()
+                if (fam in HELD_OUT_FAMILIES or sha in HELD_OUT_SHA256) and not eval_render():
+                    continue                  # held out for evaluation: never offered to a training render
                 ps = n.getDebugName(6) or ""
                 instances: list[str] = []
                 if "fvar" in f:
@@ -73,7 +96,7 @@ class Registry:
                                                   f"{ps.split('-', 1)[0]}-{style}" if style else None) if x]
                 files.append(FontFile(path=str(p), family=fam, subfamily=n.getDebugName(17) or n.getDebugName(2) or "",
                                       postscript=ps, instances=tuple(sorted(set(instances))),
-                                      sha256=hashlib.sha256(p.read_bytes()).hexdigest(),
+                                      sha256=sha,
                                       cmap=frozenset((f.getBestCmap() or {}).keys())))
         return cls(files)
 
@@ -128,6 +151,9 @@ BULLET_FALLBACKS = ["•", "–", "-"]
 def fit_font(doc, registry: Registry, rng, prefer: list[str] | None = None) -> list[dict]:
     """Choose an open family that draws every character of `doc` (bullets may fall back to – or -), set it in
     `doc.meta.font`, and return its font-file manifest. Raises ValueError when no family fits."""
+    held = [f for f in (prefer or []) if f in HELD_OUT_FAMILIES]
+    if held and not eval_render():
+        raise HeldOutFontError(f"{doc.doc_id}: held-out font family requested for a training render: {held}")
     fams = prefer or registry.families()
     fams = [f for f in fams if f in registry.families()]
     rng.shuffle(fams)
