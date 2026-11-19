@@ -13,7 +13,7 @@ import io
 import zipfile
 from xml.sax.saxutils import escape, quoteattr
 
-from ..tree import Document, Heading, NoteAnchor, PageBreak, Paragraph, Run, Table
+from ..tree import Document, Heading, NoteAnchor, PageBreak, Paragraph, Run, Table, twin_colours
 
 W = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
 R = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
@@ -31,8 +31,10 @@ def _t(text: str) -> str:
     return f'<w:t xml:space="preserve">{escape(text)}</w:t>'
 
 
-def _rpr(r: Run, extra: str = "") -> str:
+def _rpr(r: Run, extra: str = "", colour: str | None = None) -> str:
     parts = []
+    if colour:
+        parts.append(f'<w:color w:val="{colour}"/>')
     if r.bold:
         parts.append("<w:b/><w:bCs/>")
     if r.italic:
@@ -44,11 +46,11 @@ def _rpr(r: Run, extra: str = "") -> str:
     return f"<w:rPr>{inner}</w:rPr>" if inner else ""
 
 
-def _run(r: Run) -> str:
+def _run(r: Run, colour: str | None = None) -> str:
     if r.field:
         instr = {"page": " PAGE ", "numpages": " NUMPAGES "}[r.field]
-        return f'<w:fldSimple w:instr={quoteattr(instr)}><w:r>{_rpr(r)}{_t(r.text)}</w:r></w:fldSimple>'
-    return f"<w:r>{_rpr(r)}{_t(r.text)}</w:r>"
+        return f'<w:fldSimple w:instr={quoteattr(instr)}><w:r>{_rpr(r, colour=colour)}{_t(r.text)}</w:r></w:fldSimple>'
+    return f"<w:r>{_rpr(r, colour=colour)}{_t(r.text)}</w:r>"
 
 
 class _Notes:
@@ -65,23 +67,24 @@ class _Notes:
         return f'<w:r><w:rPr><w:rStyle w:val="{style}"/></w:rPr><w:{kind}Reference w:id="{wid}"/></w:r>'
 
 
-def _runs_with_anchors(runs: list[Run], anchors: list[NoteAnchor], notes: _Notes, kinds: dict[str, str]) -> str:
+def _runs_with_anchors(runs: list[Run], anchors: list[NoteAnchor], notes: _Notes, kinds: dict[str, str],
+                       colour: str | None = None) -> str:
     pending = sorted(anchors, key=lambda a: a.offset)
     out, pos = [], 0
     for r in runs:
         if r.field is not None:
-            out.append(_run(r))
+            out.append(_run(r, colour))
             continue
         text = r.text
         while pending and pos <= pending[0].offset <= pos + len(text):
             a = pending.pop(0)
             k = a.offset - pos
             if k:
-                out.append(_run(Run(text[:k], r.lang, r.bold, r.italic)))
+                out.append(_run(Run(text[:k], r.lang, r.bold, r.italic), colour))
             out.append(notes.ref(a.note_id, kinds[a.note_id]))
             text, pos = text[k:], a.offset
         if text:
-            out.append(_run(Run(text, r.lang, r.bold, r.italic)))
+            out.append(_run(Run(text, r.lang, r.bold, r.italic), colour))
         pos += len(text)
     for a in pending:                                  # anchors at the very end of an empty run list
         out.append(notes.ref(a.note_id, kinds[a.note_id]))
@@ -102,8 +105,11 @@ def _ppr(p: Paragraph | Heading, style: str | None = None) -> str:
     return f"<w:pPr>{''.join(parts)}</w:pPr>"
 
 
+COLOURS: dict[str, str] = {}      # paragraph id -> hex colour, set by write(twin=True)
+
+
 def _para(p: Paragraph | Heading, notes: _Notes, kinds: dict[str, str], style: str | None = None) -> str:
-    return f"<w:p>{_ppr(p, style)}{_runs_with_anchors(p.runs, p.notes, notes, kinds)}</w:p>"
+    return f"<w:p>{_ppr(p, style)}{_runs_with_anchors(p.runs, p.notes, notes, kinds, COLOURS.get(p.id))}</w:p>"
 
 
 def _borders(ruled: str) -> str:
@@ -190,6 +196,9 @@ def _styles(doc: Document) -> str:
 
 
 def _numbering(doc: Document) -> str:
+    # Labels in the document's face, followed by a space inside the label (suffix "nothing"): with Word's default tab
+    # suffix, Word for Mac draws the tab with Arial, a substituted face (pilot smoke test, 2026-11-19).
+    f = escape(doc.meta.font)
     out = []
     for a in doc.abstract_nums:
         lvls = []
@@ -197,8 +206,9 @@ def _numbering(doc: Document) -> str:
             restart = f'<w:lvlRestart w:val="{lv.restart}"/>' if lv.restart is not None else ""
             ind = 360 * (i + 1) + (360 if lv.fmt != "bullet" else 0) * (1 if i else 0)
             lvls.append(f'<w:lvl w:ilvl="{i}"><w:start w:val="{lv.start}"/><w:numFmt w:val="{lv.fmt}"/>{restart}'
-                        f'<w:lvlText w:val={quoteattr(lv.text)}/><w:lvlJc w:val="left"/>'
-                        f'<w:pPr><w:ind w:start="{ind + 360}" w:hanging="{360 + 180 * i}"/></w:pPr></w:lvl>')
+                        f'<w:suff w:val="nothing"/><w:lvlText w:val={quoteattr(lv.text + " ")}/><w:lvlJc w:val="left"/>'
+                        f'<w:pPr><w:ind w:start="{ind + 360}" w:hanging="{360 + 180 * i}"/></w:pPr>'
+                        f'<w:rPr><w:rFonts w:ascii="{f}" w:hAnsi="{f}" w:cs="{f}" w:hint="cs"/></w:rPr></w:lvl>')
         out.append(f'<w:abstractNum w:abstractNumId="{a.id}"><w:multiLevelType w:val="multilevel"/>'
                    f'{"".join(lvls)}</w:abstractNum>')
     for n in doc.nums:
@@ -225,7 +235,7 @@ def _notes_part(doc: Document, kind: str, notes: _Notes, kinds: dict[str, str]) 
             mark = (f'<w:r><w:rPr><w:rStyle w:val="{refstyle}"/></w:rPr><w:{kind}Ref/></w:r>'
                     f'<w:r>{_t(" ")}</w:r>') if i == 0 else ""
             paras.append(f'<w:p><w:pPr><w:pStyle w:val="{style}"/><w:bidi/></w:pPr>{mark}'
-                         f'{_runs_with_anchors(p.runs, [], notes, kinds)}</w:p>')
+                         f'{_runs_with_anchors(p.runs, [], notes, kinds, COLOURS.get(p.id))}</w:p>')
         parts.append(f'<w:{tag} w:id="{wid}">{"".join(paras)}</w:{tag}>')
     return XML_DECL + f'<w:{tag}s {NS}>{"".join(parts)}</w:{tag}s>'
 
@@ -235,7 +245,11 @@ def _hf(paras, tag: str, style: str, notes, kinds) -> str:
     return XML_DECL + f"<w:{tag} {NS}>{body}</w:{tag}>"
 
 
-def write(doc: Document) -> bytes:
+def write(doc: Document, twin: bool = False) -> bytes:
+    """The DOCX. With `twin`, every block's runs get its near-black twin colour (tree.twin_colours)."""
+    COLOURS.clear()
+    if twin:
+        COLOURS.update({i: "%02X%02X%02X" % c for i, c in twin_colours(doc).items()})
     kinds = {n.id: n.kind for n in doc.notes}
     notes = _Notes()
     pw, ph = PAGE[doc.meta.page]

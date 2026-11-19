@@ -292,3 +292,24 @@ def validate(doc: Document) -> list[str]:
             if b.col_widths and len(b.col_widths) != b.cols:
                 problems.append(f"{b.id}: {len(b.col_widths)} widths for {b.cols} columns")
     return problems
+
+
+# ---------------------------------------------------------------- colour twin (design note §3.3, check 1)
+
+def twin_colours(doc: Document) -> dict[str, tuple[int, int, int]]:
+    """A unique near-black colour per paragraph-like block (body, cells, notes, furniture), by document order.
+
+    Index k is coded as (r, g, b) with each channel in 0..31 (15 bits, 32,767 blocks); index 0 is never used, so plain
+    black (0, 0, 0) means "not ours". The colours are invisible to a reader and do not change layout.
+    """
+    out = {}
+    for k, (_, p) in enumerate(iter_paragraphs(doc), start=1):
+        if k >= 1 << 15:
+            raise ValueError("too many blocks for the colour twin")
+        out[p.id] = ((k >> 10) & 31, (k >> 5) & 31, k & 31)
+    return out
+
+
+def colour_index(rgb: tuple[int, int, int]) -> int:
+    r, g, b = rgb
+    return (r << 10) | (g << 5) | b if max(rgb) <= 31 else -1

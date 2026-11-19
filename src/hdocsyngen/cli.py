@@ -62,6 +62,20 @@ def cmd_verify_docx(a) -> int:
     return 0 if not problems else 1
 
 
+def cmd_pilot(a) -> int:
+    from . import pilot
+    spec = json.loads(Path(a.spec).read_text())
+    man = pilot.run(spec, Path(a.out))
+    print(f"{len(man['docs'])} documents in {a.out}")
+    return 0
+
+
+def cmd_pilot_summary(a) -> int:
+    from . import pilot
+    print(json.dumps(pilot.summary(Path(a.out)), ensure_ascii=False, indent=1))
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="hdocsyngen")
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -78,6 +92,13 @@ def main(argv: list[str] | None = None) -> int:
     v.add_argument("docx")
     v.add_argument("--no-numbering", action="store_true", help="skip numPr checks (producers may restructure lists)")
     v.set_defaults(func=cmd_verify_docx)
+    pl = sub.add_parser("pilot", help="run the pilot (needs the pdf and fonts extras and the producers)")
+    pl.add_argument("--spec", required=True)
+    pl.add_argument("--out", required=True)
+    pl.set_defaults(func=cmd_pilot)
+    ps = sub.add_parser("pilot-summary")
+    ps.add_argument("out")
+    ps.set_defaults(func=cmd_pilot_summary)
     a = ap.parse_args(argv)
     return a.func(a)
 
