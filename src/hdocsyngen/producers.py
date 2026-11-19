@@ -179,3 +179,54 @@ def chrome_convert(html: Path, out_dir: Path, timeout: int = 120) -> dict:
         raise VersionChanged(f"Chrome {v0} -> {v1}")
     return {"producer": "chrome", "version": v1, "options": {"flags": opts}, "input_sha256": _sha(html),
             "outputs": {"pdf": {"path": dst.name, "sha256": _sha(dst)}}, "seconds": round(secs, 2)}
+
+
+# ---------------------------------------------------------------- Ghostscript re-distil (P8)
+
+GS = shutil.which("gs") or "/opt/homebrew/bin/gs"
+GS_VARIANTS = {
+    "default": ["-sDEVICE=pdfwrite"],
+    "screen": ["-sDEVICE=pdfwrite", "-dPDFSETTINGS=/screen"],
+    "nooutputfonts": ["-sDEVICE=pdfwrite", "-dNoOutputFonts"],   # every glyph becomes a vector path: no text layer
+    "ps_roundtrip": None,                                         # ps2write, then pdfwrite
+}
+
+
+def gs_version() -> str:
+    return _run([GS, "--version"], 60).stdout.strip()
+
+
+def gs_redistil(pdf: Path, out: Path, variant: str, timeout: int = 300) -> dict:
+    """Re-distil a PDF through Ghostscript (design note §1, P8). SOURCE_DATE_EPOCH fixes the dates Ghostscript writes,
+    so the same input and version give the same bytes (checked by the P8 runner)."""
+    v0 = gs_version()
+    base = ["-q", "-dNOPAUSE", "-dBATCH", "-dSAFER", "-dCompatibilityLevel=1.7"]
+    env_epoch = {"SOURCE_DATE_EPOCH": "1767225600"}               # 2026-01-01, for reproducible metadata
+    t0 = time.time()
+    if variant == "ps_roundtrip":
+        with tempfile.TemporaryDirectory() as tmp:
+            ps = Path(tmp) / "x.ps"
+            _run_env([GS, *base, "-sDEVICE=ps2write", f"-sOutputFile={ps}", str(pdf)], timeout, env_epoch)
+            _run_env([GS, *base, "-sDEVICE=pdfwrite", f"-sOutputFile={out}", str(ps)], timeout, env_epoch)
+    else:
+        _run_env([GS, *base, *GS_VARIANTS[variant], f"-sOutputFile={out}", str(pdf)], timeout, env_epoch)
+    secs = time.time() - t0
+    v1 = gs_version()
+    if v1 != v0:
+        raise VersionChanged(f"Ghostscript {v0} -> {v1}")
+    if not out.exists():
+        raise ProducerError(f"Ghostscript wrote no PDF for {pdf.name} ({variant})")
+    return {"producer": f"ghostscript_{variant}", "version": v1, "options": {"variant": variant},
+            "input_sha256": _sha(pdf), "outputs": {"pdf": {"path": out.name, "sha256": _sha(out)}},
+            "seconds": round(secs, 2)}
+
+
+def _run_env(cmd: list[str], timeout: int, extra_env: dict[str, str]) -> subprocess.CompletedProcess:
+    env = dict(os.environ, **extra_env)
+    try:
+        r = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout, env=env)
+    except subprocess.TimeoutExpired as e:
+        raise ProducerError(f"timeout after {timeout}s: {cmd[0]}") from e
+    if r.returncode != 0:
+        raise ProducerError(f"{cmd[0]} exit {r.returncode}: {r.stderr.strip()[:300]}")
+    return r
