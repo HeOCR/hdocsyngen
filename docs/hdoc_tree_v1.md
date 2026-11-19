@@ -31,10 +31,13 @@ The code is `src/hdocsyngen/gold.py`. These are the layers the tree fixes exactl
 | Field | Content |
 |---|---|
 | `reading_order` | the body block ids in order (a table is one entry) |
-| `blocks` | every heading, paragraph, cell paragraph and note paragraph: `id`, `type`, `text` (logical, fields left out), `parent` (table or note id), `level`, `label_model`, `values` (`[{kind, start, end, text}]` character spans) |
-| `tables` | the cell grid, with spans, header flags and cell text (the cell's paragraphs joined by `\n`) |
+| `blocks` | every heading, paragraph, cell paragraph and note paragraph: `id`, `type`, `text` (logical, fields left out), `parent` (table or note id), `order` (index within its container: body, a table, a note), `level`, `label_model`, `values`, `ltr_runs` |
+| `values` | `[{kind, start, end, text, core}]`: the whole run as written (₪, %, sign and parentheses included), and `core`, its number tokens as D-bench's `measures.NUM` finds them (digits and separators; for a Hebrew-month date, the day and the year). Hebrew unit words (`ש"ח`, `יח'`) are their own runs, outside the span. |
+| `ltr_runs` | `[{start, end}]`: the spans of runs with `lang` `en` or `num`, adjacent ones merged, for the mixed-direction measure |
+| `tables` | the cell grid, with spans, header flags, cell text (the cell's paragraphs joined by `\n`) and `paragraphs` (their ids) |
 | `notes` | `{id, kind, anchor_block, anchor_offset, text}` |
-| `furniture` | header and footer text, with the field kinds they hold |
+| `furniture` | header and footer paragraphs: `id`, `order`, `text`, `fields` (`[{kind, offset}]`), `ltr_runs` |
+| `lineage` | `tree_sha256` (of the `*.tree.json` it was computed from), the hdocsyngen version and commit |
 | `label_basis` | `model`. Eval's rule: the **`producer`** basis is the scored reference, and `model` is a diagnostic. The verifier adds `label_producer` per block from the producer's own export (next PR). |
 
 **Not yet written:** these are producer-dependent, and come with the producer stage (design note §3.3):
@@ -43,17 +46,20 @@ The code is `src/hdocsyngen/gold.py`. These are the layers the tree fixes exactl
 - `not_rendered`;
 - drawn text.
 
-**Reading-order conventions,** from eval's review (2026-11-19), to be confirmed here before any set is scored:
-- table cells are read in row order, right to left in RTL tables;
-- notes form their own sequence;
-- in multi-column pages each column is read to the end before the next, and a block spanning the columns breaks the
-  flow.
+**Offsets:** every offset (`values`, `ltr_runs`, note anchors, `fields`) is into the block's stored `text`, after
+field runs are removed.
 
-## Questions for eval
+**Reading order and scoring units** (eval, 2026-11-19, review of #1):
+- **Cells are the scoring unit.** A cell's `text` is its paragraphs joined by `\n`. `line_fold_v1` collapses `\n` to a
+  space, so line breaks inside a cell are never charged. Cells are read in `(r, c)` order, with `c` logical (start
+  column first: right to left in RTL tables), and a merged cell appears once, at its top-start corner.
+- **Notes** form their own sequence, and their attachment is a separate measure.
+- **Columns:** in multi-column pages each column is read to the end before the next, and a block spanning the columns
+  breaks the flow.
+- **Furniture** is its own sequence, header before footer. A header read into the body counts as an interleaving.
+- **Field runs** are left out of `text`, and their place is in `fields`. The producer stage adds the value rendered on
+  each page (`page_values`). A page number's reference is the producer basis, like labels. Until then, furniture
+  scoring ignores a number at a field's offset.
 
-1. **Cell text:** is a cell's text its paragraphs joined by `\n` the right scoring unit, or should each cell paragraph
-   be its own unit?
-2. **Values:** should `values` spans count digits and separators only, or the whole run? The `₪` sign is part of the
-   run today.
-3. **Placeholder text:** for a field run (a page number), is leaving its text out of `text` right, with the furniture
-   recording the field?
+**Sign-off:** eval signs both schemas off (dropping `-draft`) in the PR that adds the producer layers, because the
+`producer` label basis is the scored reference.

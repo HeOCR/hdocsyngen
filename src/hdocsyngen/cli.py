@@ -40,8 +40,9 @@ def cmd_build(a) -> int:
         if vp:
             print(f"{doc_id}: DOCX does not carry the gold: {vp[:3]}", file=sys.stderr)
             return 1
-        files = {f"{doc_id}.tree.json": dumps(doc).encode(),
-                 f"{doc_id}.gold.json": json.dumps(gold(doc), ensure_ascii=False, indent=1).encode(),
+        tj = dumps(doc)
+        files = {f"{doc_id}.tree.json": tj.encode(),
+                 f"{doc_id}.gold.json": json.dumps(gold(doc, tj), ensure_ascii=False, indent=1).encode(),
                  f"{doc_id}.docx": data}
         for name, b in files.items():
             (out / name).write_bytes(b)

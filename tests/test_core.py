@@ -105,3 +105,21 @@ def test_cli_build(tmp_path):
     man = json.loads((tmp_path / "manifest.json").read_text())
     assert len(man["docs"]) == 3
     assert main(["verify-docx", str(tmp_path / "report-40.tree.json"), str(tmp_path / "report-40.docx")]) == 0
+
+
+def test_gold_fields_values_ltr_order_lineage(pool):
+    doc = build("tender", "t-gold", 11, pool)
+    g = gold(doc)
+    vals = [v for b in g["blocks"] for v in b.get("values", [])]
+    assert vals and all(v["core"] == __import__("re").findall(r"\d+(?:[.,/]\d+)*%?", v["text"]) for v in vals)
+    assert any(b.get("ltr_runs") for b in g["blocks"])
+    for b in g["blocks"]:
+        for r in b.get("ltr_runs", []):
+            assert 0 <= r["start"] < r["end"] <= len(b.get("text", ""))
+    foot = g["furniture"]["footer"][0]
+    assert [f["kind"] for f in foot["fields"]] == ["page", "numpages"]
+    assert foot["fields"][0]["offset"] == len("עמוד ")
+    body = [b for b in g["blocks"] if b["parent"] is None]
+    assert [b["order"] for b in body] == list(range(len(body)))
+    assert [b["id"] for b in body] == g["reading_order"]
+    assert len(g["lineage"]["tree_sha256"]) == 64
