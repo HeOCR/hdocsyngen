@@ -104,7 +104,7 @@ LibreOffice and Chrome write visual order. That is the opposite of the folklore,
    - It draws runs of underscores in Helvetica even when the face has `_`: a real substitution, so a hard failure (2
      documents).
    - Its text export can hang (1 document).
-5. **OCR layers:** Tesseract's layers are logical order (T2 0 on all 87 `heb` and 87 `eng` pages). The `eng` layers
+5. **OCR layers:** Tesseract's layers are logical order (T2 0 on all 131 `heb` and 131 `eng` pages). The `eng` layers
    misread Hebrew text, as a real wrong-language layer does, while the digits come through: 744 of 750 number tokens
    are kept.
 
