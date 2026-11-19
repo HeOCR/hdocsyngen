@@ -5,7 +5,8 @@
   `CENSUS_VERSION`; pipeline uses it as an oracle (expected T-class signals), not as a run-time input.
 - `verify_pdf(doc, plain, twin, allowed_fonts)`: the gold checks:
   1. **fonts (hard):** every font in both PDFs must be one of the requested family's PostScript names;
-  2. **geometry:** the twin and the plain PDF place the same glyphs at the same positions (within 0.1 pt);
+  2. **geometry:** the twin and the plain PDF have the same glyph multiset per page (else the document fails); per
+     block, shifts over 0.25 pt are recorded and over 1 pt mark `geometry_ok: false`;
   3. **text read-back:** each block's characters, found by its twin colour, match the gold's characters as a
      multiset (order-free, because a layer may be in visual order); the page(s) each block lands on are recorded;
   4. **pixels:** a block with text-layer characters but no pixels of its colour in the rendered twin is
@@ -23,6 +24,9 @@ from pathlib import Path
 from .tree import Document, colour_index, iter_paragraphs, text_of, twin_colours
 
 CENSUS_VERSION = "census.v0"
+SHIFT_RECORD_PT = 0.25      # twin shifts above this are recorded (coordinates are compared rounded to 0.1 pt)
+GEOMETRY_OK_PT = 1.0        # above this, a block's twin geometry is `geometry_ok: false` (eval)
+PARTIAL_CLIP_RATIO = 0.25   # pixels per glyph below this share of the median: `partially_rendered`
 FINALS = set("ךםןףץ")
 _WORD = re.compile(r"[א-ת]+")
 
@@ -221,32 +225,28 @@ def verify_pdf(doc: Document, plain: Path, twin: Path, allowed_fonts: set[str]) 
     plain_chars = [(p, round(c.x0, 1), round(c.y0, 1), c.get_text()) for p, c in _chars(plain)]
     twin_raw = list(_chars(twin))
     twin_chars = [(p, round(c.x0, 1), round(c.y0, 1), c.get_text()) for p, c in twin_raw]
-    # Per block: the largest shift of its glyphs between the plain PDF and the twin. A colour change can move a
-    # glyph by rounding, a page field, or (LibreOffice) a footnote line by a few points. The twin's geometry is then
-    # off by that much, which is recorded; a block that changes page or moves more than 3 pt fails the document.
-    # Order-free: producers may write the twin's glyphs in another stream order (LibreOffice splits text portions by
-    # colour), so each twin glyph is matched to the nearest plain glyph with the same page and character.
+    # Per block: the largest shift of its glyphs between the plain PDF and the twin (eval, review of #2). Text gold does
+    # not depend on colour, so only a different glyph multiset per page (a block changed page, or glyphs differ)
+    # fails the document. A shift over SHIFT_RECORD_PT is recorded; over GEOMETRY_OK_PT the block's twin geometry is
+    # marked `geometry_ok: false`. Order-free: producers may write the twin's glyphs in another stream order
+    # (LibreOffice splits text portions by colour), so each twin glyph is matched to the nearest plain glyph with the
+    # same page and character.
     owner = [colours.get(colour_index(_rgb255(c) or (255, 255, 255))) for _, c in twin_raw]
     grid: dict[tuple, list[tuple[float, float]]] = defaultdict(list)
     for pg, x, y, ch in plain_chars:
         grid[(pg, ch)].append((x, y))
     moved: dict[str, float] = {}
-    lost: set[str] = set()
     shifted = 0
     if Counter((a[0], a[3]) for a in plain_chars) != Counter((b[0], b[3]) for b in twin_chars):
-        problems.append("geometry: the twin's glyphs (per page) differ from the plain PDF's")
+        problems.append("geometry: the twin's glyph multiset per page differs from the plain PDF's")
     for (pg, x, y, ch), pid in zip(twin_chars, owner):
         if pid is None or pid in furniture or ch.isspace():
             continue
         cands = grid.get((pg, ch), [])
-        d = min((max(abs(x - px), abs(y - py)) for px, py in cands), default=None)
-        if d is None or d > 3.0:
-            lost.add(pid)
-        elif d > 0.25:
+        d = min((max(abs(x - px), abs(y - py)) for px, py in cands), default=float("inf"))
+        if d > SHIFT_RECORD_PT:
             shifted += 1
-            moved[pid] = max(moved.get(pid, 0.0), round(d, 2))
-    if lost:
-        problems.append(f"geometry: {len(lost)} blocks have glyphs more than 3 pt from any plain glyph")
+            moved[pid] = max(moved.get(pid, 0.0), round(d, 2) if d != float("inf") else 999.0)
     got_text: dict[str, list[str]] = defaultdict(list)
     pages: dict[str, set[int]] = defaultdict(set)
     unattributed = Counter()
@@ -262,6 +262,7 @@ def verify_pdf(doc: Document, plain: Path, twin: Path, allowed_fonts: set[str]) 
     page_values = _page_values(doc, twin_raw, colours)
     pixels = _pixel_counts(twin)
     blocks, not_rendered = {}, []
+    density: dict[str, float] = {}
     by_colour = twin_colours(doc)
     for container, p in iter_paragraphs(doc):
         exp = _fold(text_of(p))
@@ -273,14 +274,30 @@ def verify_pdf(doc: Document, plain: Path, twin: Path, allowed_fonts: set[str]) 
         missing = exp - got
         extra = got - exp
         entry = {"pages": sorted(pages.get(p.id, ())), "missing_chars": sum(missing.values()),
-                 "extra_chars": sum(extra.values())}
-        if exp and pixels.get(colour_index(by_colour[p.id]), 0) == 0:
+                 "extra_chars": sum(extra.values()),
+                 "geometry_ok": moved.get(p.id, 0.0) <= GEOMETRY_OK_PT}
+        px = pixels.get(colour_index(by_colour[p.id]), 0)
+        n_glyphs = sum(exp.values())
+        if exp and px == 0:
             entry["not_rendered"] = True
             not_rendered.append(p.id)
+        elif n_glyphs:
+            density[p.id] = px / n_glyphs
         blocks[p.id] = entry
         if missing and not entry.get("not_rendered") and container not in ("header", "footer"):
             problems.append(f"{p.id}: {sum(missing.values())} gold characters not in the text layer")
-    return {"problems": problems, "blocks": blocks, "not_rendered": not_rendered, "glyphs_moved": shifted,
+    # Partial clipping (heuristic): a block whose pixels per glyph fall below PARTIAL_CLIP_RATIO of the document's
+    # median is `partially_rendered` (part of it clipped or hidden). Furniture is left out (repeated per page).
+    body_density = sorted(v for k, v in density.items() if k not in furniture)
+    partial = []
+    if body_density:
+        med = body_density[len(body_density) // 2]
+        for pid, v in density.items():
+            if pid not in furniture and v < PARTIAL_CLIP_RATIO * med:
+                blocks[pid]["partially_rendered"] = True
+                partial.append(pid)
+    return {"problems": problems, "blocks": blocks, "not_rendered": not_rendered, "partially_rendered": partial,
+            "glyphs_moved": shifted,
             "moved_blocks": moved, "page_values": page_values,
             "unattributed_chars": sum(unattributed.values()),
             "unattributed_sample": "".join(sorted(unattributed))[:60]}

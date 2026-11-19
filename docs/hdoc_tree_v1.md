@@ -1,9 +1,9 @@
-# `hdoc_tree.v1` and `hdoc_gold.v1` (draft, for heocr-eval's review)
+# `hdoc_tree.v1` and `hdoc_gold.v1`
 
-The **owner is heocr-eval** (design note §8). This page describes what 0.0.1 writes, so eval can accept or change
-it. Until eval signs it off, both schemas carry the suffix `-draft`.
+The **owner is heocr-eval**, who signed both schemas off on 2026-11-19 (review of hdocsyngen#2). Any change needs
+eval's review.
 
-## The source tree (`hdoc_tree.v1-draft`, `*.tree.json`)
+## The source tree (`hdoc_tree.v1`, `*.tree.json`)
 
 The code is `src/hdocsyngen/tree.py`.
 
@@ -24,7 +24,7 @@ The code is `src/hdocsyngen/tree.py`.
 - **Lists are numbered paragraphs.** A bullet list is paragraphs whose `num` points to a bullet level; there is no
   separate list block.
 
-## The gold (`hdoc_gold.v1-draft`, `*.gold.json`)
+## The gold (`hdoc_gold.v1`, `*.gold.json`)
 
 The code is `src/hdocsyngen/gold.py`. These are the layers the tree fixes exactly, before any producer:
 
@@ -51,14 +51,20 @@ For each producer's PDF, the pilot writes the tree gold plus what that producer 
 | `blocks[].label_producer` | the label the producer rendered: **the scored reference** (eval) |
 | `blocks[].pages` | the pages the block's glyphs land on, found through the colour twin |
 | `blocks[].not_rendered` | true when the block has no pixels of its colour in the rendered twin (clipped or hidden). Out of the reference, and counted per chain. |
-| `blocks[].twin_shift_pt` | the largest shift of the block's glyphs between the twin and the plain PDF, when over the recording bound |
+| `blocks[].twin_shift_pt`, `blocks[].geometry_ok` | the largest shift of the block's glyphs between the twin and the plain PDF, when over 0.25 pt; `geometry_ok` is false over 1 pt |
+| `blocks[].partially_rendered` | part of the block is clipped or hidden (heuristic, see below) |
 | `furniture[].pages`, `furniture[].page_values` | for paragraphs with fields: `[{page, field_offset, text}]`, the value printed on each page. A field's reference is the producer basis, like labels. |
 | `checks` | the bounds the set was checked to, recorded in the gold |
 
 **The `checks` bounds:**
 - **Twin geometry:** each twin glyph is matched, order-free, to the nearest plain glyph with the same page and
-  character. A shift over 0.25 pt is recorded in `twin_shift_pt`; a glyph more than 3 pt from any plain glyph fails the
-  document. Coordinates are compared after rounding to 0.1 pt, so 0.25 pt is the smallest bound above rounding noise.
+  character. Coordinates are compared after rounding to 0.1 pt.
+  - A shift over 0.25 pt is recorded in `twin_shift_pt`.
+  - A shift over 1 pt marks the block `geometry_ok: false`: its twin boxes are not trusted.
+  - A document fails only when the glyph multiset per page differs between the twin and the plain PDF (a block
+    changed page, or glyphs differ). Text gold does not depend on colour.
+- **Clipping:** `not_rendered` (no pixels of the block's colour) and `partially_rendered` (pixels per glyph below 25%
+  of the document's median, a heuristic). The census counts documents with each, per producer.
 - **Fonts:** a hard check. Every PDF font must be a PostScript name of the requested open family.
 - **Labels:** compared exactly after stripping. **Bullets are a class:** any bullet glyph (`•`, `–`, `-`, `*`, `◦`,
   `▪`, `·`) equals any other, so a LibreOffice `•` against a Word `▪` is not a label disagreement. LibreOffice's text
@@ -79,5 +85,4 @@ field runs are removed.
   each page (`page_values`). A page number's reference is the producer basis, like labels. Until then, furniture
   scoring ignores a number at a field's offset.
 
-**Sign-off:** eval signs both schemas off (dropping `-draft`) in this PR, once it has the producer layers and
-`page_values`.
+**Sign-off:** eval signed both schemas off on 2026-11-19, with the producer layers and `page_values` in.

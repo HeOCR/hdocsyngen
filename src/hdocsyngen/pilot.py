@@ -74,6 +74,9 @@ def producer_gold(g: dict, producer: str, r: dict, pdf_name: str) -> dict:
             b["pages"] = c["pages"]
             if c.get("not_rendered"):
                 b["not_rendered"] = True
+            if c.get("partially_rendered"):
+                b["partially_rendered"] = True
+            b["geometry_ok"] = c.get("geometry_ok", True)
             if b["id"] in moved:
                 b["twin_shift_pt"] = moved[b["id"]]
         if labels is not None and "label_model" in b:
@@ -88,7 +91,10 @@ def producer_gold(g: dict, producer: str, r: dict, pdf_name: str) -> dict:
                 f["page_values"] = [{"page": v["page"], "field_offset": v["field_offset"], "text": v["text"]}
                                     for v in pv.get(f["id"], [])]
     out["checks"] = {"twin_geometry": {"match": "order-free, same page and character",
-                                       "shift_recorded_over_pt": 0.25, "fail_over_pt": 3.0},
+                                       "shift_recorded_over_pt": C.SHIFT_RECORD_PT,
+                                       "geometry_ok_false_over_pt": C.GEOMETRY_OK_PT,
+                                       "document_fails_when": "the glyph multiset per page differs"},
+                     "partial_clipping": {"pixels_per_glyph_below_share_of_median": C.PARTIAL_CLIP_RATIO},
                      "label_comparison": "exact after stripping; bullet glyphs equal any bullet (a class)",
                      "fonts": "hard: every PDF font is a PostScript name of the requested open family"}
     return out
@@ -224,6 +230,10 @@ def summary(out: Path) -> dict:
             a["docs"]["geometry_fail"] += int(any("geometry" in p for p in pc["problems"]))
             a["docs"]["text_fail"] += int(any("characters not in" in p for p in pc["problems"]))
             a["blocks"]["not_rendered"] += len(pc["not_rendered"])
+            a["blocks"]["partially_rendered"] += len(pc.get("partially_rendered", []))
+            a["blocks"]["geometry_not_ok"] += sum(1 for b in pc["blocks"].values() if not b.get("geometry_ok", True))
+            a["docs"]["clipping_partial"] += int(bool(pc.get("partially_rendered")))
+            a["docs"]["clipping_whole_block"] += int(bool(pc["not_rendered"]))
             if "resaved_docx_check" in r:
                 a["docs"]["resaved_docx_ok"] += int(not r["resaved_docx_check"])
             for k, v in r.get("label_agreement", {}).items():

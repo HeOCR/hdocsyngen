@@ -22,10 +22,11 @@
     bullet falls back to `–` or `-` when the face lacks `•`.
 - **Geometry:**
   - Each twin glyph is matched, order-free, to the nearest plain glyph with the same page and character.
-  - Shifts over 0.25 pt are recorded per block.
-  - A block whose glyph lands more than 3 pt from any plain glyph fails the document.
+  - Shifts over 0.25 pt are recorded per block; over 1 pt the block is `geometry_ok: false`.
+  - A document fails only when the glyph multiset per page differs.
 - **Text read-back:** each block's characters, found by its twin colour, must match the gold's as a multiset.
-- **Pixels:** a block with no pixels of its colour in the rendered twin is `not_rendered`.
+- **Pixels:** a block with no pixels of its colour in the rendered twin is `not_rendered`; one with pixels per glyph
+  below 25% of the document's median is `partially_rendered`.
 - **DOCX:** the producer-re-saved DOCX must carry the gold. numIds are matched one to one.
 - **Labels (the `producer` basis):**
   - Word's list strings and LibreOffice's text export are matched to body paragraphs in order. Trailing note marks
