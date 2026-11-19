@@ -18,13 +18,21 @@
   - Every font in the plain and twin PDFs must be one of the requested open family's PostScript names. Any
     substitution fails the document.
   - Microsoft-font output falls under the lo_pdf rule and is never public.
+  - Variable fonts: producers name their instances, for example `MiriamLibre-Bold` (LibreOffice) or
+    `AssistantRoman-Bold` (Word). The registry adds each instance's PostScript name, or the variations prefix plus the
+    style.
+  - Word for Mac names a variable font's instance `PSName_Style` (for example `Rubik-Light_Bold`, a synthesised bold
+    of the requested face). That counts as the requested family and is listed in `synthetic_style_fonts`.
   - `fonts.fit_font` picks an allow-listed family that draws every character, including labels and bullets. A
     bullet falls back to `–` or `-` when the face lacks `•`.
 - **Geometry:**
   - Each twin glyph is matched, order-free, to the nearest plain glyph with the same page and character.
   - Shifts over 0.25 pt are recorded per block; over 1 pt the block is `geometry_ok: false`.
   - A document fails only when the glyph multiset per page differs.
-- **Text read-back:** each block's characters, found by its twin colour, must match the gold's as a multiset.
+- **Text read-back:** each block's characters, found by its twin colour, must match the gold's as a multiset, with
+  compatibility forms folded (NFKC: a ligature such as `ﬁ` counts as `fi`, and is recorded) and each mirrored bracket
+  pair as one class. Whether the producer stored the logical bracket or its mirror (the glyph
+  drawn in RTL) is recorded per block (`brackets`).
 - **Pixels:** a block with no pixels of its colour in the rendered twin is `not_rendered`; one with pixels per glyph
   below 25% of the document's median is `partially_rendered`.
 - **DOCX:** the producer-re-saved DOCX must carry the gold. numIds are matched one to one.

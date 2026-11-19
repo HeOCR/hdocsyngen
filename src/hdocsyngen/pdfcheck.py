@@ -154,8 +154,21 @@ def census(pdf: Path) -> dict:
             "struct_tree": info["struct_tree"], "pages": pages}
 
 
+MIRROR = {"(": ")", ")": "(", "[": "]", "]": "[", "{": "}", "}": "{", "<": ">", ">": "<"}
+
+
 def _fold(s: str) -> Counter:
-    return Counter(c for c in unicodedata.normalize("NFC", s) if not c.isspace())
+    """Characters as a multiset, compatibility forms folded (NFKC): a producer may store a ligature such as U+FB01 for
+    "fi" in its text layer. Each block records the ligatures it found (`ligatures`)."""
+    return Counter(c for c in unicodedata.normalize("NFKC", s) if not c.isspace())
+
+
+def _fold_brackets(c: Counter) -> Counter:
+    """Each mirrored pair as one class: a producer may store a bracket as the glyph it draws (mirrored in RTL)."""
+    out = Counter()
+    for ch, n in c.items():
+        out[min(ch, MIRROR.get(ch, ch))] += n
+    return out
 
 
 def _pixel_counts(pdf: Path, dpi: int = 150) -> Counter:
@@ -225,12 +238,20 @@ def _page_values(doc: Document, twin_raw, colours: dict[int, str]) -> dict[str, 
 def verify_pdf(doc: Document, plain: Path, twin: Path, allowed_fonts: set[str]) -> dict:
     """Problems (hard failures) and the observed layers: pages per block, not_rendered blocks."""
     problems: list[str] = []
+    synthetic: set[str] = set()
     for label, pdf in (("plain", plain), ("twin", twin)):
         for page_fonts in _doc_info(pdf)["page_fonts"]:
             for f in page_fonts:
                 base = f["name"].split("+", 1)[-1]
-                if base not in allowed_fonts:
-                    problems.append(f"{label}: font {base} is not the requested family")
+                if base in allowed_fonts:
+                    continue
+                # Word for Mac names a variable font's instance `PSName_Style` (e.g. Rubik-Light_Bold: the requested
+                # face, with a synthesised style). That is the requested family, recorded as synthetic, not a
+                # substitution.
+                if "_" in base and base.split("_", 1)[0] in allowed_fonts:
+                    synthetic.add(base)
+                    continue
+                problems.append(f"{label}: font {base} is not the requested family")
     problems = sorted(set(problems))
     colours = {colour_index(c): pid for pid, c in twin_colours(doc).items()}
     furniture = {p.id for p in doc.furniture.header + doc.furniture.footer}
@@ -283,11 +304,20 @@ def verify_pdf(doc: Document, plain: Path, twin: Path, allowed_fonts: set[str]) 
             # furniture repeats on every page; check one copy is there
             per_page = max(1, len(pages.get(p.id, ())) or 1)
             got = Counter({c: n // per_page for c, n in got.items()})
-        missing = exp - got
-        extra = got - exp
+        # Brackets are compared as mirrored pairs; whether the producer stored the logical bracket or its mirror
+        # (the glyph drawn in RTL) is recorded per block (`brackets`).
+        missing = _fold_brackets(exp) - _fold_brackets(got)
+        extra = _fold_brackets(got) - _fold_brackets(exp)
+        bexp = {b: exp[b] for b in MIRROR if exp[b]}
+        bgot = {b: got[b] for b in MIRROR if got[b]}
         entry = {"pages": sorted(pages.get(p.id, ())), "missing_chars": sum(missing.values()),
                  "extra_chars": sum(extra.values()),
                  "geometry_ok": moved.get(p.id, 0.0) <= GEOMETRY_OK_PT}
+        if bexp and bexp != bgot:
+            entry["brackets"] = {"gold": bexp, "layer": bgot}
+        ligs = sum(1 for ch in got_text.get(p.id, []) if unicodedata.normalize("NFKC", ch) != ch and len(unicodedata.normalize("NFKC", ch)) > 1)
+        if ligs:
+            entry["ligatures"] = ligs
         px = pixels.get(colour_index(by_colour[p.id]), 0)
         n_glyphs = sum(exp.values())
         if exp and px == 0:
@@ -308,7 +338,11 @@ def verify_pdf(doc: Document, plain: Path, twin: Path, allowed_fonts: set[str]) 
             if pid not in furniture and v < PARTIAL_CLIP_RATIO * med:
                 blocks[pid]["partially_rendered"] = True
                 partial.append(pid)
+    mirrored = sum(1 for b in blocks.values() if "brackets" in b)
+    ligatures = sum(b.get("ligatures", 0) for b in blocks.values())
     return {"problems": problems, "blocks": blocks, "not_rendered": not_rendered, "partially_rendered": partial,
+            "synthetic_style_fonts": sorted(synthetic), "blocks_with_bracket_change": mirrored,
+            "ligature_chars": ligatures,
             "glyphs_moved": shifted,
             "moved_blocks": moved, "page_values": page_values,
             "unattributed_chars": sum(unattributed.values()),

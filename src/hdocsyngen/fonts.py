@@ -36,6 +36,7 @@ class FontFile:
     subfamily: str
     postscript: str
     sha256: str
+    instances: tuple[str, ...] = ()            # PostScript names of a variable font's named instances
     cmap: frozenset[int] = field(repr=False, default=frozenset())
 
 
@@ -59,8 +60,19 @@ class Registry:
                 fam = n.getDebugName(16) or n.getDebugName(1) or ""
                 if fam not in OPEN_FAMILIES:
                     continue
+                ps = n.getDebugName(6) or ""
+                instances: list[str] = []
+                if "fvar" in f:
+                    # Producers name a variable font's instances: the instance's own PostScript name if it has one,
+                    # else the variations prefix (name 25, or the PostScript name's family part) plus the style.
+                    prefix = n.getDebugName(25) or ps.split("-", 1)[0]
+                    for inst in f["fvar"].instances:
+                        own = n.getDebugName(inst.postscriptNameID) if inst.postscriptNameID not in (0xFFFF, None) else None
+                        style = (n.getDebugName(inst.subfamilyNameID) or "").replace(" ", "")
+                        instances += [x for x in (own, f"{prefix}-{style}" if style else None,
+                                                  f"{ps.split('-', 1)[0]}-{style}" if style else None) if x]
                 files.append(FontFile(path=str(p), family=fam, subfamily=n.getDebugName(17) or n.getDebugName(2) or "",
-                                      postscript=n.getDebugName(6) or "",
+                                      postscript=ps, instances=tuple(sorted(set(instances))),
                                       sha256=hashlib.sha256(p.read_bytes()).hexdigest(),
                                       cmap=frozenset((f.getBestCmap() or {}).keys())))
         return cls(files)
@@ -74,7 +86,13 @@ class Registry:
         return {c for c in chars if not c.isspace() and ord(c) not in cover}
 
     def postscript_names(self, family: str) -> set[str]:
-        return {f.postscript for f in self.files if f.family == family}
+        """The family's PostScript names, variable-font instance names included."""
+        out = set()
+        for f in self.files:
+            if f.family == family:
+                out.add(f.postscript)
+                out.update(f.instances)
+        return out
 
     def manifest(self, family: str) -> list[dict]:
         return [{"file": Path(f.path).name, "postscript": f.postscript, "sha256": f.sha256,
