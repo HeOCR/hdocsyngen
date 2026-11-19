@@ -57,6 +57,35 @@ def _label_diffs(doc, producer: dict[str, str]) -> dict:
     return dict(out)
 
 
+def producer_gold(g: dict, producer: str, r: dict, pdf_name: str) -> dict:
+    """The gold for one producer's PDF: the tree gold plus the observed layers (design note §3.2): `label_producer`
+    (the scored reference, eval), the pages of every block, `not_rendered`, and the twin's geometry shift."""
+    import copy
+    out = copy.deepcopy(g)
+    out["producer"] = {"name": producer, "pdf": pdf_name, "version": r["plain"]["version"],
+                       "pdf_sha256": r["plain"]["outputs"]["pdf"]["sha256"]}
+    labels = r.get("labels")
+    out["label_basis"] = "producer" if labels is not None else "model"
+    checks = r["pdf_check"]["blocks"]
+    moved = r["pdf_check"].get("moved_blocks", {})
+    for b in out["blocks"]:
+        c = checks.get(b["id"])
+        if c is not None:
+            b["pages"] = c["pages"]
+            if c.get("not_rendered"):
+                b["not_rendered"] = True
+            if b["id"] in moved:
+                b["twin_shift_pt"] = moved[b["id"]]
+        if labels is not None and "label_model" in b:
+            b["label_producer"] = labels.get(b["id"])
+    for kind in ("header", "footer"):
+        for f in out["furniture"][kind]:
+            c = checks.get(f["id"])
+            if c is not None:
+                f["pages"] = c["pages"]
+    return out
+
+
 def run_doc(template: str, seed: int, pool: TextPool, reg: F.Registry, out: Path, producers: list[str],
             image: bool, grain: bool) -> dict:
     doc_id = f"{template}-{seed}"
@@ -68,7 +97,9 @@ def run_doc(template: str, seed: int, pool: TextPool, reg: F.Registry, out: Path
     if problems:
         return {"doc_id": doc_id, "error": f"invalid tree: {problems[:3]}"}
     allowed = reg.postscript_names(doc.meta.font)
-    files = {"tree.json": dumps(doc).encode(), "gold.json": json.dumps(gold(doc), ensure_ascii=False, indent=1).encode(),
+    tj = dumps(doc)
+    gold_doc = gold(doc, tj)
+    files = {"tree.json": tj.encode(), "gold.json": json.dumps(gold_doc, ensure_ascii=False, indent=1).encode(),
              "docx": DOCX.write(doc), "twin.docx": DOCX.write(doc, twin=True),
              "html": HTML.write(doc), "twin.html": HTML.write(doc, twin=True)}
     for name, b in files.items():
@@ -107,6 +138,8 @@ def run_doc(template: str, seed: int, pool: TextPool, reg: F.Registry, out: Path
                 r["label_agreement"] = _label_diffs(doc, labels)
             r["pdf_check"] = C.verify_pdf(doc, plain_pdf, twin_pdf, allowed)
             r["census"] = C.census(plain_pdf)
+            pg = producer_gold(gold_doc, prod, r, plain_pdf.name)
+            (d / f"{doc_id}.{prod}.gold.json").write_text(json.dumps(pg, ensure_ascii=False, indent=1))
             if image:
                 for dpi in (200, 300):
                     ip = d / prod / f"{doc_id}.{prod}.img{dpi}.pdf"
