@@ -40,11 +40,29 @@ The code is `src/hdocsyngen/gold.py`. These are the layers the tree fixes exactl
 | `lineage` | `tree_sha256` (of the `*.tree.json` it was computed from), the hdocsyngen version and commit |
 | `label_basis` | `model`. Eval's rule: the **`producer`** basis is the scored reference, and `model` is a diagnostic. The verifier adds `label_producer` per block from the producer's own export (next PR). |
 
-**Not yet written:** these are producer-dependent, and come with the producer stage (design note §3.3):
-- pages and geometry, from the colour twin;
-- `label_producer`;
-- `not_rendered`;
-- drawn text.
+## The producer layers (`<doc>.<producer>.gold.json`, PR 2)
+
+For each producer's PDF, the pilot writes the tree gold plus what that producer did (design note §3.2):
+
+| Field | Content |
+|---|---|
+| `producer` | name, version, PDF file and its sha256 |
+| `label_basis` | `producer` where the producer's own labels were read back (Word's list strings, LibreOffice's text export); `model` otherwise (Chrome: labels are CSS counters) |
+| `blocks[].label_producer` | the label the producer rendered: **the scored reference** (eval) |
+| `blocks[].pages` | the pages the block's glyphs land on, found through the colour twin |
+| `blocks[].not_rendered` | true when the block has no pixels of its colour in the rendered twin (clipped or hidden). Out of the reference, and counted per chain. |
+| `blocks[].twin_shift_pt` | the largest shift of the block's glyphs between the twin and the plain PDF, when over the recording bound |
+| `furniture[].pages`, `furniture[].page_values` | for paragraphs with fields: `[{page, field_offset, text}]`, the value printed on each page. A field's reference is the producer basis, like labels. |
+| `checks` | the bounds the set was checked to, recorded in the gold |
+
+**The `checks` bounds:**
+- **Twin geometry:** each twin glyph is matched, order-free, to the nearest plain glyph with the same page and
+  character. A shift over 0.25 pt is recorded in `twin_shift_pt`; a glyph more than 3 pt from any plain glyph fails the
+  document. Coordinates are compared after rounding to 0.1 pt, so 0.25 pt is the smallest bound above rounding noise.
+- **Fonts:** a hard check. Every PDF font must be a PostScript name of the requested open family.
+- **Labels:** compared exactly after stripping. **Bullets are a class:** any bullet glyph (`•`, `–`, `-`, `*`, `◦`,
+  `▪`, `·`) equals any other, so a LibreOffice `•` against a Word `▪` is not a label disagreement. LibreOffice's text
+  export writes every bullet as `•`, whatever the PDF draws.
 
 **Offsets:** every offset (`values`, `ltr_runs`, note anchors, `fields`) is into the block's stored `text`, after
 field runs are removed.
@@ -61,5 +79,5 @@ field runs are removed.
   each page (`page_values`). A page number's reference is the producer basis, like labels. Until then, furniture
   scoring ignores a number at a field's offset.
 
-**Sign-off:** eval signs both schemas off (dropping `-draft`) in the PR that adds the producer layers, because the
-`producer` label basis is the scored reference.
+**Sign-off:** eval signs both schemas off (dropping `-draft`) in this PR, once it has the producer layers and
+`page_values`.

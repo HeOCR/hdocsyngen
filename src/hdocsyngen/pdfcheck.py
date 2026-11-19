@@ -165,6 +165,47 @@ def _pixel_counts(pdf: Path, dpi: int = 150) -> Counter:
     return counts
 
 
+def _page_values(doc: Document, twin_raw, colours: dict[int, str]) -> dict[str, list[dict]]:
+    """The value each furniture field printed on each page (eval: the producer-basis reference for fields).
+
+    A furniture paragraph's glyphs are found by its twin colour, per page. Runs of digit glyphs on one baseline form
+    the printed numbers; they are assigned to the paragraph's fields in logical order, which in a right-to-left
+    paragraph is right to left on the page. Digits inside a number read left to right.
+    """
+    from .gold import _fields
+    out: dict[str, list[dict]] = {}
+    furn = {p.id: p for p in doc.furniture.header + doc.furniture.footer}
+    glyphs: dict[tuple[str, int], list] = defaultdict(list)
+    loose: dict[int, list] = defaultdict(list)          # uncoloured digits per page: Word and LibreOffice redraw
+    for page_no, ch in twin_raw:                         # field results without the run's colour
+        pid = colours.get(colour_index(_rgb255(ch) or (255, 255, 255)))
+        if pid in furn:
+            glyphs[(pid, page_no)].append(ch)
+        elif pid is None and ch.get_text().isdigit():
+            loose[page_no].append(ch)
+    for (pid, page_no), chs in sorted(glyphs.items(), key=lambda x: (x[0][0], x[0][1])):
+        fields = _fields(furn[pid])
+        if not fields:
+            continue
+        baselines = {round(c.y0, 1) for c in chs}
+        mine = [c for c in chs if c.get_text().isdigit()]
+        mine += [c for c in loose.get(page_no, []) if any(abs(c.y0 - y) < 1.0 for y in baselines)]
+        digits = sorted(mine, key=lambda c: (round(c.y0), c.x0))
+        clusters: list[list] = []
+        for c in digits:
+            last = clusters[-1][-1] if clusters else None
+            if last is not None and abs(c.y0 - last.y0) < 1 and 0 <= c.x0 - last.x1 < 0.5 * max(1.0, c.size):
+                clusters[-1].append(c)
+            else:
+                clusters.append([c])
+        clusters.sort(key=lambda cl: -cl[0].x0)                  # right to left: logical order in RTL
+        rec = out.setdefault(pid, [])
+        for f, cl in zip(fields, clusters):
+            rec.append({"page": page_no, "field": f["kind"], "field_offset": f["offset"],
+                        "text": "".join(c.get_text() for c in cl)})
+    return out
+
+
 def verify_pdf(doc: Document, plain: Path, twin: Path, allowed_fonts: set[str]) -> dict:
     """Problems (hard failures) and the observed layers: pages per block, not_rendered blocks."""
     problems: list[str] = []
@@ -218,6 +259,7 @@ def verify_pdf(doc: Document, plain: Path, twin: Path, allowed_fonts: set[str]) 
             continue
         got_text[pid].append(ch.get_text())
         pages[pid].add(page_no)
+    page_values = _page_values(doc, twin_raw, colours)
     pixels = _pixel_counts(twin)
     blocks, not_rendered = {}, []
     by_colour = twin_colours(doc)
@@ -239,6 +281,6 @@ def verify_pdf(doc: Document, plain: Path, twin: Path, allowed_fonts: set[str]) 
         if missing and not entry.get("not_rendered") and container not in ("header", "footer"):
             problems.append(f"{p.id}: {sum(missing.values())} gold characters not in the text layer")
     return {"problems": problems, "blocks": blocks, "not_rendered": not_rendered, "glyphs_moved": shifted,
-            "moved_blocks": moved,
+            "moved_blocks": moved, "page_values": page_values,
             "unattributed_chars": sum(unattributed.values()),
             "unattributed_sample": "".join(sorted(unattributed))[:60]}

@@ -78,11 +78,19 @@ def producer_gold(g: dict, producer: str, r: dict, pdf_name: str) -> dict:
                 b["twin_shift_pt"] = moved[b["id"]]
         if labels is not None and "label_model" in b:
             b["label_producer"] = labels.get(b["id"])
+    pv = r["pdf_check"].get("page_values", {})
     for kind in ("header", "footer"):
         for f in out["furniture"][kind]:
             c = checks.get(f["id"])
             if c is not None:
                 f["pages"] = c["pages"]
+            if f.get("fields"):
+                f["page_values"] = [{"page": v["page"], "field_offset": v["field_offset"], "text": v["text"]}
+                                    for v in pv.get(f["id"], [])]
+    out["checks"] = {"twin_geometry": {"match": "order-free, same page and character",
+                                       "shift_recorded_over_pt": 0.25, "fail_over_pt": 3.0},
+                     "label_comparison": "exact after stripping; bullet glyphs equal any bullet (a class)",
+                     "fonts": "hard: every PDF font is a PostScript name of the requested open family"}
     return out
 
 
@@ -167,6 +175,9 @@ def run_doc(template: str, seed: int, pool: TextPool, reg: F.Registry, out: Path
 
 def run(spec: dict, out: Path) -> dict:
     out.mkdir(parents=True, exist_ok=True)
+    pool_sha = _sha(Path(spec["pool"]).read_bytes())
+    if spec.get("pool_sha256") and spec["pool_sha256"] != pool_sha:
+        raise ValueError(f"pool sha256 {pool_sha} is not the pinned {spec['pool_sha256']}")
     pool = TextPool.load(spec["pool"], spec.get("require_licence"))
     reg = F.Registry.scan([Path(p).expanduser() for p in spec["fonts_dirs"]])
     producers = spec.get("producers", ["word", "lo", "chrome"])
@@ -174,7 +185,7 @@ def run(spec: dict, out: Path) -> dict:
                  "lo": P.lo_version() if "lo" in producers else None,
                  "chrome": P.chrome_version() if "chrome" in producers else None}
     manifest = {"schema": "hdocsyngen_pilot.v0", "hdocsyngen": __version__, "spec": spec,
-                "pool_sha256": _sha(Path(spec["pool"]).read_bytes()), "versions": versions0,
+                "pool_sha256": pool_sha, "versions": versions0,
                 "fonts": [{"family": f.family, "file": Path(f.path).name, "postscript": f.postscript,
                            "sha256": f.sha256, "licence": F.OPEN_FAMILIES[f.family]} for f in reg.files],
                 "docs": []}
