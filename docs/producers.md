@@ -33,6 +33,17 @@
   compatibility forms folded (NFKC: a ligature such as `ﬁ` counts as `fi`, and is recorded) and each mirrored bracket
   pair as one class. Whether the producer stored the logical bracket or its mirror (the glyph
   drawn in RTL) is recorded per block (`brackets`).
+- **Independent text-layer audit (`text_readback`):** PDFium glyph origins define physical order within horizontal
+  baselines. In colour-twin blocks, ASCII English and numeric tokens from the tree are checked in increasing x order,
+  including when Hebrew around them reads right to left. The audit counts forward, reversed and unresolved tokens.
+  A wrapped token or unreadable twin colour can be unresolved. Repeated copies are counted at block level. On the
+  plain PDF, pdfminer, Poppler and PyMuPDF are compared with the PDFium visual slots
+  for character coverage per page. This comparison ignores whitespace, bidi controls and bracket mirroring, and
+  decomposes ligatures and combining marks. Each reader can legitimately return a different sequence. P9 and P10
+  receive the same page-level audit.
+- **Single-line bidi order:** when a block with LTR tokens fits one baseline and its characters match the tree,
+  the audit compares the observed sequence with both Python BiDi implementations, using a Hebrew base direction
+  and LTR embeddings for English and numeric runs. Each implementation's result is recorded separately.
 - **Pixels:** a block with no pixels of its colour in the rendered twin is `not_rendered`; one with pixels per glyph
   below 25% of the document's median is `partially_rendered`.
 - **DOCX:** the producer-re-saved DOCX must carry the gold. numIds are matched one to one.
@@ -57,19 +68,31 @@
 | Word for Mac 16.115 | Quartz PDFContext; Type 1C subsets, the Latin and digit subsets **without ToUnicode**; logical stream order (T2 signal 0); about half the glyph runs single glyphs | With Word's default **tab** after list labels, Word draws the tab with Arial (a substituted face). The writer uses a space inside the label instead (suffix `nothing`). |
 | LibreOffice 26.2.5.2 | Type 1 with ToUnicode; **visual stream order** for Hebrew (T2 signal 1.0) | It writes the colour twin's glyphs in a different stream order, so geometry is matched order-free. Its text export writes every bullet as `•`. |
 | Chrome for Testing 158 | Skia PDF; Culmus faces as **Type 3**; visual stream order (T2 signal 1.0); a tagged structure tree | Footnotes become end notes: there are no paged-media footnotes. |
-| Tesseract 5.5.3 PDF over 200 dpi JPEG 55 with grain | GlyphLessFont CID layer | The `heb` layer **reversed a date's digits** on a grainy page (the reversed-numbers effect pipeline asked for). The `eng` layer is garbage (T4). |
+| Tesseract 5.5.3 PDF over 200 dpi JPEG 55 with grain | GlyphLessFont CID layer | The apparent reversal of a date's digits came from `pdftotext`'s bidi display. The full pilot checked the digits in [stream order](pilot_v0_report.md). The `eng` layer is a wrong-language layer (T4). |
 
 ocrmypdf 16.13 needs Ghostscript, which is phase 2, so the pilot uses Tesseract's PDF renderer for P10.
 
 ## Running the pilot
 
 ```bash
-python -m pip install -e ".[test,fonts,pdf]"
+python -m pip install -e ".[test,fonts,pdf,readback]"
+# Install Poppler's pdftotext on PATH.
 export HDOCSYNGEN_CHROME=".../Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing"
 export HDOCSYNGEN_TOOLS_BIN=".../hdocsyngen-pilot-env/.venv/bin"
 hdocsyngen pilot --spec spec.json --out runs/pilot-v0
 hdocsyngen pilot-summary runs/pilot-v0
 ```
 
+A saved PDF can be audited without rerunning its producer. Supply the tree and colour twin together to also check
+LTR tokens.
+
+```bash
+hdocsyngen pdf-readback plain.pdf --tree source.tree.json --twin colour-twin.pdf
+```
+
+Pilot outputs are for training or calibration under the applicable data approvals. Keep Reshumot out of any CC0 set
+and retain each input's provenance. A CC0 prose pool alone does not establish CC0 for the resulting documents.
+Font files stay local. The audit measures synthetic text-layer survival and does not report OCR performance.
+
 A 2-document mini run takes about 3 minutes (about 100 s a document, with every route). The 48-document pilot is a
-heavy job and goes through the power scheduler.
+longer run. Use the power scheduler for local jobs expected to sustain full CPU or GPU use for more than about an hour.

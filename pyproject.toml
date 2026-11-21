@@ -21,6 +21,7 @@ dependencies = []
 test = ["pytest>=8"]
 fonts = ["fonttools==4.68.0"]
 pdf = ["pdfminer.six==20260107", "pypdfium2==5.15.2", "numpy>=2", "pillow>=11"]
+readback = ["PyMuPDF==1.27.2.3", "python-bidi==0.6.12"]
 
 [project.scripts]
 hdocsyngen = "hdocsyngen.cli:main"
