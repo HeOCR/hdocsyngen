@@ -62,6 +62,14 @@ def cmd_verify_docx(a) -> int:
     return 0 if not problems else 1
 
 
+def cmd_pdf_readback(a) -> int:
+    from .pdfcheck import read_text_layer
+
+    doc = loads(a.tree.read_text(encoding="utf-8")) if a.tree else None
+    print(json.dumps(read_text_layer(a.pdf, doc, a.twin), indent=1))
+    return 0
+
+
 def cmd_pilot(a) -> int:
     from . import pilot
     spec = json.loads(Path(a.spec).read_text())
@@ -92,7 +100,12 @@ def main(argv: list[str] | None = None) -> int:
     v.add_argument("docx")
     v.add_argument("--no-numbering", action="store_true", help="skip numPr checks (producers may restructure lists)")
     v.set_defaults(func=cmd_verify_docx)
-    pl = sub.add_parser("pilot", help="run the pilot (needs the pdf and fonts extras and the producers)")
+    r = sub.add_parser("pdf-readback", help="audit a synthetic PDF text layer (needs the pdf and readback extras)")
+    r.add_argument("pdf", type=Path)
+    r.add_argument("--tree", type=Path, help="source tree for the LTR check (requires --twin)")
+    r.add_argument("--twin", type=Path, help="colour twin for the LTR check (requires --tree)")
+    r.set_defaults(func=cmd_pdf_readback)
+    pl = sub.add_parser("pilot", help="run the pilot (needs the pdf, fonts and readback extras and the producers)")
     pl.add_argument("--spec", required=True)
     pl.add_argument("--out", required=True)
     pl.set_defaults(func=cmd_pilot)
@@ -100,6 +113,8 @@ def main(argv: list[str] | None = None) -> int:
     ps.add_argument("out")
     ps.set_defaults(func=cmd_pilot_summary)
     a = ap.parse_args(argv)
+    if a.cmd == "pdf-readback" and (a.tree is None) != (a.twin is None):
+        r.error("--tree and --twin must be supplied together")
     return a.func(a)
 
 

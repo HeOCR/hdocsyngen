@@ -11,6 +11,8 @@
      multiset (order-free, because a layer may be in visual order); the page(s) each block lands on are recorded;
   4. **pixels:** a block with text-layer characters but no pixels of its colour in the rendered twin is
      `not_rendered` (clipped or hidden).
+- `read_text_layer(pdf, doc, twin)`: comparison of position-sorted pdfium, pdfminer, Poppler and PyMuPDF.
+  An optional tree and colour twin let it also check that LTR tokens occupy increasing x slots within a block.
 
 Characters are read with pdfium (pypdfium2); document structure (fonts, ToUnicode, StructTreeRoot) with pdfminer.six
 (the `pdf` extra).
@@ -23,7 +25,8 @@ from collections import Counter, defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 
-from .tree import Document, colour_index, iter_paragraphs, text_of, twin_colours
+from .readers.pdf_read import mupdf_pages, poppler_pages
+from .tree import Document, Run, colour_index, iter_paragraphs, text_of, twin_colours
 
 CENSUS_VERSION = "census.v0"
 SHIFT_RECORD_PT = 0.25      # twin shifts above this are recorded (coordinates are compared rounded to 0.1 pt)
@@ -235,6 +238,111 @@ def _fold_brackets(c: Counter) -> Counter:
     for ch, n in c.items():
         out[min(ch, MIRROR.get(ch, ch))] += n
     return out
+
+
+def _visual_lines(glyphs: list[Glyph]) -> list[str]:
+    """Horizontal baselines from top to bottom, with glyph slots from left to right on each baseline."""
+    lines: list[list[Glyph]] = []
+    for glyph in sorted(glyphs, key=lambda g: -g.origin[1]):
+        if not lines or lines[-1][0].origin[1] - glyph.origin[1] > 1.0:
+            lines.append([])
+        lines[-1].append(glyph)
+    return ["".join(g.text for g in sorted(line, key=lambda g: g.origin[0])) for line in lines]
+
+
+_LTR_TOKEN = re.compile(r"[A-Za-z0-9](?:[A-Za-z0-9:/.,@_+#?&=%~-]*[A-Za-z0-9])?")
+_BRACKET_CLASSES = str.maketrans({c: min(c, mirror) for c, mirror in MIRROR.items()})
+
+
+def _slot_order(text: str) -> str:
+    return "".join(c for c in unicodedata.normalize("NFKD", text).translate(_BRACKET_CLASSES)
+                   if not c.isspace() and unicodedata.category(c) not in ("Cf", "Mn", "Me"))
+
+
+def _bidi_order(runs: list[Run], observed: str) -> dict[str, bool] | None:
+    """Compare order only when the one visual line carries the tree's characters."""
+    visual = _slot_order(observed)
+    if Counter(visual) != Counter(_slot_order("".join(run.text for run in runs))):
+        return None
+    from bidi import get_display as rust_display
+    from bidi.algorithm import get_display as python_display
+
+    # Recreate the tree's direction instead of passing through any controls from source prose.
+    logical = []
+    for run in runs:
+        text = "".join(c for c in run.text if unicodedata.category(c) != "Cf")
+        logical.append(text if run.lang == "he" else f"\u202a{text}\u202c")
+    text = "".join(logical)
+    return {"python_bidi": visual == _slot_order(python_display(text, base_dir="R")),
+            "rust_bidi": visual == _slot_order(rust_display(text, base_dir="R"))}
+
+
+def _ltr_slots(doc: Document, twin_glyphs: list[tuple[int, Glyph]]) -> dict[str, dict]:
+    colours = {colour_index(rgb): pid for pid, rgb in twin_colours(doc).items()}
+    per_block: dict[str, dict[int, list[Glyph]]] = defaultdict(lambda: defaultdict(list))
+    for page, glyph in twin_glyphs:
+        pid = colours.get(colour_index(glyph.rgb)) if glyph.rgb is not None else None
+        if pid is not None:
+            per_block[pid][page].append(glyph)
+    checks = {}
+    for _, p in iter_paragraphs(doc):
+        expected = Counter(token for run in p.runs if run.lang in ("en", "num") and run.field is None
+                           for token in _LTR_TOKEN.findall(run.text) if token != token[::-1])
+        if not expected:
+            continue
+        lines = [line for glyphs in per_block[p.id].values() for line in _visual_lines(glyphs)]
+        observed = Counter(token for line in lines
+                           for token in _LTR_TOKEN.findall(unicodedata.normalize("NFKC", line)))
+        forward = expected & observed
+        # Reserve exact matches first when a block contains both a token and its reverse.
+        remaining = observed - forward
+        reversed_count = sum(min(n, remaining[token[::-1]]) for token, n in (expected - forward).items())
+        found = forward.total()
+        checks[p.id] = {"forward": found, "reversed": reversed_count,
+                        "unresolved": expected.total() - found - reversed_count}
+        if len(lines) == 1 and not any(run.field for run in p.runs):
+            order = _bidi_order(p.runs, lines[0])
+            if order is not None:
+                checks[p.id]["visual_order"] = order
+    return checks
+
+
+def _readback_chars(text: str) -> Counter:
+    # NFKD compares decomposed marks even when a reader emitted them in a different order.
+    return _fold_brackets(Counter(c for c in unicodedata.normalize("NFKD", text)
+                                  if not c.isspace() and unicodedata.category(c) != "Cf"))
+
+
+def read_text_layer(pdf: Path, doc: Document | None = None, twin: Path | None = None) -> dict:
+    """Audit text-layer coverage per page and physical LTR token order in the colour twin.
+
+    Reader deltas are relative to PDFium's visual slots. The tree and the existing block survival checks remain
+    the reference; e.g. three readers can agree on the same damaged Unicode map. The audit contains counts only.
+    """
+    if (doc is None) != (twin is None):
+        raise ValueError("both the tree and its colour twin are required for the LTR check")
+    visual: dict[int, list[Glyph]] = defaultdict(list)
+    for page, glyph in _chars(pdf):
+        visual[page].append(glyph)
+    stream: dict[int, list[str]] = defaultdict(list)
+    for page, glyph in _stream_chars(pdf):
+        stream[page].append(glyph.get_text())
+    poppler, mupdf = poppler_pages(pdf), mupdf_pages(pdf)
+    if len(poppler) != len(mupdf):
+        raise ValueError(f"read-back page count differs: Poppler {len(poppler)}, PyMuPDF {len(mupdf)}")
+    pages = []
+    for i, (poppler_text, mupdf_text) in enumerate(zip(poppler, mupdf, strict=True), 1):
+        reference = _readback_chars("\n".join(_visual_lines(visual[i])))
+        readers = {}
+        for name, text in (("pdfminer", "".join(stream[i])), ("poppler", poppler_text), ("pymupdf", mupdf_text)):
+            chars = _readback_chars(text)
+            readers[name] = {"chars": chars.total(), "missing": (reference - chars).total(),
+                             "extra": (chars - reference).total()}
+        pages.append({"page": i, "pdfium_visual_chars": reference.total(), "readers": readers})
+    result = {"pages": pages}
+    if doc is not None and twin is not None:
+        result["ltr_slots"] = _ltr_slots(doc, list(_chars(twin)))
+    return result
 
 
 def _pixel_counts(pdf: Path, dpi: int = 150) -> Counter:

@@ -13,8 +13,10 @@ from __future__ import annotations
 import hashlib
 import json
 import random
+import shutil
 import traceback
 from collections import Counter, defaultdict
+from importlib.util import find_spec
 from pathlib import Path
 
 from . import __version__
@@ -151,6 +153,7 @@ def run_doc(template: str, seed: int, pool: TextPool, reg: F.Registry, out: Path
                 r["labels"] = labels
                 r["label_agreement"] = _label_diffs(doc, labels)
             r["pdf_check"] = C.verify_pdf(doc, plain_pdf, twin_pdf, allowed)
+            r["text_readback"] = C.read_text_layer(plain_pdf, doc, twin_pdf)
             r["census"] = C.census(plain_pdf)
             pg = producer_gold(gold_doc, prod, r, plain_pdf.name)
             (d / f"{doc_id}.{prod}.gold.json").write_text(json.dumps(pg, ensure_ascii=False, indent=1))
@@ -159,16 +162,19 @@ def run_doc(template: str, seed: int, pool: TextPool, reg: F.Registry, out: Path
                     ip = d / prod / f"{doc_id}.{prod}.img{dpi}.pdf"
                     pages = d / prod / f"pages{dpi}"
                     r[f"img{dpi}"] = I.rasterise(plain_pdf, ip, dpi, 85, 0.0, seed, keep_pages=pages)
+                    r[f"img{dpi}"]["text_readback"] = C.read_text_layer(ip)
                     if dpi == 200:
                         jpgs = sorted(pages.glob("*.jpg"))
                         for lang in ("heb", "eng"):
                             op = d / prod / f"{doc_id}.{prod}.img200.ocr_{lang}.pdf"
                             r[f"ocr_{lang}"] = I.ocr_layer(jpgs, op, lang, 200)
                             r[f"ocr_{lang}"]["census"] = C.census(op)
+                            r[f"ocr_{lang}"]["text_readback"] = C.read_text_layer(op)
             if grain:
                 q = random.Random(seed).randint(40, 70)
                 gp = d / prod / f"{doc_id}.{prod}.grain200q{q}.pdf"
                 r["grain"] = I.rasterise(plain_pdf, gp, 200, q, 1.0, seed)
+                r["grain"]["text_readback"] = C.read_text_layer(gp)
         except P.VersionChanged:
             raise
         except Exception as e:                                   # a producer failure is a result, not a crash
@@ -180,6 +186,8 @@ def run_doc(template: str, seed: int, pool: TextPool, reg: F.Registry, out: Path
 
 
 def run(spec: dict, out: Path) -> dict:
+    if not shutil.which("pdftotext") or any(find_spec(module) is None for module in ("pymupdf", "bidi")):
+        raise RuntimeError("pilot text read-back needs pdftotext (Poppler) and the readback extra")
     out.mkdir(parents=True, exist_ok=True)
     pool_sha = _sha(Path(spec["pool"]).read_bytes())
     if spec.get("pool_sha256") and spec["pool_sha256"] != pool_sha:
