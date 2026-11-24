@@ -92,8 +92,8 @@ def _numeric(s: str) -> bool:
 
 
 def build(template: str, doc_id: str, seed: int, pool: TextPool) -> Document:
-    from . import report, tender
-    return {"tender": tender.build, "report": report.build}[template](doc_id, seed, pool)
+    from . import report, tables, tender
+    return {"tender": tender.build, "report": report.build, "tables": tables.build}[template](doc_id, seed, pool)
 
 
-TEMPLATES = ("tender", "report")
+TEMPLATES = ("tender", "report", "tables")
