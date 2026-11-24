@@ -99,3 +99,30 @@ Font files stay local. The audit measures synthetic text-layer survival and does
 
 A 2-document mini run takes about 3 minutes (about 100 s a document, with every route). The 48-document pilot is a
 longer run. Use the power scheduler for local jobs expected to sustain full CPU or GPU use for more than about an hour.
+
+## Scaling the saved producer matrix
+
+`pilot-matrix` uses the saved Word, LibreOffice and Chrome PDFs and their
+`pilot-readback` JSON. It creates four P8 variants, three P9 variants and
+three P10 variants for each native producer slot. It keeps the native checks
+from the input audit and applies the same four-reader page audit to each
+derived PDF. The source pilot stays read-only. See the [full matrix report](pilot_full_matrix.md)
+for the 48-tree run and the CC0 audit bundle.
+
+Install the reader extras, `img2pdf==0.6.3`, Ghostscript, Poppler and
+Tesseract with `heb` and `eng` data. Supply the pinned language data path
+and use one Tesseract thread for the local run.
+
+```sh
+export TESSDATA_PREFIX=/path/to/tessdata
+export OMP_THREAD_LIMIT=1
+hdocsyngen pilot-matrix /path/to/pilot-v0 \
+  --native-audit docs/pilot_v0_reader_audit.json \
+  --tessdata "$TESSDATA_PREFIX" --out /path/to/matrix-artifacts > matrix.json
+```
+
+The command accepts `--limit N` for a smoke run. Rerun without the limit
+to continue in the same output directory. A complete slot resumes only
+if its source, tool and artifact hashes still match. Use a new output
+directory when the recipe or tool versions change. The output contains
+generation and reader diagnostics. It is for synthetic pilot analysis.
