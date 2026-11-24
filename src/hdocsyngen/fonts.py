@@ -31,7 +31,7 @@ OPEN_FAMILIES = {
 }
 
 
-# Held out for HeOCR evaluation (niqqud print test, 2026-11-19): never in a training render. The list is shared with
+# Held out for HeOCR print evaluation: never in a training render. The list is shared with
 # hocrsyngen (data/fonts_excluded.json, schema heocr_font_exclusion.v1). Eval's gate-set renders may opt in with
 # HDOCSYNGEN_EVAL_RENDER=1 for that run only.
 EXCLUSION_PATH = Path(__file__).with_name("data") / "fonts_excluded.json"
