@@ -7,6 +7,7 @@ checked (producer-filled). An empty list means the DOCX carries the gold.
 from __future__ import annotations
 
 from .readers.docx_read import read
+from .layout import printed
 from .tree import Document, Heading, PageBreak, Paragraph, Table, text_of
 
 
@@ -31,6 +32,7 @@ def verify_docx(doc: Document, data: bytes, check_numbering: bool = True) -> lis
     note_text = {n.id: "\n".join(text_of(p) for p in n.paragraphs) for n in doc.notes}
     for i, (e, g) in enumerate(zip(expected, blocks)):
         if isinstance(e, Table):
+            e = printed(e)
             if g["type"] != "table":
                 problems.append(f"{e.id}: expected a table, read a paragraph")
                 continue

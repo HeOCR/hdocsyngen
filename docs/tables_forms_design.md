@@ -18,9 +18,9 @@ The codes come from heocr-agent-wiki `records/tables/phase0-2026-11-25`.
 | F8 GLYPH-GAPS | decimals, percentages and grouped amounts in many fonts | every variant | PR 1 (the fault itself comes through producers and layer faults, PR 3) |
 | F11 CROSS-PAGE | 45–90 rows, header repeated in about 60% of tables | `long` | PR 1 |
 | F13 MATRIX | a triangular matrix with diagonal labels and no header row | `matrix` | PR 1 |
-| F10 OPEN-SIDES | rulings without outer verticals | needs `ruled: "inner"` | PR 2 (schema) |
-| F12 SNAKE | one logical table printed as side-by-side blocks | needs a `layout` field and a printed-grid → logical-table map | PR 2 (schema) |
-| F14 ROTATED | a landscape section holding a table | needs per-section orientation | PR 2 (schema) |
+| F10 OPEN-SIDES | rulings without outer verticals | `ruled: "inner"`, drawn by every variant | PR 2 |
+| F12 SNAKE | one logical table printed as side-by-side blocks | `table.blocks` (k), `layout.printed()` and `blocks` gold metadata; `snake` variant | PR 2 |
+| F14 ROTATED | a landscape section holding a table | per-section orientation | PR 2b |
 | F9 / F5 / F1 layer faults | visual-order runs, split runs, hidden OCR layers, missing `.` glyphs | a PDF post-process on producer output, with the gold unchanged | PR 3 |
 | scans and photos | image-only variants | hocrsyngen scanifier and 3D capture, used as libraries with the commit pinned | PR 4 |
 | F15 FORM-TREE | sections, labelled fields, value slots, checkboxes, mini-tables, side-by-side sections | a `form` template plus a form-tree gold | PR 5 (schema) |
@@ -35,7 +35,7 @@ The codes come from heocr-agent-wiki `records/tables/phase0-2026-11-25`.
 ## Schema additions (approved by eval, 2026-11-25; code in PR 2 and PR 5)
 
 - **`table.ruled`** gains `"inner"`: rulings between cells, with no outer border.
-- **`table.layout`**: `{"blocks": k}` prints the logical table as `k` side-by-side copies of its columns, each with the header repeated. The gold keeps the logical table, plus a `blocks` record of the block boundaries (convention a).
+- **`table.blocks`** (k, default 1) prints the logical table as `k` side-by-side copies of its columns, each with the header repeated. Body rows are cut into runs of `ceil(body_rows / k)`, and block 0 is the start (rightmost) block. The gold keeps the logical table, plus a `blocks` record: `{k, header_rows, rows_per_block, ranges}`, where `ranges` are logical body-row ranges (convention a). Writers and the DOCX verifier share `layout.printed()`. Side-by-side tables need leading header rows and no body row spans. (This is the approved `layout: {"blocks": k}`, flattened to one field.)
 - **Section orientation**: `meta.sections[]` with `orientation: landscape` for a page range.
 - **The form tree, `hdoc_form.v1`**: `form → section* → (field | table | group)`.
   - **`field`:** `{id, label, value, kind, slot, pages}`.

@@ -14,6 +14,7 @@ from __future__ import annotations
 
 from html import escape
 
+from ..layout import printed
 from ..tree import Document, Heading, PageBreak, Paragraph, Run, Table, text_of, twin_colours
 
 CSS_FMT = {"decimal": "decimal", "hebrew1": "hebrew", "lowerLetter": "lower-latin"}
@@ -132,6 +133,7 @@ def write(doc: Document, twin: bool = False) -> bytes:
         if isinstance(b, PageBreak):
             body.append('<div class="pb"></div>')
         elif isinstance(b, Table):
+            b = printed(b)
             origin = {(c.r, c.c): c for c in b.cells}
             head_rows = sorted({c.r for c in b.cells if c.header})
             widths = b.col_widths or [1.0] * b.cols
@@ -200,6 +202,11 @@ thead {{ display: table-header-group; }} tr {{ break-inside: avoid; }}
 .ruled-all td, .ruled-all th {{ border: 0.5pt solid black; }}
 .ruled-header th {{ border-bottom: 1pt solid black; }}
 .ruled-rows tr {{ border-top: 0.5pt solid black; border-bottom: 0.5pt solid black; }}
+.ruled-inner td, .ruled-inner th {{ border: 0.5pt solid black; }}
+.ruled-inner tr:first-child td, .ruled-inner tr:first-child th {{ border-top: none; }}
+.ruled-inner tr:last-child td, .ruled-inner tr:last-child th {{ border-bottom: none; }}
+.ruled-inner td:first-child, .ruled-inner th:first-child {{ border-right: none; }}
+.ruled-inner td:last-child, .ruled-inner th:last-child {{ border-left: none; }}
 .notes {{ font-size: 0.85em; margin-top: 1.5em; }} .notes hr {{ width: 30%; margin-inline-start: 0; }}
 .nref {{ font-size: 0.7em; }}
 .pb {{ break-after: page; }}

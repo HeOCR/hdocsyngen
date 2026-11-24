@@ -25,7 +25,8 @@ def to_heocr_table(table: dict, pages: list[int] | None = None) -> dict:
     return {"schema": "heocr_table.v1", "id": table["id"], "rows": table["rows"], "cols": table["cols"],
             "header_rows": header_rows(table), "direction": "rtl", "pages": pages,
             "cells": [{"r": c["r"], "c": c["c"], "rowspan": c["rowspan"], "colspan": c["colspan"], "text": c["text"]}
-                      for c in table["cells"]]}
+                      for c in table["cells"]],
+            **({"blocks": table["blocks"]} if table.get("blocks") else {})}
 
 
 def page_breaks(table: dict, producer_gold: dict) -> list[int] | None:

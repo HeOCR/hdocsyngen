@@ -97,3 +97,44 @@ def test_page_breaks_from_producer_pages():
                            {"id": "p3", "pages": [2]}, {"id": "p4", "pages": [3]}]}
     assert page_breaks(table, producer) == [3, 4]
     assert page_breaks(table, {"blocks": []}) is None
+
+
+def test_snake_layout_prints_blocks_and_keeps_the_logical_gold(pool):
+    from hdocsyngen.layout import blocks_meta, printed
+    b = Builder("snake", 4, pool)
+    t = T.snake(b)
+    t.blocks = 3
+    p = printed(t)
+    meta = blocks_meta(t)
+    assert p.cols == 3 * t.cols and p.rows == 1 + meta["rows_per_block"]
+    # block 0 is the start (rightmost) block: logical body row 1 is printed row 1, columns 0..cols-1
+    by_pos = {(c.r, c.c): c for c in p.cells}
+    first_body = next(c for c in t.cells if c.r == 1 and c.c == 0)
+    assert by_pos[(1, 0)].paragraphs == first_body.paragraphs
+    # the second block's first row is logical row 1 + rows_per_block
+    second = next(c for c in t.cells if c.r == 1 + meta["rows_per_block"] and c.c == 0)
+    assert by_pos[(1, t.cols)].paragraphs == second.paragraphs
+    # header repeated in every block
+    assert all(by_pos[(0, k * t.cols)].header for k in range(3))
+    furniture = Furniture(header=[b.para([Run("כותרת")])], footer=[b.para([Run("1", "num", field="page")])])
+    doc = Document("snake", b.meta("tables", "tables"), [t], furniture=furniture)
+    assert validate(doc) == []
+    assert verify_docx(doc, docx.write(doc)) == []
+    (exported,) = export(gold(doc, dumps(doc)))
+    assert (exported["rows"], exported["cols"]) == (t.rows, t.cols)          # logical, not printed
+    assert exported["blocks"]["k"] == 3 and exported["blocks"]["ranges"][0][0] == 1
+
+
+def test_snake_validation_rejects_body_row_spans(pool):
+    b = Builder("bad", 1, pool)
+    t = T.row_groups(b)
+    t.blocks = 2
+    doc = Document("bad", b.meta("tables", "tables"), [t])
+    assert any("body row spans" in p for p in validate(doc))
+
+
+def test_inner_ruling_has_no_outer_border():
+    from hdocsyngen.writers.docx import _borders
+    xml = _borders("inner")
+    assert '<w:top w:val="nil"/>' in xml and "insideH" in xml and "insideV" in xml
+    assert '<w:left w:val="nil"/>' in xml and '<w:right w:val="nil"/>' in xml

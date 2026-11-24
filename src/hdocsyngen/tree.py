@@ -79,9 +79,10 @@ class Table:
     cols: int
     cells: list[Cell]
     type: Literal["table"] = "table"
-    ruled: Literal["all", "header", "rows", "none"] = "all"
+    ruled: Literal["all", "header", "rows", "none", "inner"] = "all"   # inner: no outer border (open sides)
     repeat_header: bool = True
     col_widths: list[float] = field(default_factory=list)   # relative; empty = equal
+    blocks: int = 1                   # > 1: printed as side-by-side blocks (layout.py); the tree stays logical
 
 
 @dataclass
@@ -179,6 +180,7 @@ def _block(d: dict) -> Block:
     if t == "table":
         return Table(id=d["id"], rows=d["rows"], cols=d["cols"], ruled=d.get("ruled", "all"),
                      repeat_header=d.get("repeat_header", True), col_widths=d.get("col_widths", []),
+                     blocks=d.get("blocks", 1),
                      cells=[Cell(r=c["r"], c=c["c"], rowspan=c.get("rowspan", 1), colspan=c.get("colspan", 1),
                                  header=c.get("header", False), paragraphs=[_para(p) for p in c["paragraphs"]])
                             for c in d["cells"]])
@@ -292,6 +294,19 @@ def validate(doc: Document) -> list[str]:
                 problems.append(f"{b.id}: grid has empty slots")
             if b.col_widths and len(b.col_widths) != b.cols:
                 problems.append(f"{b.id}: {len(b.col_widths)} widths for {b.cols} columns")
+            if b.ruled not in ("all", "header", "rows", "none", "inner"):
+                problems.append(f"{b.id}: unknown ruled {b.ruled!r}")
+            if b.blocks < 1:
+                problems.append(f"{b.id}: blocks must be >= 1")
+            elif b.blocks > 1:
+                heads = {c.r for c in b.cells if c.header}
+                n_head = next((r for r in range(b.rows) if r not in heads), b.rows)
+                if heads != set(range(n_head)) or any(c.header and c.r + c.rowspan > n_head for c in b.cells):
+                    problems.append(f"{b.id}: side-by-side blocks need leading header rows only")
+                if any(c.rowspan > 1 for c in b.cells if c.r >= n_head):
+                    problems.append(f"{b.id}: side-by-side blocks cannot have body row spans")
+                if b.rows - n_head < b.blocks:
+                    problems.append(f"{b.id}: fewer body rows than blocks")
     return problems
 
 

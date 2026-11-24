@@ -13,6 +13,7 @@ from pathlib import Path
 
 from . import __version__
 from .numbering import model_labels
+from .layout import blocks_meta
 from .tree import Document, Heading, PageBreak, Paragraph, Table, text_of
 
 GOLD_SCHEMA = "hdoc_gold.v1"
@@ -107,8 +108,11 @@ def gold(doc: Document, tree_json: str | None = None) -> dict:
                               "paragraphs": [p.id for p in c.paragraphs]})
                 for p in c.paragraphs:
                     blocks.append(para_entry(p, b.id, "cell_paragraph"))
-            tables.append({"id": b.id, "rows": b.rows, "cols": b.cols, "repeat_header": b.repeat_header,
-                           "ruled": b.ruled, "cells": cells})
+            entry = {"id": b.id, "rows": b.rows, "cols": b.cols, "repeat_header": b.repeat_header,
+                     "ruled": b.ruled, "cells": cells}
+            if b.blocks > 1:
+                entry["blocks"] = blocks_meta(b)
+            tables.append(entry)
             counters["body"] = counters.get("body", -1) + 1
             blocks.append({"id": b.id, "type": "table", "parent": None, "order": counters["body"]})
     anchors = {}
