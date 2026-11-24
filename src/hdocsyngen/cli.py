@@ -91,6 +91,14 @@ def cmd_pilot_readback(a) -> int:
     return 0
 
 
+def cmd_pilot_matrix(a) -> int:
+    from .pilot_matrix import run
+
+    print(json.dumps(run(a.run, a.native_audit, a.out, a.tessdata, a.limit), sort_keys=True,
+                     separators=(",", ":")))
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="hdocsyngen")
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -122,6 +130,13 @@ def main(argv: list[str] | None = None) -> int:
     pr = sub.add_parser("pilot-readback", help="audit saved synthetic pilot PDFs without rerunning producers")
     pr.add_argument("run", type=Path, help="saved pilot directory")
     pr.set_defaults(func=cmd_pilot_readback)
+    pm = sub.add_parser("pilot-matrix", help="run the implemented downstream routes on audited native PDFs")
+    pm.add_argument("run", type=Path, help="saved pilot directory")
+    pm.add_argument("--native-audit", type=Path, required=True, help="pilot-readback JSON for this pilot")
+    pm.add_argument("--out", type=Path, required=True, help="local matrix artifacts and resumable slot receipts")
+    pm.add_argument("--tessdata", type=Path, required=True, help="same directory as TESSDATA_PREFIX")
+    pm.add_argument("--limit", type=int, help="only the first N native slots, for timing or smoke tests")
+    pm.set_defaults(func=cmd_pilot_matrix)
     a = ap.parse_args(argv)
     if a.cmd == "pdf-readback" and (a.tree is None) != (a.twin is None):
         r.error("--tree and --twin must be supplied together")
