@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 
 from hdocsyngen.gold import gold
-from hdocsyngen.table_export import export, header_rows
+from hdocsyngen.table_export import export, header_rows, page_breaks
 from hdocsyngen.templates import Builder, build
 from hdocsyngen.templates import tables as T
 from hdocsyngen.textpool import TextPool
@@ -79,3 +79,21 @@ def test_header_rows_stops_at_first_body_row():
         {"r": 2, "c": 0, "rowspan": 1, "colspan": 1, "header": False},
         {"r": 2, "c": 1, "rowspan": 1, "colspan": 1, "header": False}]}
     assert header_rows(t) == 2
+
+
+def test_section_rows_follow_both_print_styles(pool):
+    styles = set()
+    for seed in range(20):
+        b = Builder("s", seed, pool)
+        (t,) = export(gold(Document("s", b.meta("tables", "tables"), [T.sections(b)]), ""))
+        spans = [c for c in t["cells"] if c["r"] > 0 and c["c"] == 0 and c["colspan"] == t["cols"]]
+        styles.add("span" if spans else "col0")
+    assert styles == {"span", "col0"}
+
+
+def test_page_breaks_from_producer_pages():
+    table = {"cells": [{"r": r, "c": 0, "paragraphs": [f"p{r}"]} for r in range(5)]}
+    producer = {"blocks": [{"id": "p0", "pages": [1]}, {"id": "p1", "pages": [1]}, {"id": "p2", "pages": [1, 2]},
+                           {"id": "p3", "pages": [2]}, {"id": "p4", "pages": [3]}]}
+    assert page_breaks(table, producer) == [3, 4]
+    assert page_breaks(table, {"blocks": []}) is None

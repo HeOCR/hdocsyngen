@@ -66,13 +66,18 @@ def sections(b: Builder) -> Table:
     rng = b.rng
     cols = rng.randint(3, 5)
     rows = [[_label(b, 1, 3) for _ in range(cols)]]
+    span_style = rng.random() < 0.5    # else the label sits in column 0, other cells empty
+    merges: dict[tuple[int, int], tuple[int, int]] = {}
     for s in range(rng.randint(2, 4)):
         lead = f"({s + 1}) " if rng.random() < 0.5 else ""
-        rows.append([lead + _label(b, 2, 5) + (":" if rng.random() < 0.5 else "")] + [""] * (cols - 1))
+        label = lead + _label(b, 2, 5) + (":" if rng.random() < 0.5 else "")
+        if span_style:     # the label spans the table in print: one cell, colspan = cols (convention c)
+            merges[(len(rows), 0)] = (1, cols)
+        rows.append([label] + [""] * (cols - 1))
         for _ in range(rng.randint(2, 6)):
             name = _label(b, 1, 3) if rng.random() < 0.7 else _label(b, 6, 10)   # some labels wrap to two lines
             rows.append([name] + [_number(b) for _ in range(cols - 1)])
-    return table_from_rows(b, rows, ruled=rng.choice(RULED))
+    return table_from_rows(b, rows, merges=merges, ruled=rng.choice(RULED))
 
 
 def row_groups(b: Builder) -> Table:

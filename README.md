@@ -11,7 +11,7 @@ and prove that the gold survived each program. The gold is exact because we wrot
 - the source tree and its gold (`hdoc_tree.v1` and `hdoc_gold.v1`, owned and signed off by heocr-eval, see [docs/hdoc_tree_v1.md](docs/hdoc_tree_v1.md));
 - Hebrew counting and the `model` numbering labels;
 - generated values;
-- the `tender` and `report` templates;
+- the `tender`, `report` and `tables` templates (`tables`: see [docs/tables_forms_design.md](docs/tables_forms_design.md));
 - a byte-reproducible DOCX writer;
 - an independent DOCX reader;
 - a DOCX gold check that also accepts producer-re-saved DOCX (numIds may be renumbered).
