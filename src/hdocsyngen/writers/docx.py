@@ -13,6 +13,7 @@ import io
 import zipfile
 from xml.sax.saxutils import escape, quoteattr
 
+from ..layout import printed
 from ..tree import Document, Heading, NoteAnchor, PageBreak, Paragraph, Run, Table, twin_colours
 
 W = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
@@ -119,11 +120,15 @@ def _borders(ruled: str) -> str:
         return f"<w:tblBorders>{b(['top', 'left', 'bottom', 'right', 'insideH', 'insideV'])}</w:tblBorders>"
     if ruled == "rows":
         return f"<w:tblBorders>{b(['top', 'bottom', 'insideH'])}</w:tblBorders>"
+    if ruled == "inner":
+        nil = "".join(f'<w:{n} w:val="nil"/>' for n in ["top", "left", "bottom", "right"])
+        return f"<w:tblBorders>{nil}{b(['insideH', 'insideV'])}</w:tblBorders>"
     nil = "".join(f'<w:{n} w:val="nil"/>' for n in ["top", "left", "bottom", "right", "insideH", "insideV"])
     return f"<w:tblBorders>{nil}</w:tblBorders>"
 
 
 def _table(t: Table, notes: _Notes, kinds: dict[str, str], text_width: int) -> str:
+    t = printed(t)
     widths = t.col_widths or [1.0] * t.cols
     total = sum(widths)
     tw = [max(200, int(text_width * w / total)) for w in widths]

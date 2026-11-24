@@ -13,8 +13,9 @@ in docs/tables_forms_design.md and wait on eval's review.
 | `long` | F11 page-spanning table, header repeated or not |
 | `matrix` | F13 triangular matrix with diagonal labels |
 | `wrapped` | F2 multi-line cells (several sentences per cell) |
+| `snake` | F12 one logical table printed as 2-3 side-by-side blocks, header repeated per block |
 
-Every variant draws `ruled` from all/header/rows/none (F6 borderless) and mixes decimals, percentages and amounts
+Every variant draws `ruled` from all/header/rows/none/inner (F6 borderless, F10 open sides) and mixes decimals, percentages and amounts
 (F8 number glyphs). Text comes from the pool (invented or CC0 text only, per AGENTS.md).
 """
 from __future__ import annotations
@@ -23,8 +24,8 @@ from ..textpool import TextPool
 from ..tree import Document, Furniture, Run, Table
 from . import Builder, table_from_rows
 
-VARIANTS = ("grouped_header", "sections", "row_groups", "long", "matrix", "wrapped")
-RULED = ("all", "header", "rows", "none")
+VARIANTS = ("grouped_header", "sections", "row_groups", "long", "matrix", "wrapped", "snake")
+RULED = ("all", "header", "rows", "none", "inner")
 
 
 def _number(b: Builder) -> str:
@@ -128,8 +129,21 @@ def wrapped(b: Builder) -> Table:
     return table_from_rows(b, rows, ruled=rng.choice(["all", "rows", "none"]))
 
 
+def snake(b: Builder) -> Table:
+    rng = b.rng
+    cols = rng.randint(2, 3)
+    rows = [[_label(b, 1, 3) for _ in range(cols)]]
+    first = rng.randint(1, 20)
+    for i in range(rng.randint(12, 40)):
+        rows.append([str(first + i)] + [_number(b) for _ in range(cols - 1)])
+    t = table_from_rows(b, rows, ruled=rng.choice(RULED))
+    t.blocks = rng.randint(2, 3)
+    return t
+
+
 BUILDERS = {"grouped_header": grouped_header, "sections": sections, "row_groups": row_groups, "long": long,
-            "matrix": matrix, "wrapped": wrapped}
+            "matrix": matrix, "wrapped": wrapped,
+            "snake": snake}
 
 
 def build(doc_id: str, seed: int, pool: TextPool) -> Document:
