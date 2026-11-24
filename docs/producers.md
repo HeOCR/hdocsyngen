@@ -106,7 +106,8 @@ longer run. Use the power scheduler for local jobs expected to sustain full CPU 
 `pilot-readback` JSON. It creates four P8 variants, three P9 variants and
 three P10 variants for each native producer slot. It keeps the native checks
 from the input audit and applies the same four-reader page audit to each
-derived PDF. The source pilot stays read-only.
+derived PDF. The source pilot stays read-only. See the [full matrix report](pilot_full_matrix.md)
+for the 48-tree run and the CC0 audit bundle.
 
 Install the reader extras, `img2pdf==0.6.3`, Ghostscript, Poppler and
 Tesseract with `heb` and `eng` data. Supply the pinned language data path
