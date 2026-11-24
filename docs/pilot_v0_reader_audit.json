@@ -1,0 +1,6359 @@
+{
+ "schema": "hdocsyngen_pilot_readback.v1",
+ "pilot_manifest_sha256": "896e275bdf9c512cd328c161993c8d369e50a00aa11cd5dc3a51bb4b9773b28f",
+ "producer_versions": {
+  "word": "16.115",
+  "lo": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+  "chrome": "Google Chrome for Testing 158.0.8127.36"
+ },
+ "reader_versions": {
+  "pypdfium2": "5.15.2",
+  "pdfium": "159.0.8149.0@sourcebuild-toolchained",
+  "pdfminer.six": "20260107",
+  "pymupdf": "1.27.2.3",
+  "poppler": "pdftotext version 26.07.0",
+  "python-bidi": "0.6.12"
+ },
+ "documents": 48,
+ "rows": [
+  {
+   "doc_id": "tender-20261119",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "eb2e84ff502b72473cbd81f1dca0794ba43b9976461f59e62b4c05d5e8ef0c9d",
+   "producer_result_sha256": "38ada50cf3370dd93e52f4bad2324f5ecdbad22c30ac203ee377930d1c5ff2b1",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "1f59eab8336e339b6a841ce44a77cedb98066caf58606cdb82ec3ad0cb2c859a",
+   "twin_sha256": "b0858e1c0f6ebbf8a715c8f7dd8e01a0419becca7f8c076589fe7545fff18db6",
+   "pages": 2,
+   "pdfium_visual_chars": 3169,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 47,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 40,
+    "python_bidi_agree": 40,
+    "rust_bidi_agree": 40
+   }
+  },
+  {
+   "doc_id": "tender-20261119",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "eb2e84ff502b72473cbd81f1dca0794ba43b9976461f59e62b4c05d5e8ef0c9d",
+   "producer_result_sha256": "38ada50cf3370dd93e52f4bad2324f5ecdbad22c30ac203ee377930d1c5ff2b1",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "65d39fa7bdaab625dacc4f63e0b495ac8194392cdd593df225bc6b361b971c08",
+   "twin_sha256": "f0098f4abd62b47d07dea59fd762e5d993889a297f5eb5b1c37df012d3cb3e31",
+   "pages": 2,
+   "pdfium_visual_chars": 3169,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 47,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 40,
+    "python_bidi_agree": 38,
+    "rust_bidi_agree": 38
+   }
+  },
+  {
+   "doc_id": "tender-20261119",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "eb2e84ff502b72473cbd81f1dca0794ba43b9976461f59e62b4c05d5e8ef0c9d",
+   "producer_result_sha256": "38ada50cf3370dd93e52f4bad2324f5ecdbad22c30ac203ee377930d1c5ff2b1",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "dbf129858b76369a95544ad6e83d45be211c3c26c8c4778a1f113c55e07a0659",
+   "twin_sha256": "08f799ae30249460af7285b8e984d691aca254a36a114b5b4884b10c365a2254",
+   "pages": 2,
+   "pdfium_visual_chars": 3169,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 47,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 32,
+    "python_bidi_agree": 32,
+    "rust_bidi_agree": 32
+   }
+  },
+  {
+   "doc_id": "tender-20261120",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "5d13c147c5819f360f764182faf9af878a628f19eeacb25b35c2b56f15d15d44",
+   "producer_result_sha256": "726e98f14323d6d0dce9176addc72236b5c1277feea6736e1c62e0f0279e7854",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "3b1574fa2d3097c4bb98eae9754b8317fb392a4b2886af88019213902230e938",
+   "twin_sha256": "9b8ab3a4ab9c24e89941d5e40449d6718631a9559170613426e25268615629f7",
+   "pages": 4,
+   "pdfium_visual_chars": 6113,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 59,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 52,
+    "python_bidi_agree": 52,
+    "rust_bidi_agree": 52
+   }
+  },
+  {
+   "doc_id": "tender-20261120",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "5d13c147c5819f360f764182faf9af878a628f19eeacb25b35c2b56f15d15d44",
+   "producer_result_sha256": "726e98f14323d6d0dce9176addc72236b5c1277feea6736e1c62e0f0279e7854",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "4e13be5ab89bb0ccb6939368a340c8e97f083f25c9ebf5f2ebe51813cb434593",
+   "twin_sha256": "19460a9118b86fa1c3f79fa0f41e2b4ebdd0936c10d9dcddda4c020f576a542b",
+   "pages": 4,
+   "pdfium_visual_chars": 6113,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 59,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 52,
+    "python_bidi_agree": 45,
+    "rust_bidi_agree": 45
+   }
+  },
+  {
+   "doc_id": "tender-20261120",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "5d13c147c5819f360f764182faf9af878a628f19eeacb25b35c2b56f15d15d44",
+   "producer_result_sha256": "726e98f14323d6d0dce9176addc72236b5c1277feea6736e1c62e0f0279e7854",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "ee64bdecf5d2c9c263433dab787dfc44839d9738efed1bae13f95d0495acee21",
+   "twin_sha256": "d441736046d3c910bbd94dadcb838a7ba7c9e5c66ac850a805a054d6786e5213",
+   "pages": 4,
+   "pdfium_visual_chars": 6113,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 59,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 29,
+    "python_bidi_agree": 29,
+    "rust_bidi_agree": 29
+   }
+  },
+  {
+   "doc_id": "tender-20261121",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "cd2c29aceef941ce737d04fd2f6555463100946dd1a85597c2e2a0e98f9f1304",
+   "producer_result_sha256": "2e4442726d7f4b2519c590124a78e614d3d7b44e6bb155d98f5c46da8756938a",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "45408ef5956972954f329c5e89841715a0f2e27612770929a78f50e8f889cc83",
+   "twin_sha256": "7c5d4f8fbf1292b72ac9987197674c8a05fe8973539ae6fc463fed9229786de6",
+   "pages": 4,
+   "pdfium_visual_chars": 4954,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 43,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 35,
+    "python_bidi_agree": 35,
+    "rust_bidi_agree": 35
+   }
+  },
+  {
+   "doc_id": "tender-20261121",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "cd2c29aceef941ce737d04fd2f6555463100946dd1a85597c2e2a0e98f9f1304",
+   "producer_result_sha256": "2e4442726d7f4b2519c590124a78e614d3d7b44e6bb155d98f5c46da8756938a",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "b35aa7aa5c4b74d9d99f09f975c6116ac793837db09e53312d9a8fcf764a4a44",
+   "twin_sha256": "b5f8fc93eb900923e5e9404a1a2a29142ac8db2bfe5f8c2d41a3d991d2b52639",
+   "pages": 4,
+   "pdfium_visual_chars": 4988,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 43,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 36,
+    "python_bidi_agree": 33,
+    "rust_bidi_agree": 33
+   }
+  },
+  {
+   "doc_id": "tender-20261121",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "cd2c29aceef941ce737d04fd2f6555463100946dd1a85597c2e2a0e98f9f1304",
+   "producer_result_sha256": "2e4442726d7f4b2519c590124a78e614d3d7b44e6bb155d98f5c46da8756938a",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "34ab108308375e1fe6a790118ef580f90974f4184f4a9b77170eb695c7355cd4",
+   "twin_sha256": "04d4923c7e8974f4ea0af312d9b779a6de52e297e983877b34c5a5aef45407b2",
+   "pages": 4,
+   "pdfium_visual_chars": 4921,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 67,
+     "order": {
+      "different_sequence": 3,
+      "different_inventory": 1
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 67,
+     "order": {
+      "different_sequence": 3,
+      "different_inventory": 1
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 67,
+     "order": {
+      "different_sequence": 3,
+      "different_inventory": 1
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 43,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 26,
+    "python_bidi_agree": 26,
+    "rust_bidi_agree": 26
+   }
+  },
+  {
+   "doc_id": "tender-20261122",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "9b24ffcf8bad34eaec4e486f85297588ae0a43b0f6bd9b4379332ca8adf7c8af",
+   "producer_result_sha256": "56ff620bcef54c82b8b746e5be21e4590746b79bcba925fc43485e92d8c56c83",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "761edb06e76a05cfd50232dfbea4d5e749341e0724422bc489cc4eda60da0757",
+   "twin_sha256": "bdb1e260985672d326494ae6eb811c2617b125936fd1cdfb66a507e159126ab4",
+   "pages": 6,
+   "pdfium_visual_chars": 6905,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 6
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 6
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 6
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 69,
+    "reversed": 0,
+    "unresolved": 2,
+    "visual_lines_compared": 47,
+    "python_bidi_agree": 47,
+    "rust_bidi_agree": 47
+   }
+  },
+  {
+   "doc_id": "tender-20261122",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "9b24ffcf8bad34eaec4e486f85297588ae0a43b0f6bd9b4379332ca8adf7c8af",
+   "producer_result_sha256": "56ff620bcef54c82b8b746e5be21e4590746b79bcba925fc43485e92d8c56c83",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "4bc4df1e49f1348c9b0e969a1186a7e42763a258b381174bd9210875a49fd604",
+   "twin_sha256": "5441ab549f51cd93e5b83684d90b14599da86b2ad123c49cc510d131c2745b14",
+   "pages": 6,
+   "pdfium_visual_chars": 6939,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 6
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 6
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 6
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 69,
+    "reversed": 0,
+    "unresolved": 2,
+    "visual_lines_compared": 49,
+    "python_bidi_agree": 45,
+    "rust_bidi_agree": 45
+   }
+  },
+  {
+   "doc_id": "tender-20261122",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "9b24ffcf8bad34eaec4e486f85297588ae0a43b0f6bd9b4379332ca8adf7c8af",
+   "producer_result_sha256": "56ff620bcef54c82b8b746e5be21e4590746b79bcba925fc43485e92d8c56c83",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "041af5dbdcc8f4db9ec4985818930b3f476b4ccaf5a1a99fa3de4e2a13bf94df",
+   "twin_sha256": "e097d973261829c3226d771c2726936d86a19e17dfcaa1e4de9bda9c0b9fa02e",
+   "pages": 6,
+   "pdfium_visual_chars": 6905,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 6
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 6
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 6
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 71,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 43,
+    "python_bidi_agree": 43,
+    "rust_bidi_agree": 43
+   }
+  },
+  {
+   "doc_id": "tender-20261123",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "ae027cdacca8184c1cb44402d212ab891a0c08300bf7369ee792df57e8412260",
+   "producer_result_sha256": "a085020ad7001acae281b7003bcb1a9a3b307f447484be95af2b1ec35782aa2e",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "a93845000c2f8a29c731644c9ea3f5af236547b6f94e33450f082826c949fdaf",
+   "twin_sha256": "5e159934f91251400c4e86ba94275ba798a2f5edf839f17050fcc8f21047dbef",
+   "pages": 3,
+   "pdfium_visual_chars": 2844,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 55,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 50,
+    "python_bidi_agree": 50,
+    "rust_bidi_agree": 50
+   }
+  },
+  {
+   "doc_id": "tender-20261123",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "ae027cdacca8184c1cb44402d212ab891a0c08300bf7369ee792df57e8412260",
+   "producer_result_sha256": "a085020ad7001acae281b7003bcb1a9a3b307f447484be95af2b1ec35782aa2e",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "19a2d5e0ccc33558a31f492e91f5120a7fa4aa5b98d263492d3d7129f903eda8",
+   "twin_sha256": "3ea7bcacdb7853a64645f63a0bf18e05c8aaef8bad550b095fca43427503469f",
+   "pages": 2,
+   "pdfium_visual_chars": 2820,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 55,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 50,
+    "python_bidi_agree": 48,
+    "rust_bidi_agree": 48
+   }
+  },
+  {
+   "doc_id": "tender-20261123",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "ae027cdacca8184c1cb44402d212ab891a0c08300bf7369ee792df57e8412260",
+   "producer_result_sha256": "a085020ad7001acae281b7003bcb1a9a3b307f447484be95af2b1ec35782aa2e",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "40a1b822336e3d7ce3124f82c8406a7b9a6f56453845cf4f03d5831224ffbd37",
+   "twin_sha256": "ce5b2d437c157860dd035b697011dca426079e4849e921e3856669a9c6f8c8a7",
+   "pages": 3,
+   "pdfium_visual_chars": 2844,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 55,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 47,
+    "python_bidi_agree": 47,
+    "rust_bidi_agree": 47
+   }
+  },
+  {
+   "doc_id": "tender-20261124",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "28fe9c2139cf145f0aadd461defec5fb0b17d559b7d37fbfc8c4e855ff6edbf8",
+   "producer_result_sha256": "c8c242ce917bd5afc08a9b4863ee21e9bdb26a521fef7d2192fdce74587fa93b",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "52d5ffc7b151b26ca95ac7c9ca4f76bb22b13a9145a8cf7f00bba7dda4eeac47",
+   "twin_sha256": "bf5fe68e3d84d6d6f108b1f8ad665e63a5904e8a890c8ed3d6305ca32305aefa",
+   "pages": 4,
+   "pdfium_visual_chars": 3740,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 67,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 58,
+    "python_bidi_agree": 58,
+    "rust_bidi_agree": 58
+   }
+  },
+  {
+   "doc_id": "tender-20261124",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "28fe9c2139cf145f0aadd461defec5fb0b17d559b7d37fbfc8c4e855ff6edbf8",
+   "producer_result_sha256": "c8c242ce917bd5afc08a9b4863ee21e9bdb26a521fef7d2192fdce74587fa93b",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "681bf27a169074d65caefbd35470c29ab90c2beef954a1b535e871c0489e0eda",
+   "twin_sha256": "7c86934005a15f4e6fb86c65d6fb8b0603c35c5dfddb9fd73bb3c6397066bd54",
+   "pages": 4,
+   "pdfium_visual_chars": 3740,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 67,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 59,
+    "python_bidi_agree": 58,
+    "rust_bidi_agree": 58
+   }
+  },
+  {
+   "doc_id": "tender-20261124",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "28fe9c2139cf145f0aadd461defec5fb0b17d559b7d37fbfc8c4e855ff6edbf8",
+   "producer_result_sha256": "c8c242ce917bd5afc08a9b4863ee21e9bdb26a521fef7d2192fdce74587fa93b",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "7fb656ed5550bc610e2a9d805bbeed831da8ece770e6c357133cd703cfc5ab48",
+   "twin_sha256": "22c0046926958a2330f6967e0b39481fc80b7595413e5c38a3628435f4431c32",
+   "pages": 3,
+   "pdfium_visual_chars": 3716,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 67,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 52,
+    "python_bidi_agree": 52,
+    "rust_bidi_agree": 52
+   }
+  },
+  {
+   "doc_id": "tender-20261125",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "4b13dd9db1e5a66e53c49136d0d6c9ce4f227af6e9cbe7b8ae3058030193995f",
+   "producer_result_sha256": "3be7b12a1874aabb438b52df00718c7f683b381f997391031cc6a56578557383",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "3b94a44d751d237a4b8bd2d35e73ecdfe7d73834fe81aac74ed5fa56b113d4f8",
+   "twin_sha256": "c8e3943d649300b7fbff7a918455d45a5dd663c9d1791fb7c945b0a472f38245",
+   "pages": 4,
+   "pdfium_visual_chars": 7190,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 64,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 58,
+    "python_bidi_agree": 58,
+    "rust_bidi_agree": 58
+   }
+  },
+  {
+   "doc_id": "tender-20261125",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "4b13dd9db1e5a66e53c49136d0d6c9ce4f227af6e9cbe7b8ae3058030193995f",
+   "producer_result_sha256": "3be7b12a1874aabb438b52df00718c7f683b381f997391031cc6a56578557383",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "55810f647efefcdce6a5545056daa737fc5d61762e2d084f1d4d9bedd2519dc2",
+   "twin_sha256": "be9ef668cfe061a30842bf6cc9524a60b564bc00f558792ac4cae6ecaecea1eb",
+   "pages": 4,
+   "pdfium_visual_chars": 7190,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 64,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 59,
+    "python_bidi_agree": 57,
+    "rust_bidi_agree": 57
+   }
+  },
+  {
+   "doc_id": "tender-20261125",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "4b13dd9db1e5a66e53c49136d0d6c9ce4f227af6e9cbe7b8ae3058030193995f",
+   "producer_result_sha256": "3be7b12a1874aabb438b52df00718c7f683b381f997391031cc6a56578557383",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "6c1215c3de48c824ec0f138ee56ce0784a37632b90b37191918136e550fb3f25",
+   "twin_sha256": "541501b60678c942b6f86da00b32ec8c6f74d4e925b1bea3dfb1e351ddea823c",
+   "pages": 4,
+   "pdfium_visual_chars": 7190,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 64,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 47,
+    "python_bidi_agree": 47,
+    "rust_bidi_agree": 47
+   }
+  },
+  {
+   "doc_id": "tender-20261126",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "8d7eeb5d73375cabefef877695109bb9d196068fed212aea7515945561edc36a",
+   "producer_result_sha256": "d2e6cd06596f851a96ce7e2d5a9f8e4837a3f4e070033cc55fca70d840ae1823",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "d8e37695b76b34fe03af3d3cb31188f7c1c9a2d6d8dc82823f1e27fe0303e754",
+   "twin_sha256": "42e15a9565e8ab4036a946c87a938fc7230ca31847ed33ca8654199d0fa662db",
+   "pages": 4,
+   "pdfium_visual_chars": 5838,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 68,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 62,
+    "python_bidi_agree": 62,
+    "rust_bidi_agree": 62
+   }
+  },
+  {
+   "doc_id": "tender-20261126",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "8d7eeb5d73375cabefef877695109bb9d196068fed212aea7515945561edc36a",
+   "producer_result_sha256": "d2e6cd06596f851a96ce7e2d5a9f8e4837a3f4e070033cc55fca70d840ae1823",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "4894a999980fd6fe6629a5f6662d5bab94f5fe0e3e94a9531066457ee7ade3dc",
+   "twin_sha256": "1cea28160cbe1d5d82fde863bc28a0001502613afcfba2c9167032896c6e2bbb",
+   "pages": 4,
+   "pdfium_visual_chars": 5838,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 68,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 62,
+    "python_bidi_agree": 59,
+    "rust_bidi_agree": 59
+   }
+  },
+  {
+   "doc_id": "tender-20261126",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "8d7eeb5d73375cabefef877695109bb9d196068fed212aea7515945561edc36a",
+   "producer_result_sha256": "d2e6cd06596f851a96ce7e2d5a9f8e4837a3f4e070033cc55fca70d840ae1823",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "f72876a022b81dfc6f1535f2c6edceb7fb4141043ca913b08f399dd35a285acb",
+   "twin_sha256": "2c6dfcd1411e1d097e09b9d443e5b73c1bee31e84442b752a8c211823ce5bf7b",
+   "pages": 4,
+   "pdfium_visual_chars": 5838,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 68,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 41,
+    "python_bidi_agree": 41,
+    "rust_bidi_agree": 41
+   }
+  },
+  {
+   "doc_id": "tender-20261127",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "75f53de062b4a70d005f1d70834821f196d091773cda4a82c534e13137768c84",
+   "producer_result_sha256": "4e38356351ff040d8abe68d250c85e3547f639df0494b5653ed99d5c8ae7bd27",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "9a5604f794d1dee9418e403a7eb3acf13242728016488c292748454a0c0be30c",
+   "twin_sha256": "79bd220ede6c2e91b7697b0b7c084a5804960b7e19d39d3a74d2744970e12038",
+   "pages": 4,
+   "pdfium_visual_chars": 4311,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 54,
+    "reversed": 0,
+    "unresolved": 1,
+    "visual_lines_compared": 47,
+    "python_bidi_agree": 47,
+    "rust_bidi_agree": 47
+   }
+  },
+  {
+   "doc_id": "tender-20261127",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "75f53de062b4a70d005f1d70834821f196d091773cda4a82c534e13137768c84",
+   "producer_result_sha256": "4e38356351ff040d8abe68d250c85e3547f639df0494b5653ed99d5c8ae7bd27",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "fbbf325ae4ed250224874d8a4deebf7eee469d68f57f827960ff38190edeb336",
+   "twin_sha256": "55f99a7091633aa35e148409332097e1cbc89682fb28c31198c92f6dcad045e4",
+   "pages": 4,
+   "pdfium_visual_chars": 4311,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 54,
+    "reversed": 0,
+    "unresolved": 1,
+    "visual_lines_compared": 48,
+    "python_bidi_agree": 47,
+    "rust_bidi_agree": 47
+   }
+  },
+  {
+   "doc_id": "tender-20261127",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "75f53de062b4a70d005f1d70834821f196d091773cda4a82c534e13137768c84",
+   "producer_result_sha256": "4e38356351ff040d8abe68d250c85e3547f639df0494b5653ed99d5c8ae7bd27",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "b433250add0e87925d9b2662d1c030f35cc9f95a1bd70dc861169810c5fd57eb",
+   "twin_sha256": "a99f01a42ba1fbb34c2f595ce643435843eb232faccc3b1438272b5a9c603404",
+   "pages": 4,
+   "pdfium_visual_chars": 4345,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 54,
+    "reversed": 0,
+    "unresolved": 1,
+    "visual_lines_compared": 38,
+    "python_bidi_agree": 38,
+    "rust_bidi_agree": 38
+   }
+  },
+  {
+   "doc_id": "tender-20261128",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "1bb9f89d738ea853838455a325e857f12fe14834540771e4e09eee55616597dd",
+   "producer_result_sha256": "2bf0094c94c6a31f00e1640342e4ae34f08de4622da508816fa4e02338dffe45",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "2a95ca1543300df8a1044bed1753791c71c2d57419136e621112dafaa5f702cb",
+   "twin_sha256": "1df95f277f50363a442c26b5ce4f675974b2e1c4677c58fa7273c9da18cdbe1a",
+   "pages": 2,
+   "pdfium_visual_chars": 2426,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 28,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 26,
+    "python_bidi_agree": 26,
+    "rust_bidi_agree": 26
+   }
+  },
+  {
+   "doc_id": "tender-20261128",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "1bb9f89d738ea853838455a325e857f12fe14834540771e4e09eee55616597dd",
+   "producer_result_sha256": "2bf0094c94c6a31f00e1640342e4ae34f08de4622da508816fa4e02338dffe45",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "dffd8d7efc486f2d67135a2d8fd5321a4e13c0d1a4d00efc9f1de67b5ee72266",
+   "twin_sha256": "29a61376eef050718cbc2b5a3e2e9c4a33f0d55550be583bb3a90a14982d7d89",
+   "pages": 2,
+   "pdfium_visual_chars": 2426,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 28,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 26,
+    "python_bidi_agree": 24,
+    "rust_bidi_agree": 24
+   }
+  },
+  {
+   "doc_id": "tender-20261128",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "1bb9f89d738ea853838455a325e857f12fe14834540771e4e09eee55616597dd",
+   "producer_result_sha256": "2bf0094c94c6a31f00e1640342e4ae34f08de4622da508816fa4e02338dffe45",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "c00146c94380c53fc809f63414c6e382cddbda873a55a2385d60701a2fd5627e",
+   "twin_sha256": "51c5e6b01e5e47184654fd6b86c2aab2359d8065f272c04c5a26ffef52c6f077",
+   "pages": 2,
+   "pdfium_visual_chars": 2426,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 28,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 23,
+    "python_bidi_agree": 23,
+    "rust_bidi_agree": 23
+   }
+  },
+  {
+   "doc_id": "tender-20261129",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "f49f8a98652f74074862227956c3ad8fa8c9892eec0d713e3b67af5677a0426c",
+   "producer_result_sha256": "863249ffa89bc758902c0958aaa85fadc44a4876f386ad192ca50f57f5c92f2e",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "64a38b58b7e5ba67d34a8d1dfc3ab2a5bed28841afea651b2932e5d263d44cc5",
+   "twin_sha256": "72343280af66a9a073f04bbc44549318ac800b9b64a777ab2be42912bcee7885",
+   "pages": 4,
+   "pdfium_visual_chars": 6449,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 53,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 46,
+    "python_bidi_agree": 46,
+    "rust_bidi_agree": 46
+   }
+  },
+  {
+   "doc_id": "tender-20261129",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "f49f8a98652f74074862227956c3ad8fa8c9892eec0d713e3b67af5677a0426c",
+   "producer_result_sha256": "863249ffa89bc758902c0958aaa85fadc44a4876f386ad192ca50f57f5c92f2e",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "9b4c3dc9794154db9f62b8d71f66e0e86875677b68861427f3c9dc2fc6c1c890",
+   "twin_sha256": "fdea8f2864c949bfc8c871d3a09da5700018d82b90c0cc58472424cd4cfe4aa6",
+   "pages": 4,
+   "pdfium_visual_chars": 6449,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 53,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 48,
+    "python_bidi_agree": 42,
+    "rust_bidi_agree": 42
+   }
+  },
+  {
+   "doc_id": "tender-20261129",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "f49f8a98652f74074862227956c3ad8fa8c9892eec0d713e3b67af5677a0426c",
+   "producer_result_sha256": "863249ffa89bc758902c0958aaa85fadc44a4876f386ad192ca50f57f5c92f2e",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "7522254315ffa83160f5ba9210881ad494ff7fee5769e47b7427a9dc842e1214",
+   "twin_sha256": "76c8aa5e71016483008b111a41be451162fad1393c34f97afe93f992ab5b94c0",
+   "pages": 5,
+   "pdfium_visual_chars": 6472,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 53,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 28,
+    "python_bidi_agree": 28,
+    "rust_bidi_agree": 28
+   }
+  },
+  {
+   "doc_id": "tender-20261130",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "9efbc3868071acaa7e241597633d610d1964e0b0db6da2ee41f3d1a3c38012eb",
+   "producer_result_sha256": "7761273621b171fb4383dded772fea181aeea0976692090bc5c887caf1f61fb7",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "eac57bb2db9c3297ddedf8ff363fb7c0f62204d45588d9ef4b568e2350f87543",
+   "twin_sha256": "994131f5555e1067e5802fd080bddc69c296f106442f04b59de7bc09a40db5ec",
+   "pages": 3,
+   "pdfium_visual_chars": 4436,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 45,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 42,
+    "python_bidi_agree": 42,
+    "rust_bidi_agree": 42
+   }
+  },
+  {
+   "doc_id": "tender-20261130",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "9efbc3868071acaa7e241597633d610d1964e0b0db6da2ee41f3d1a3c38012eb",
+   "producer_result_sha256": "7761273621b171fb4383dded772fea181aeea0976692090bc5c887caf1f61fb7",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "762333997b5165a5cf1fc94995c22eb2d0873e65c0caab58bc47d770c4e67cab",
+   "twin_sha256": "6e9fd554b9bbcddebb90dc23c92da9bdeec4fe717c45cfab8f968595fc497983",
+   "pages": 3,
+   "pdfium_visual_chars": 4436,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 45,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 42,
+    "python_bidi_agree": 41,
+    "rust_bidi_agree": 41
+   }
+  },
+  {
+   "doc_id": "tender-20261130",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "9efbc3868071acaa7e241597633d610d1964e0b0db6da2ee41f3d1a3c38012eb",
+   "producer_result_sha256": "7761273621b171fb4383dded772fea181aeea0976692090bc5c887caf1f61fb7",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "eab5bae7f9889dd410ca4966a2eb83381574c75911be87834c953045f365db28",
+   "twin_sha256": "d1046ae355136b74d0dcd9cdac37a08e37840a33e74bde07c0399608eb9253fe",
+   "pages": 3,
+   "pdfium_visual_chars": 4436,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 45,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 27,
+    "python_bidi_agree": 27,
+    "rust_bidi_agree": 27
+   }
+  },
+  {
+   "doc_id": "tender-20261131",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "458328a5899c30fcf527d788ca625c28b33b26e0e5dde26ff2474e7860d7837b",
+   "producer_result_sha256": "a32387fd1b269b8dbf75cb36b8422c6998f476217f580a1ae335341d56089cba",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "1cd6da250dfc8c210657265395f3d319df894f40ce872e5280596bf0908d83df",
+   "twin_sha256": "385238275194a8dd3861cf351addec4f231899310fbf960399c8912e56e16677",
+   "pages": 5,
+   "pdfium_visual_chars": 6216,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 65,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 52,
+    "python_bidi_agree": 52,
+    "rust_bidi_agree": 52
+   }
+  },
+  {
+   "doc_id": "tender-20261131",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "458328a5899c30fcf527d788ca625c28b33b26e0e5dde26ff2474e7860d7837b",
+   "producer_result_sha256": "a32387fd1b269b8dbf75cb36b8422c6998f476217f580a1ae335341d56089cba",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "39431ba54e19cf31089ee20707f0cddfe5f8dd1088b1b19132f5241db84cb7d9",
+   "twin_sha256": "b29571e900f63d8a37d79ec7008e4536b0594133015526c6a8a4e7acfed02d44",
+   "pages": 5,
+   "pdfium_visual_chars": 6216,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 65,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 56,
+    "python_bidi_agree": 51,
+    "rust_bidi_agree": 51
+   }
+  },
+  {
+   "doc_id": "tender-20261131",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "458328a5899c30fcf527d788ca625c28b33b26e0e5dde26ff2474e7860d7837b",
+   "producer_result_sha256": "a32387fd1b269b8dbf75cb36b8422c6998f476217f580a1ae335341d56089cba",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "904a9c6847dff87fbd9af2320ced85c79101e5bcff0595dd8e8ab096c3fe64e0",
+   "twin_sha256": "ddd8b2c83ca838b5fd958be49b36254412f3d9ee43de9ece8505f19c8bd12627",
+   "pages": 4,
+   "pdfium_visual_chars": 6192,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 65,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 40,
+    "python_bidi_agree": 40,
+    "rust_bidi_agree": 40
+   }
+  },
+  {
+   "doc_id": "tender-20261132",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "4528cdd085531cd86f7b3af26d7a0aa1e66abf4739a03ae4a1d98d2770842c79",
+   "producer_result_sha256": "a0f4fcc1aeaac6a0ec0c7550f67db4e56c03fa55ed7b0e6c4c36565a5d6706e4",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "c0d40a9c165ec1f4a9b752fa5a601fd4d32898b1f5ca0400daf7ab8acff94564",
+   "twin_sha256": "c8525f84549098c298df6e634dd55cf857cb7baf959236f062d60e0892c20811",
+   "pages": 3,
+   "pdfium_visual_chars": 5013,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 59,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 54,
+    "python_bidi_agree": 54,
+    "rust_bidi_agree": 54
+   }
+  },
+  {
+   "doc_id": "tender-20261132",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "4528cdd085531cd86f7b3af26d7a0aa1e66abf4739a03ae4a1d98d2770842c79",
+   "producer_result_sha256": "a0f4fcc1aeaac6a0ec0c7550f67db4e56c03fa55ed7b0e6c4c36565a5d6706e4",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "c2a9f43ec6a7c1104c424e286ef171837e0555ae440d070f644c39cbfb832754",
+   "twin_sha256": "8ac6e68c108521bee1ff8cd147ce26cf457a6dc4db000ab5ba9967f779befd8f",
+   "pages": 3,
+   "pdfium_visual_chars": 5013,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 59,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 54,
+    "python_bidi_agree": 49,
+    "rust_bidi_agree": 49
+   }
+  },
+  {
+   "doc_id": "tender-20261132",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "4528cdd085531cd86f7b3af26d7a0aa1e66abf4739a03ae4a1d98d2770842c79",
+   "producer_result_sha256": "a0f4fcc1aeaac6a0ec0c7550f67db4e56c03fa55ed7b0e6c4c36565a5d6706e4",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "f6a277cfccfdaefc5ff1a7ec8e673fba604c3280aee604dc4be880f4a4bda25b",
+   "twin_sha256": "69ea3cce08fdd6b57062da726caed39b17e7f654a7ca62141262d909788432a7",
+   "pages": 3,
+   "pdfium_visual_chars": 5013,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 59,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 39,
+    "python_bidi_agree": 39,
+    "rust_bidi_agree": 39
+   }
+  },
+  {
+   "doc_id": "tender-20261133",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "caff24c9647677e080706a28e4d636395f4a48b0abde5daed6c1c020e820f95b",
+   "producer_result_sha256": "01c9d07411942d07ad09673ff0b847527f0cd629d4d1d75a1fc2e32684cee254",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "d5d3d3cc250f7c7b116e633ed3b001b0bd99961fcd4e6485b223685e30fc1b32",
+   "twin_sha256": "e162d2df79cd68072c1cdb7f3a02f4fc999a41b22c472e6912d185e58f97cff4",
+   "pages": 3,
+   "pdfium_visual_chars": 3893,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 49,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 44,
+    "python_bidi_agree": 44,
+    "rust_bidi_agree": 44
+   }
+  },
+  {
+   "doc_id": "tender-20261133",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "caff24c9647677e080706a28e4d636395f4a48b0abde5daed6c1c020e820f95b",
+   "producer_result_sha256": "01c9d07411942d07ad09673ff0b847527f0cd629d4d1d75a1fc2e32684cee254",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "dddc73faa3cdd07bbfade98483b4564ca39face231a5b9e4275a14aa3565532a",
+   "twin_sha256": "9f88c74599233c0a22aefb8d560cee6e585ee5ad3730bf7314428e78960d7501",
+   "pages": 3,
+   "pdfium_visual_chars": 3893,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 49,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 44,
+    "python_bidi_agree": 42,
+    "rust_bidi_agree": 42
+   }
+  },
+  {
+   "doc_id": "tender-20261133",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "caff24c9647677e080706a28e4d636395f4a48b0abde5daed6c1c020e820f95b",
+   "producer_result_sha256": "01c9d07411942d07ad09673ff0b847527f0cd629d4d1d75a1fc2e32684cee254",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "65019ff70201125bbbf9eca641345eb5382aa365076b265d463294bd482019a9",
+   "twin_sha256": "625899897c0eebd5e8061157e07ca794716670cb0ca0a6243ef0cec619cb61b6",
+   "pages": 3,
+   "pdfium_visual_chars": 3893,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 49,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 36,
+    "python_bidi_agree": 36,
+    "rust_bidi_agree": 36
+   }
+  },
+  {
+   "doc_id": "tender-20261134",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "c8a1afbda6333dcbd2ba04e657604664c52fdde32870e36b3f22402ba6a7a803",
+   "producer_result_sha256": "11c37e270b822ef6f1bdb04fcb691ea16e8ec04a88248177fe9f4a21058d62e0",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "69ca1aacdcc64845241d04d1d49041e766cc713655b4dfcbf389fb2441b70c28",
+   "twin_sha256": "c1ba16ed49ff12dbc5104ddc2da58e856f470c7d0f766fa3d9418f9f035a51f1",
+   "pages": 4,
+   "pdfium_visual_chars": 4788,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 73,
+    "reversed": 0,
+    "unresolved": 1,
+    "visual_lines_compared": 63,
+    "python_bidi_agree": 62,
+    "rust_bidi_agree": 62
+   }
+  },
+  {
+   "doc_id": "tender-20261134",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "c8a1afbda6333dcbd2ba04e657604664c52fdde32870e36b3f22402ba6a7a803",
+   "producer_result_sha256": "11c37e270b822ef6f1bdb04fcb691ea16e8ec04a88248177fe9f4a21058d62e0",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "9c423bc50553707e3c6cfa438e9117f1307bbc17ac893d3fdd660bd9e6983d31",
+   "twin_sha256": "ae375ccc865541725a1a7465531f9ca264668e4a36b9a37433389669dbcf7d0a",
+   "pages": 4,
+   "pdfium_visual_chars": 4788,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 73,
+    "reversed": 0,
+    "unresolved": 1,
+    "visual_lines_compared": 64,
+    "python_bidi_agree": 62,
+    "rust_bidi_agree": 62
+   }
+  },
+  {
+   "doc_id": "tender-20261134",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "c8a1afbda6333dcbd2ba04e657604664c52fdde32870e36b3f22402ba6a7a803",
+   "producer_result_sha256": "11c37e270b822ef6f1bdb04fcb691ea16e8ec04a88248177fe9f4a21058d62e0",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "c0ace383a51869a43336fda1a957587062a333ac767a00009eef0ac0ea2524de",
+   "twin_sha256": "62e9ddcc25e26bc5ce613cae44a3844c60bd6b3e9558245485f82e4ed0c698cc",
+   "pages": 4,
+   "pdfium_visual_chars": 4754,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 73,
+    "reversed": 0,
+    "unresolved": 1,
+    "visual_lines_compared": 54,
+    "python_bidi_agree": 54,
+    "rust_bidi_agree": 54
+   }
+  },
+  {
+   "doc_id": "tender-20261135",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "130032ed34bb188fe457dc206879e0c8fa1c539898a63dc88f1c80f0ff794add",
+   "producer_result_sha256": "9092b3154ac7b54c3b1a0303d61b883fd7abf33384a0ef5195c4daa72082fb7f",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "fdd8b83b14a9563186083ff1ef0f6a0f22e39eb32e72620ce003191e6b2c77cc",
+   "twin_sha256": "1df5a2c62ed770644dc0a88125f2de093c5784d29297f7c120676bf9e24c712c",
+   "pages": 4,
+   "pdfium_visual_chars": 6022,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 79,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 67,
+    "python_bidi_agree": 67,
+    "rust_bidi_agree": 67
+   }
+  },
+  {
+   "doc_id": "tender-20261135",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "130032ed34bb188fe457dc206879e0c8fa1c539898a63dc88f1c80f0ff794add",
+   "producer_result_sha256": "9092b3154ac7b54c3b1a0303d61b883fd7abf33384a0ef5195c4daa72082fb7f",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "17789c4ce91cad81949dd46ef61ffbe2b9bfdfab779898f2f2d50088b5468907",
+   "twin_sha256": "7ac098771b96d231acb1cd5812e57939bdc82284a5adac1f17a9c1dbc2435953",
+   "pages": 4,
+   "pdfium_visual_chars": 6022,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 79,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 67,
+    "python_bidi_agree": 63,
+    "rust_bidi_agree": 63
+   }
+  },
+  {
+   "doc_id": "tender-20261135",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "130032ed34bb188fe457dc206879e0c8fa1c539898a63dc88f1c80f0ff794add",
+   "producer_result_sha256": "9092b3154ac7b54c3b1a0303d61b883fd7abf33384a0ef5195c4daa72082fb7f",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "e7b55676f0d1982dcd153adba2c047f7f66f4cb420b639e3e515f0048f870629",
+   "twin_sha256": "de4eb955f7de6072f45df3e8bdee6f614931b8c091df3e008334ede14149229e",
+   "pages": 4,
+   "pdfium_visual_chars": 6056,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 79,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 57,
+    "python_bidi_agree": 57,
+    "rust_bidi_agree": 57
+   }
+  },
+  {
+   "doc_id": "tender-20261136",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "766cf5469fac58798534d72fecb710feedb60d58a596d84507fc08c85c48603c",
+   "producer_result_sha256": "337f7ada62ffb7f441a46514bddd8cbada7501841d817a323ddb6a3e7a386307",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "4cbcd5446e82b51064ae71fbd36a5237fe6732553f98bec07b11562a5748e330",
+   "twin_sha256": "6e23980c31b8b365e30f5d8339c4e5b5e36cb4fc02a6374452f57de9147f8411",
+   "pages": 5,
+   "pdfium_visual_chars": 6842,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 84,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 77,
+    "python_bidi_agree": 77,
+    "rust_bidi_agree": 77
+   }
+  },
+  {
+   "doc_id": "tender-20261136",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "766cf5469fac58798534d72fecb710feedb60d58a596d84507fc08c85c48603c",
+   "producer_result_sha256": "337f7ada62ffb7f441a46514bddd8cbada7501841d817a323ddb6a3e7a386307",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "06d20a5e2dff128131b39554da5d88fe943944ec25a234cc8b035ba8b0d2d3ce",
+   "twin_sha256": "a44bc3b512619992af8ff2d059eff13afe06244295dc1447ffa2127adacc5213",
+   "pages": 5,
+   "pdfium_visual_chars": 6842,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 84,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 78,
+    "python_bidi_agree": 72,
+    "rust_bidi_agree": 72
+   }
+  },
+  {
+   "doc_id": "tender-20261136",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "766cf5469fac58798534d72fecb710feedb60d58a596d84507fc08c85c48603c",
+   "producer_result_sha256": "337f7ada62ffb7f441a46514bddd8cbada7501841d817a323ddb6a3e7a386307",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "e8aa86e8beb84c0001a80a582f721b41e1fde6858af423e26b4507ffab605434",
+   "twin_sha256": "eb9c5e2e5547caf69896ae4fa7311d195022efade2bfadd35fe3e4ca753d37b9",
+   "pages": 5,
+   "pdfium_visual_chars": 6808,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 84,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 53,
+    "python_bidi_agree": 53,
+    "rust_bidi_agree": 53
+   }
+  },
+  {
+   "doc_id": "tender-20261137",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "5c5913e56bd393a99d087a18d43d1fb8769c1d8bea5a684f871183979ff27b94",
+   "producer_result_sha256": "b69fb118d9db18994e861a65a617c268a639ba4af76bbe1208e23eb420e04ee8",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "3b5eb4b91037fb97888a808bb404bf53bbdd45eb9a0732d66f6411b7bc50f07e",
+   "twin_sha256": "3b665e3facf97c6cdfb24e1c89e16e9385f6db6831bb1a61ded268fa680b1061",
+   "pages": 5,
+   "pdfium_visual_chars": 4979,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 50,
+    "reversed": 0,
+    "unresolved": 1,
+    "visual_lines_compared": 42,
+    "python_bidi_agree": 42,
+    "rust_bidi_agree": 42
+   }
+  },
+  {
+   "doc_id": "tender-20261137",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "5c5913e56bd393a99d087a18d43d1fb8769c1d8bea5a684f871183979ff27b94",
+   "producer_result_sha256": "b69fb118d9db18994e861a65a617c268a639ba4af76bbe1208e23eb420e04ee8",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "c7fdc02b996229bce243684731dce0ecc566f2e1df6f55d6004d6218c71b2859",
+   "twin_sha256": "8ffa6d2d4432868723187b80ada7a904c746452e546f32fdae7b2b2d640b5d6e",
+   "pages": 5,
+   "pdfium_visual_chars": 5013,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 50,
+    "reversed": 0,
+    "unresolved": 1,
+    "visual_lines_compared": 42,
+    "python_bidi_agree": 37,
+    "rust_bidi_agree": 37
+   }
+  },
+  {
+   "doc_id": "tender-20261137",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "5c5913e56bd393a99d087a18d43d1fb8769c1d8bea5a684f871183979ff27b94",
+   "producer_result_sha256": "b69fb118d9db18994e861a65a617c268a639ba4af76bbe1208e23eb420e04ee8",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "e452fd53069315e8cd13335c2060f0d7e967a8b0f0d078d230fcab4c78d73dfa",
+   "twin_sha256": "53972b2d0867e9d455833d342e6f9416e33cf38d5391ea7c6fa93f851a3b353d",
+   "pages": 4,
+   "pdfium_visual_chars": 4955,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 51,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 31,
+    "python_bidi_agree": 31,
+    "rust_bidi_agree": 31
+   }
+  },
+  {
+   "doc_id": "tender-20261138",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "737a6665e4e1fea5ec102297693bd9faca46bd998a055d373ef23f96ed1205d1",
+   "producer_result_sha256": "f2981de29cbb2e8011b19a2ab8ffd32bf2d0d875f9caeb4cb8116c351b4d120b",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "32d2093b3e7070cdcc80af3affb3b61aefb8e9bdaab87bb95bb82743f29c1d75",
+   "twin_sha256": "24d5e1feb5154e16c35f19d471a4ece219a8fc65fcb1b6bfa5f83f29fabffa51",
+   "pages": 5,
+   "pdfium_visual_chars": 6109,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 47,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 40,
+    "python_bidi_agree": 40,
+    "rust_bidi_agree": 40
+   }
+  },
+  {
+   "doc_id": "tender-20261138",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "737a6665e4e1fea5ec102297693bd9faca46bd998a055d373ef23f96ed1205d1",
+   "producer_result_sha256": "f2981de29cbb2e8011b19a2ab8ffd32bf2d0d875f9caeb4cb8116c351b4d120b",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "d68d4f53535fff6f5792bbfe6b94e251c87cea562aeca5a03070613b228a128d",
+   "twin_sha256": "744a4737126432241230e3ee1d46a1c685614006539870e5821a910dec4d1b3b",
+   "pages": 4,
+   "pdfium_visual_chars": 6051,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 47,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 41,
+    "python_bidi_agree": 39,
+    "rust_bidi_agree": 39
+   }
+  },
+  {
+   "doc_id": "tender-20261138",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "737a6665e4e1fea5ec102297693bd9faca46bd998a055d373ef23f96ed1205d1",
+   "producer_result_sha256": "f2981de29cbb2e8011b19a2ab8ffd32bf2d0d875f9caeb4cb8116c351b4d120b",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "06585a34c5fb1155e402f3ad89012c8d7b3aad5c711b916dc3b9dc252e606f85",
+   "twin_sha256": "56cffb23eb14f3574d6368c3ca79c0be5230f7b667b4a8af464f218529a1cd85",
+   "pages": 4,
+   "pdfium_visual_chars": 5978,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 73,
+     "order": {
+      "different_inventory": 3,
+      "different_sequence": 1
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 73,
+     "order": {
+      "different_inventory": 3,
+      "different_sequence": 1
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 73,
+     "order": {
+      "different_inventory": 3,
+      "different_sequence": 1
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 47,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 31,
+    "python_bidi_agree": 31,
+    "rust_bidi_agree": 31
+   }
+  },
+  {
+   "doc_id": "tender-20261139",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "635fde50b424546b8cdc3ebfa48cabd2b655df87c647fd5fd42e95866472ca86",
+   "producer_result_sha256": "9ee655234e00836466c5cc94825dbfa5ad2c256e5d4a649d621f64050f6637ff",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "e1dfc16f8fe9571b4dd6b4be1b86eed034b0c68fc12a2ef1b526d5832ae68f52",
+   "twin_sha256": "ebf386efb905271ad5dee996cf25304094bb33ea92f9e1649cdd2526cbc6d321",
+   "pages": 3,
+   "pdfium_visual_chars": 4416,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 52,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 43,
+    "python_bidi_agree": 43,
+    "rust_bidi_agree": 43
+   }
+  },
+  {
+   "doc_id": "tender-20261139",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "635fde50b424546b8cdc3ebfa48cabd2b655df87c647fd5fd42e95866472ca86",
+   "producer_result_sha256": "9ee655234e00836466c5cc94825dbfa5ad2c256e5d4a649d621f64050f6637ff",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "0a10aa7ac6e088df8b22dc297c47007699af1083f7a2bb27708feff2eb4667bf",
+   "twin_sha256": "694dbef88510e760690e1963f47e4cf5d4be3d8de51b82c934ddd33e3f23eb1e",
+   "pages": 3,
+   "pdfium_visual_chars": 4416,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 52,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 44,
+    "python_bidi_agree": 42,
+    "rust_bidi_agree": 42
+   }
+  },
+  {
+   "doc_id": "tender-20261139",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "635fde50b424546b8cdc3ebfa48cabd2b655df87c647fd5fd42e95866472ca86",
+   "producer_result_sha256": "9ee655234e00836466c5cc94825dbfa5ad2c256e5d4a649d621f64050f6637ff",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "da59c6ef23fd040914a4cb60d888e8b773e282f8465c9be6c4518adcaaf1b712",
+   "twin_sha256": "bf50dd301633009e954d24c856c34d96924b048c94edfc0543de2b5389d94f2e",
+   "pages": 3,
+   "pdfium_visual_chars": 4416,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 52,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 34,
+    "python_bidi_agree": 34,
+    "rust_bidi_agree": 34
+   }
+  },
+  {
+   "doc_id": "tender-20261140",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "8e036602bc864ac570ec75e30c3261b0cbd46ecab23361b452d62f79416335a7",
+   "producer_result_sha256": "b1334ceb885f6cd2ce12fe56b15044b0dee1f524a211013fa5691ca20f3914ee",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "32d9d2b6ad871d2ea0a9a869319298cccfa4c489568a8e5355d7ebd921e603a3",
+   "twin_sha256": "c5ed612fb0ada2a61667fb44e0e34006239e93dd65c3b52dd3a34d405937bae6",
+   "pages": 4,
+   "pdfium_visual_chars": 5298,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 59,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 51,
+    "python_bidi_agree": 51,
+    "rust_bidi_agree": 51
+   }
+  },
+  {
+   "doc_id": "tender-20261140",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "8e036602bc864ac570ec75e30c3261b0cbd46ecab23361b452d62f79416335a7",
+   "producer_result_sha256": "b1334ceb885f6cd2ce12fe56b15044b0dee1f524a211013fa5691ca20f3914ee",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "26593941d589b46dbeb89acdc8e3c10194ee003f7274b640d1f0ec523f8f9c87",
+   "twin_sha256": "66dea50338c7a63ff2559f4b0a36cca1ff1e5a7459302808b74e57ff9369c215",
+   "pages": 4,
+   "pdfium_visual_chars": 5298,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 59,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 51,
+    "python_bidi_agree": 44,
+    "rust_bidi_agree": 44
+   }
+  },
+  {
+   "doc_id": "tender-20261140",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "8e036602bc864ac570ec75e30c3261b0cbd46ecab23361b452d62f79416335a7",
+   "producer_result_sha256": "b1334ceb885f6cd2ce12fe56b15044b0dee1f524a211013fa5691ca20f3914ee",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "ebf5e4dc7ddf0f6fe75256513f057a265b5fc4f067bb816a20c71310b2f99168",
+   "twin_sha256": "fc9e5b381e08ed24c9f9abf95e77862048a2b8377b41ee1ac24e750396098b9d",
+   "pages": 4,
+   "pdfium_visual_chars": 5298,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 59,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 34,
+    "python_bidi_agree": 34,
+    "rust_bidi_agree": 34
+   }
+  },
+  {
+   "doc_id": "tender-20261141",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "24f1ba2377604b28f6e56e25bd00fd62fa55c0792ad2913862d692c7060f70cb",
+   "producer_result_sha256": "aa9238147b8ef592f84ffa4e1b87c693bf6ae39f0d4850d5b383143b100d49ef",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "6c5b9e37e9626869278ef756810711be1a4a74aface20d78900459be345ee956",
+   "twin_sha256": "61b70ce15c01a482c9569db188f392d0e05c8df7afbf535cbba1ce7eb8cbb1b0",
+   "pages": 5,
+   "pdfium_visual_chars": 5732,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 52,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 37,
+    "python_bidi_agree": 37,
+    "rust_bidi_agree": 37
+   }
+  },
+  {
+   "doc_id": "tender-20261141",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "24f1ba2377604b28f6e56e25bd00fd62fa55c0792ad2913862d692c7060f70cb",
+   "producer_result_sha256": "aa9238147b8ef592f84ffa4e1b87c693bf6ae39f0d4850d5b383143b100d49ef",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "33c3b07e8513e82c9a25680d372e6a46cb5e61f0727355c8894468809c04fe36",
+   "twin_sha256": "eceb9787f5718f586b85068a029cb3b3f5db5e70fee9596b62253fc407adf578",
+   "pages": 5,
+   "pdfium_visual_chars": 5698,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 52,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 39,
+    "python_bidi_agree": 37,
+    "rust_bidi_agree": 37
+   }
+  },
+  {
+   "doc_id": "tender-20261141",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "24f1ba2377604b28f6e56e25bd00fd62fa55c0792ad2913862d692c7060f70cb",
+   "producer_result_sha256": "aa9238147b8ef592f84ffa4e1b87c693bf6ae39f0d4850d5b383143b100d49ef",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "f58159dccc25a8fe5af3408f41660389c684d7de753bdcbca9e319d14b0fee61",
+   "twin_sha256": "bc50acea816a9b912ced33d7a91099053063dcbf1424b35f0dc0e3eb4649c95a",
+   "pages": 5,
+   "pdfium_visual_chars": 5732,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 5
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 52,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 31,
+    "python_bidi_agree": 31,
+    "rust_bidi_agree": 31
+   }
+  },
+  {
+   "doc_id": "tender-20261142",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "1361ab1303f903e97a65d89db090fc03798f37bdf268b969e9248bc592fbb7ad",
+   "producer_result_sha256": "eb8510ee55513de7a27506d46416b2f58932ee7dcc22ac814bb57042b3bed8e7",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "751d0db4cba8ede63f8bb85e99d8579d0ef65246ea4afe4bf75e92ea8ec4613c",
+   "twin_sha256": "2b76ac72016623828e622df8e0e72398ca47c0fa902412da3cdb6d1c088d7881",
+   "pages": 3,
+   "pdfium_visual_chars": 4266,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 72,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 62,
+    "python_bidi_agree": 62,
+    "rust_bidi_agree": 62
+   }
+  },
+  {
+   "doc_id": "tender-20261142",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "1361ab1303f903e97a65d89db090fc03798f37bdf268b969e9248bc592fbb7ad",
+   "producer_result_sha256": "eb8510ee55513de7a27506d46416b2f58932ee7dcc22ac814bb57042b3bed8e7",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "6ef60faea5cff332013791cde7a3474bab411e2ff8e647c20d7970b0932b46ef",
+   "twin_sha256": "e011a45683805314da1b86b3f0b4ebb4bd271010b128fb8e0dc8e8c13e6e4e44",
+   "pages": 3,
+   "pdfium_visual_chars": 4266,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 72,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 62,
+    "python_bidi_agree": 62,
+    "rust_bidi_agree": 62
+   }
+  },
+  {
+   "doc_id": "tender-20261142",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "1361ab1303f903e97a65d89db090fc03798f37bdf268b969e9248bc592fbb7ad",
+   "producer_result_sha256": "eb8510ee55513de7a27506d46416b2f58932ee7dcc22ac814bb57042b3bed8e7",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "9aad7906aa4cd7b5cac9b1955a917174becea9c379c96d2297fe1ce3bfa08b8e",
+   "twin_sha256": "105e5271b7e53c876522bbf2723d3f25e5d015cefae5950e6beba03193545df2",
+   "pages": 3,
+   "pdfium_visual_chars": 4239,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 27,
+     "order": {
+      "different_sequence": 1,
+      "different_inventory": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 27,
+     "order": {
+      "different_sequence": 1,
+      "different_inventory": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 27,
+     "order": {
+      "different_sequence": 1,
+      "different_inventory": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 72,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 50,
+    "python_bidi_agree": 50,
+    "rust_bidi_agree": 50
+   }
+  },
+  {
+   "doc_id": "report-20361119",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "6653e4db2141eea78d20b8c161fb592d2a2c7c1323f2dd8918726bff808cba96",
+   "producer_result_sha256": "6a9581197f87d2d2faab68d61dc4f1ca3a99af4b23eb23efb614e15c24bcee30",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "e8446e35d15feca312b2d7a49a099bb845328a8e5ede7f8b87891b55758fb982",
+   "twin_sha256": "0bc34fb6d264779c1e2c89f362379e8e18da422c1c4797c40bd8eac920890e51",
+   "pages": 3,
+   "pdfium_visual_chars": 4100,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 35,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 26,
+    "python_bidi_agree": 26,
+    "rust_bidi_agree": 26
+   }
+  },
+  {
+   "doc_id": "report-20361119",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "6653e4db2141eea78d20b8c161fb592d2a2c7c1323f2dd8918726bff808cba96",
+   "producer_result_sha256": "6a9581197f87d2d2faab68d61dc4f1ca3a99af4b23eb23efb614e15c24bcee30",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "75948a35cf128249d6f1311957f4d28fc8c5a5a1a6643d4fdef0d538b079a424",
+   "twin_sha256": "8d776cb2040451a2afcfce961e886bdd10e49ee24815ffce621cdb572cc33718",
+   "pages": 3,
+   "pdfium_visual_chars": 4100,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 35,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 26,
+    "python_bidi_agree": 25,
+    "rust_bidi_agree": 25
+   }
+  },
+  {
+   "doc_id": "report-20361119",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "6653e4db2141eea78d20b8c161fb592d2a2c7c1323f2dd8918726bff808cba96",
+   "producer_result_sha256": "6a9581197f87d2d2faab68d61dc4f1ca3a99af4b23eb23efb614e15c24bcee30",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "684c18a7a7bc07aa0b599fb3ae1da885c3056451750a4f351b414fb0a424049c",
+   "twin_sha256": "03fd5d0b4e81016ad3f0529e75312e7ffdb75ec865eab8872dad63a3c9e61251",
+   "pages": 3,
+   "pdfium_visual_chars": 4100,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 35,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 25,
+    "python_bidi_agree": 25,
+    "rust_bidi_agree": 25
+   }
+  },
+  {
+   "doc_id": "report-20361120",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "6b239737b0a98bb5dd5324342448a0cc3dbbff5108ff48037040655bf2c609f2",
+   "producer_result_sha256": "2689fd770b422e149f56aedec916fde6f082e9221197a8a63e4ecb028594cbe8",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "4509c7a78255b80bbd33103dab774b8fad7ecef4f7bbff9d21397e85d672620d",
+   "twin_sha256": "c2aee12ff96e961f569f3bccdcc6406f1de0e6c310d861c819f701ad45d326de",
+   "pages": 3,
+   "pdfium_visual_chars": 6325,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 47,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 33,
+    "python_bidi_agree": 33,
+    "rust_bidi_agree": 33
+   }
+  },
+  {
+   "doc_id": "report-20361120",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "6b239737b0a98bb5dd5324342448a0cc3dbbff5108ff48037040655bf2c609f2",
+   "producer_result_sha256": "2689fd770b422e149f56aedec916fde6f082e9221197a8a63e4ecb028594cbe8",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "e016c2549145c4eb0e4cb14fd5dcaa4c1cb6aadc7e4c06d5cbf6bd0139eff9ce",
+   "twin_sha256": "aea7273458d83a6342f6d19b72a5b42feaa9120b7d1f05c953372a9526155e4c",
+   "pages": 3,
+   "pdfium_visual_chars": 6325,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 47,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 33,
+    "python_bidi_agree": 33,
+    "rust_bidi_agree": 33
+   }
+  },
+  {
+   "doc_id": "report-20361120",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "6b239737b0a98bb5dd5324342448a0cc3dbbff5108ff48037040655bf2c609f2",
+   "producer_result_sha256": "2689fd770b422e149f56aedec916fde6f082e9221197a8a63e4ecb028594cbe8",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "f27475519aa6c8bd6c6ca21aa89db7dd59270283360a70c23cb875c7e3e90e52",
+   "twin_sha256": "3f04a72cd0d48b4ce29863415b1c1eaadf932c203494b15a14d24842838c9a7b",
+   "pages": 4,
+   "pdfium_visual_chars": 6363,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 47,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 33,
+    "python_bidi_agree": 33,
+    "rust_bidi_agree": 33
+   }
+  },
+  {
+   "doc_id": "report-20361121",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "d48c7f1e340b460edd1da14c88a088463777e01116de7976e132af21c6510aac",
+   "producer_result_sha256": "210bf583e593647773faaa46c481ee16b28c3363ede515437b9cc859c2fd1739",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "b1ef219a9a79188080055709e9b97c02f31f95d5631c686614fdcd23a5c04d84",
+   "twin_sha256": "4b2ed18188e986c51f2a8f5eb364b7274135843e2f9246f3361e62a51f1af39c",
+   "pages": 3,
+   "pdfium_visual_chars": 3036,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 28,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 24,
+    "python_bidi_agree": 24,
+    "rust_bidi_agree": 24
+   }
+  },
+  {
+   "doc_id": "report-20361121",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "d48c7f1e340b460edd1da14c88a088463777e01116de7976e132af21c6510aac",
+   "producer_result_sha256": "210bf583e593647773faaa46c481ee16b28c3363ede515437b9cc859c2fd1739",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "26864b08ad846d79009e0303aefaf137a9c72ce523b818cb2cddb03397fbab9f",
+   "twin_sha256": "d49156086488b3fa1dbbc118cca9a3dca01198f9f43fb53f63313ebfec221737",
+   "pages": 3,
+   "pdfium_visual_chars": 3036,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 28,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 24,
+    "python_bidi_agree": 23,
+    "rust_bidi_agree": 23
+   }
+  },
+  {
+   "doc_id": "report-20361121",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "d48c7f1e340b460edd1da14c88a088463777e01116de7976e132af21c6510aac",
+   "producer_result_sha256": "210bf583e593647773faaa46c481ee16b28c3363ede515437b9cc859c2fd1739",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "e1e5a17ff881dec7f878ceadc62b61cb0e48d32e69bb9e258f75bbafd4f1afe0",
+   "twin_sha256": "fb588ec1ae2439ebf04fa49131722d359a6daef13f18a46f88a0d56363ca8504",
+   "pages": 3,
+   "pdfium_visual_chars": 3036,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 28,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 24,
+    "python_bidi_agree": 24,
+    "rust_bidi_agree": 24
+   }
+  },
+  {
+   "doc_id": "report-20361122",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "28468c9b68c9948d319b9e0c459d9dfb4c4568c093b8f8706f065747051cd5d3",
+   "producer_result_sha256": "4ab0273172cb397671d5b716e3905f03d903fa87b5d22dc25ef6477479ece731",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "592879bd9c1a95851f8a770266de938494e9d7139998d15e667c159690f22359",
+   "twin_sha256": "f28e0760fda2d9e3565aeb0a761be334463a9a318d851ffb5da7daff66554d0f",
+   "pages": 3,
+   "pdfium_visual_chars": 3832,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 19,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 12,
+    "python_bidi_agree": 12,
+    "rust_bidi_agree": 12
+   }
+  },
+  {
+   "doc_id": "report-20361122",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "28468c9b68c9948d319b9e0c459d9dfb4c4568c093b8f8706f065747051cd5d3",
+   "producer_result_sha256": "4ab0273172cb397671d5b716e3905f03d903fa87b5d22dc25ef6477479ece731",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "c3f9297053cfe39e15365e7a4acf7a19f0d8290253ccfa697832e0a3a7ea5982",
+   "twin_sha256": "25db56d2e575ce5f30728f03239d9269190c9f0d46cd55bee781711c1e08e8e2",
+   "pages": 3,
+   "pdfium_visual_chars": 3832,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 19,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 12,
+    "python_bidi_agree": 12,
+    "rust_bidi_agree": 12
+   }
+  },
+  {
+   "doc_id": "report-20361122",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "28468c9b68c9948d319b9e0c459d9dfb4c4568c093b8f8706f065747051cd5d3",
+   "producer_result_sha256": "4ab0273172cb397671d5b716e3905f03d903fa87b5d22dc25ef6477479ece731",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "0bc6c08d9b7019a345850601cbbc9d724766adc1d62f64cb30b4ca3f8cc13f8a",
+   "twin_sha256": "f4a7df0520fb645d5feb342ffb9349b6a0c4e0f4b248c5534228d12fcc159c9e",
+   "pages": 3,
+   "pdfium_visual_chars": 3832,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 19,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 11,
+    "python_bidi_agree": 11,
+    "rust_bidi_agree": 11
+   }
+  },
+  {
+   "doc_id": "report-20361123",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "55dd3dd67f2fe7e4bad729150326d538c78259225fafd159e47895eefcd9b861",
+   "producer_result_sha256": "7ec4c34b1e40f9e2d85dfe7e56262409c8b2ae38368347f8c90c6901b30d1898",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "e169b40ee61cdcbfff7f19d6925aee043c91255fdd2296a7bbe23a1d8f03f47f",
+   "twin_sha256": "897358f43892c84100c67bae7a55c0c927021970986d95cafffbc066273caca6",
+   "pages": 2,
+   "pdfium_visual_chars": 2796,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 20,
+    "reversed": 0,
+    "unresolved": 1,
+    "visual_lines_compared": 17,
+    "python_bidi_agree": 17,
+    "rust_bidi_agree": 17
+   }
+  },
+  {
+   "doc_id": "report-20361123",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "55dd3dd67f2fe7e4bad729150326d538c78259225fafd159e47895eefcd9b861",
+   "producer_result_sha256": "7ec4c34b1e40f9e2d85dfe7e56262409c8b2ae38368347f8c90c6901b30d1898",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "4707c588e51df21121fd6786c3b83feb77b2c5a8b25ddac21a9bc9e4d3a953cc",
+   "twin_sha256": "856d477ddff2df65fa38508f2362f002bacd15d6ae9b086ed0a341fcaf2d1d83",
+   "pages": 2,
+   "pdfium_visual_chars": 2796,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 20,
+    "reversed": 0,
+    "unresolved": 1,
+    "visual_lines_compared": 17,
+    "python_bidi_agree": 17,
+    "rust_bidi_agree": 17
+   }
+  },
+  {
+   "doc_id": "report-20361123",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "55dd3dd67f2fe7e4bad729150326d538c78259225fafd159e47895eefcd9b861",
+   "producer_result_sha256": "7ec4c34b1e40f9e2d85dfe7e56262409c8b2ae38368347f8c90c6901b30d1898",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "b77842cd39f4bc9aca708009ffb347af4de6b45f8885961af513b6424556a56a",
+   "twin_sha256": "441f3c940ff29c61d96ba19b17dcd4d0c510df8843661bbdc1396aeb23a97a13",
+   "pages": 2,
+   "pdfium_visual_chars": 2796,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 20,
+    "reversed": 0,
+    "unresolved": 1,
+    "visual_lines_compared": 17,
+    "python_bidi_agree": 17,
+    "rust_bidi_agree": 17
+   }
+  },
+  {
+   "doc_id": "report-20361124",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "c5dce74ebd04e2425e1397f14b435b4b08966d920a82c99a97697bff3d973b1e",
+   "producer_result_sha256": "1b1cf27d258c2f818e997e12c697ee5210064d0321a70f24349f4ddc92c0b8af",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "39d1b17e0868411ded8750589083b58e1f14bfb891bf6b4e2224d5a382341409",
+   "twin_sha256": "389862766b5e1ae5d2c9735fa4d24171bab3f2d61e16e5db5eef6621bc1d4921",
+   "pages": 3,
+   "pdfium_visual_chars": 3042,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 39,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 30,
+    "python_bidi_agree": 30,
+    "rust_bidi_agree": 30
+   }
+  },
+  {
+   "doc_id": "report-20361124",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "c5dce74ebd04e2425e1397f14b435b4b08966d920a82c99a97697bff3d973b1e",
+   "producer_result_sha256": "1b1cf27d258c2f818e997e12c697ee5210064d0321a70f24349f4ddc92c0b8af",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "d16d8a961038683919b8c93779c6fafc7932ac8605e3670100b7673544a4777f",
+   "twin_sha256": "c5635cec0f7126fed9c11e16e172d665616bb0f9d6ee107a86e86dbd0e1e2f73",
+   "pages": 3,
+   "pdfium_visual_chars": 3042,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 39,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 30,
+    "python_bidi_agree": 30,
+    "rust_bidi_agree": 30
+   }
+  },
+  {
+   "doc_id": "report-20361124",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "c5dce74ebd04e2425e1397f14b435b4b08966d920a82c99a97697bff3d973b1e",
+   "producer_result_sha256": "1b1cf27d258c2f818e997e12c697ee5210064d0321a70f24349f4ddc92c0b8af",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "a89554ed3847847040e158b11d46d2e9e5524707884445b5f3c0c29072041182",
+   "twin_sha256": "64595379c20c87619aad4ecaed624d8cda7dbee79eca2921e6a87bb1b8992e93",
+   "pages": 3,
+   "pdfium_visual_chars": 3042,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 39,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 29,
+    "python_bidi_agree": 29,
+    "rust_bidi_agree": 29
+   }
+  },
+  {
+   "doc_id": "report-20361125",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "b3597c1825bbda80505da09eb902fb70ad8c7582e016e0fa8a80a6cce6abb817",
+   "producer_result_sha256": "dd22cbf7f5961ab832d400fa43e95387c784a3188de2c336cf5e79cd6f561939",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "a89dfdd4cb99662826151bc00d37fc3551c0d0406d3d484152c51d5a6c5f4b1e",
+   "twin_sha256": "85df1e668b057f05abda007429f48364e35d8048ef0ca6be654871a25fced235",
+   "pages": 3,
+   "pdfium_visual_chars": 4078,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 37,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 27,
+    "python_bidi_agree": 27,
+    "rust_bidi_agree": 27
+   }
+  },
+  {
+   "doc_id": "report-20361125",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "b3597c1825bbda80505da09eb902fb70ad8c7582e016e0fa8a80a6cce6abb817",
+   "producer_result_sha256": "dd22cbf7f5961ab832d400fa43e95387c784a3188de2c336cf5e79cd6f561939",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "1727bf53d53ec467467c6307af4087e95d52aed68161ad73fdb105a4d69ae9db",
+   "twin_sha256": "7700cd1e148a08702ded9b29fc54b9a159f40b325dc6c3876d0491da1388561a",
+   "pages": 3,
+   "pdfium_visual_chars": 4078,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 37,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 27,
+    "python_bidi_agree": 25,
+    "rust_bidi_agree": 25
+   }
+  },
+  {
+   "doc_id": "report-20361125",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "b3597c1825bbda80505da09eb902fb70ad8c7582e016e0fa8a80a6cce6abb817",
+   "producer_result_sha256": "dd22cbf7f5961ab832d400fa43e95387c784a3188de2c336cf5e79cd6f561939",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "a3e5571aa45d9f86da98e3ce2bfd54630422160d85250473f7d1931e2b611fba",
+   "twin_sha256": "278f430243c35eea9d74d6b1431d00a0d98c0c962c1ce896e775c229a7915ccc",
+   "pages": 3,
+   "pdfium_visual_chars": 4078,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 37,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 26,
+    "python_bidi_agree": 26,
+    "rust_bidi_agree": 26
+   }
+  },
+  {
+   "doc_id": "report-20361126",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "df0a1ae960e0d5b6c175af8961edf6a865c495b516e65b51c80b0aed6c680787",
+   "producer_result_sha256": "6cc18176c15c7a2fb54ee92bf7cd9ac6969eca738cbcf82b0d6b8ca5c9f9dfd7",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "e89b2ea5c324682da052a9deaa1e0107c5b0f9cf8438a1fdc30663fd447b06fd",
+   "twin_sha256": "7397c35f4233b6c08d5b6f735fb9b8c30bfb37a8ec70a71a210ad204a86b8c2f",
+   "pages": 2,
+   "pdfium_visual_chars": 3935,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 34,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 25,
+    "python_bidi_agree": 25,
+    "rust_bidi_agree": 25
+   }
+  },
+  {
+   "doc_id": "report-20361126",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "df0a1ae960e0d5b6c175af8961edf6a865c495b516e65b51c80b0aed6c680787",
+   "producer_result_sha256": "6cc18176c15c7a2fb54ee92bf7cd9ac6969eca738cbcf82b0d6b8ca5c9f9dfd7",
+   "status": "plain_only_after_producer_error",
+   "version_basis": "run_pin_and_pdf_release_metadata",
+   "plain_sha256": "4bf3fed8cf10ac75edf9071248b7e2c4517973eab0ad2d2ba637f3749475ac30",
+   "pages": 2,
+   "pdfium_visual_chars": 3935,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   }
+  },
+  {
+   "doc_id": "report-20361126",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "df0a1ae960e0d5b6c175af8961edf6a865c495b516e65b51c80b0aed6c680787",
+   "producer_result_sha256": "6cc18176c15c7a2fb54ee92bf7cd9ac6969eca738cbcf82b0d6b8ca5c9f9dfd7",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "83e51688859546340188fbaa6b6162eb68afb670332ffb8028008b02d7f9a7e1",
+   "twin_sha256": "8f99bea02b2489bce4fa00397210a40fb54cd1b3f63f212d57557f152303024c",
+   "pages": 3,
+   "pdfium_visual_chars": 3967,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 34,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 25,
+    "python_bidi_agree": 25,
+    "rust_bidi_agree": 25
+   }
+  },
+  {
+   "doc_id": "report-20361127",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "f61aa5ce40b119db071d4e0292e316880659f745d9273d24e755914659abc30a",
+   "producer_result_sha256": "b8926c8dfd9248472329ace6193ff143de6bbc3f76418a47911cc29bfe0a5565",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "350451d6a1304cbb7351d4bcc9d4cb727bc2182b2f86e3ca0f1bc4bd6adef387",
+   "twin_sha256": "df19f7fa4da46dac966a818ebb0f02398f77bedc23aa026c69c9434a69bc097b",
+   "pages": 2,
+   "pdfium_visual_chars": 3290,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 26,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 18,
+    "python_bidi_agree": 18,
+    "rust_bidi_agree": 18
+   }
+  },
+  {
+   "doc_id": "report-20361127",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "f61aa5ce40b119db071d4e0292e316880659f745d9273d24e755914659abc30a",
+   "producer_result_sha256": "b8926c8dfd9248472329ace6193ff143de6bbc3f76418a47911cc29bfe0a5565",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "725b4e672b9f619805f8c6d6dc5547e49674244ce3041fd0c38827c453c5e679",
+   "twin_sha256": "85b6a6905de3babd345b045629c1464b97ca78a09fa9ab27708c35f92d88ee0f",
+   "pages": 2,
+   "pdfium_visual_chars": 3290,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 26,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 18,
+    "python_bidi_agree": 18,
+    "rust_bidi_agree": 18
+   }
+  },
+  {
+   "doc_id": "report-20361127",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "f61aa5ce40b119db071d4e0292e316880659f745d9273d24e755914659abc30a",
+   "producer_result_sha256": "b8926c8dfd9248472329ace6193ff143de6bbc3f76418a47911cc29bfe0a5565",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "5822f92c41c84478a3e843215647b538c60601690930737e6493db010e07609f",
+   "twin_sha256": "b34a896eb9e6b69b17b9a43c230e772f09debae3414ffb6bac4348cb2689420b",
+   "pages": 3,
+   "pdfium_visual_chars": 3318,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 26,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 17,
+    "python_bidi_agree": 17,
+    "rust_bidi_agree": 17
+   }
+  },
+  {
+   "doc_id": "report-20361128",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "c38f400ffea806946f0bfd255b9d713100ad65026e1e3f2a7fcab36c407700af",
+   "producer_result_sha256": "6444dc37578d4691502233db4fde96908f85c8c43effbae285b0f62e3ddc99a3",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "76c3dcb0cef515a931cec19368d1ab399cfd5188f8879250436dbbfb18a0fb61",
+   "twin_sha256": "e39be737afd03601837a062fb44fb2c96a5dbd02aed364a5dfab7ec0ea07e9c8",
+   "pages": 4,
+   "pdfium_visual_chars": 5469,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 33,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 22,
+    "python_bidi_agree": 22,
+    "rust_bidi_agree": 22
+   }
+  },
+  {
+   "doc_id": "report-20361128",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "c38f400ffea806946f0bfd255b9d713100ad65026e1e3f2a7fcab36c407700af",
+   "producer_result_sha256": "6444dc37578d4691502233db4fde96908f85c8c43effbae285b0f62e3ddc99a3",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "7f20e54c5857d0889d0c361fb30ea867d1971f5d65b8459fae2684e8b2b77058",
+   "twin_sha256": "616d4d76d765b9d8d8332c0be26d23fa39d7c9f1c47e9ae9d017c416a798b2e5",
+   "pages": 4,
+   "pdfium_visual_chars": 5469,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 33,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 22,
+    "python_bidi_agree": 22,
+    "rust_bidi_agree": 22
+   }
+  },
+  {
+   "doc_id": "report-20361128",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "c38f400ffea806946f0bfd255b9d713100ad65026e1e3f2a7fcab36c407700af",
+   "producer_result_sha256": "6444dc37578d4691502233db4fde96908f85c8c43effbae285b0f62e3ddc99a3",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "3c84b9aff73795f811f0b72800b430b71a38a37f805662c40e28f20e37ccff00",
+   "twin_sha256": "386e993fe1ade1252b7c2b18f07eceb26f518cfc833874ecd387ad54908b7ba9",
+   "pages": 4,
+   "pdfium_visual_chars": 5469,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 33,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 21,
+    "python_bidi_agree": 21,
+    "rust_bidi_agree": 21
+   }
+  },
+  {
+   "doc_id": "report-20361129",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "a10b5879869c422749dc8c42326f8caf17f26be1f96df544de1537d589e0e3c4",
+   "producer_result_sha256": "193cadd9f2399792fc258cdb63181bfd93c3fdec54d9fe6c7434da379160b302",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "c7dd950ee58e3c372e9f4282e764ccbea0db5d9ac0a3b6ccce5e428ea1338402",
+   "twin_sha256": "c05b8a7c06c8353e89dbe4c80812f57dca68dc6bf4376986ca61865b71bee3e5",
+   "pages": 3,
+   "pdfium_visual_chars": 3818,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 34,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 24,
+    "python_bidi_agree": 24,
+    "rust_bidi_agree": 24
+   }
+  },
+  {
+   "doc_id": "report-20361129",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "a10b5879869c422749dc8c42326f8caf17f26be1f96df544de1537d589e0e3c4",
+   "producer_result_sha256": "193cadd9f2399792fc258cdb63181bfd93c3fdec54d9fe6c7434da379160b302",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "2481f803533694618b33d6011ded5a0fcc91f4958fc8898b8da37a636212062d",
+   "twin_sha256": "434bec2b5e9f45f769af50c59726a473f74d9933c89c5bb6342fbd016f88775f",
+   "pages": 3,
+   "pdfium_visual_chars": 3818,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 34,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 24,
+    "python_bidi_agree": 24,
+    "rust_bidi_agree": 24
+   }
+  },
+  {
+   "doc_id": "report-20361129",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "a10b5879869c422749dc8c42326f8caf17f26be1f96df544de1537d589e0e3c4",
+   "producer_result_sha256": "193cadd9f2399792fc258cdb63181bfd93c3fdec54d9fe6c7434da379160b302",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "8d6ca9a9c0593b28debfea7723c59596bcd79357937c34614290efde965ab3ee",
+   "twin_sha256": "4d7b2007aafcbd4cbc7e6a7631cc4f6eea4a3e5315e6bb7ca4ae289185377da0",
+   "pages": 3,
+   "pdfium_visual_chars": 3818,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 34,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 24,
+    "python_bidi_agree": 24,
+    "rust_bidi_agree": 24
+   }
+  },
+  {
+   "doc_id": "report-20361130",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "6eb42fe18a50a8c78aa77a77ced215b86edbda0d127a6b19eedfd1fa8e8bd732",
+   "producer_result_sha256": "8e23dcd343209da1068a0a8e3fe8ff2ad8c372f9f634c20d8713aaf9badbdf64",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "01e57a8784f42ac30056584a21b2a25384f33c03a75261e3b6d5a805f7272c63",
+   "twin_sha256": "b73b4fe8b3a141532ed8b14a3c11f3afe3e9fc3c1cf7becccb5c1125eb64d7ab",
+   "pages": 3,
+   "pdfium_visual_chars": 2977,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 27,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 22,
+    "python_bidi_agree": 22,
+    "rust_bidi_agree": 22
+   }
+  },
+  {
+   "doc_id": "report-20361130",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "6eb42fe18a50a8c78aa77a77ced215b86edbda0d127a6b19eedfd1fa8e8bd732",
+   "producer_result_sha256": "8e23dcd343209da1068a0a8e3fe8ff2ad8c372f9f634c20d8713aaf9badbdf64",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "3aeafd625c7e369ac776ae3693ae74764dbffaaac02ae5d74be34f15eeb3aaa0",
+   "twin_sha256": "d9a07980dbde9026e10ddc248ab4e97694c8166db5223326c4207d1fe181ca28",
+   "pages": 3,
+   "pdfium_visual_chars": 2977,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 27,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 22,
+    "python_bidi_agree": 22,
+    "rust_bidi_agree": 22
+   }
+  },
+  {
+   "doc_id": "report-20361130",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "6eb42fe18a50a8c78aa77a77ced215b86edbda0d127a6b19eedfd1fa8e8bd732",
+   "producer_result_sha256": "8e23dcd343209da1068a0a8e3fe8ff2ad8c372f9f634c20d8713aaf9badbdf64",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "b86ef9aeaebb660d06104b0b725bd836b889a3c274036e67667ef5cf7fe93955",
+   "twin_sha256": "055d32cb49ac27fa0df961573d49acbb79e9d4baf7fc777ba53a88c3e79c92d7",
+   "pages": 3,
+   "pdfium_visual_chars": 2953,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 27,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 21,
+    "python_bidi_agree": 21,
+    "rust_bidi_agree": 21
+   }
+  },
+  {
+   "doc_id": "report-20361131",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "fdb3c5a74b80bf774b2886f4d03fb74d572906993e13ef537aa78e49086b39a4",
+   "producer_result_sha256": "41fd5f6844372f2a09ab69537a875b1cab24f61c24442b659c22136b5404dba6",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "cf7f75d8730ef5e9d6b5ff3ef5f457c0b292bc990a95c8baa689df7df9433611",
+   "twin_sha256": "b108e22111e3503c6baa199ae351460e3c7ef1f47423bfebf3d6e080622d2857",
+   "pages": 3,
+   "pdfium_visual_chars": 3316,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 30,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 21,
+    "python_bidi_agree": 21,
+    "rust_bidi_agree": 21
+   }
+  },
+  {
+   "doc_id": "report-20361131",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "fdb3c5a74b80bf774b2886f4d03fb74d572906993e13ef537aa78e49086b39a4",
+   "producer_result_sha256": "41fd5f6844372f2a09ab69537a875b1cab24f61c24442b659c22136b5404dba6",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "645423fcf3540ab496d9adb6542a7cee9ef48b7ca9441d88a633df693276d719",
+   "twin_sha256": "4799dcc86902a68656665994acf9f2be628911c7ef9ca51b6fbac5f59979191d",
+   "pages": 3,
+   "pdfium_visual_chars": 3316,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 30,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 21,
+    "python_bidi_agree": 20,
+    "rust_bidi_agree": 20
+   }
+  },
+  {
+   "doc_id": "report-20361131",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "fdb3c5a74b80bf774b2886f4d03fb74d572906993e13ef537aa78e49086b39a4",
+   "producer_result_sha256": "41fd5f6844372f2a09ab69537a875b1cab24f61c24442b659c22136b5404dba6",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "36cf7479ea182cb10145033e73ad5f2315a7b106e7088af62645551d62655829",
+   "twin_sha256": "031954349e226515f8eb20039b8f7aa015617f41ded91d5eccef41857739add9",
+   "pages": 3,
+   "pdfium_visual_chars": 3285,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 30,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 21,
+    "python_bidi_agree": 21,
+    "rust_bidi_agree": 21
+   }
+  },
+  {
+   "doc_id": "report-20361132",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "89ae295f44a8dfbc902a83ee892d51ad37fbea8483d9a7049647da2aef968eb9",
+   "producer_result_sha256": "0c12d9244031a9f4396dbe76ccea1e784e5d2155afe6c43daed70b82bbcc496f",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "f7083ce7c031cf09b643fe41d69e60083771a4624289b07dbc0d7f5519f2a7bb",
+   "twin_sha256": "746da80741f7b3e7e27b9a49cfb2932f4aa19dcfb1b9474a8692da8d7f3a8624",
+   "pages": 4,
+   "pdfium_visual_chars": 4273,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 33,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 23,
+    "python_bidi_agree": 23,
+    "rust_bidi_agree": 23
+   }
+  },
+  {
+   "doc_id": "report-20361132",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "89ae295f44a8dfbc902a83ee892d51ad37fbea8483d9a7049647da2aef968eb9",
+   "producer_result_sha256": "0c12d9244031a9f4396dbe76ccea1e784e5d2155afe6c43daed70b82bbcc496f",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "f1c97936e3c6caf0a0d158f8ebe28be1c360d8421cb93353ceb5233cabf04d7f",
+   "twin_sha256": "c54f4661d4026e50c4c034b8ae785c7de7805e732a8deac8257305b551453043",
+   "pages": 4,
+   "pdfium_visual_chars": 4273,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 33,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 23,
+    "python_bidi_agree": 23,
+    "rust_bidi_agree": 23
+   }
+  },
+  {
+   "doc_id": "report-20361132",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "89ae295f44a8dfbc902a83ee892d51ad37fbea8483d9a7049647da2aef968eb9",
+   "producer_result_sha256": "0c12d9244031a9f4396dbe76ccea1e784e5d2155afe6c43daed70b82bbcc496f",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "cc27cd83ef91e93c1eef81b7536ef5dbd13738009dd17a9cc92b49b660417733",
+   "twin_sha256": "77ddad568b648284b74b7703f33b3fcbdb76980aed606e439d0ffb7499bb7ae8",
+   "pages": 3,
+   "pdfium_visual_chars": 4259,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 33,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 22,
+    "python_bidi_agree": 22,
+    "rust_bidi_agree": 22
+   }
+  },
+  {
+   "doc_id": "report-20361133",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "f7da7a43b7b6da67f50a3d5bfb0e1713288d0ea2b26d5417ac128c1995ffe7c2",
+   "producer_result_sha256": "af1eac51f69324d9c2f78514b2fcb4ef38a39e09513ad66544d50814660a9135",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "fbd985e09cbedd894ead01dce09e4294a7c436a0df2a2b5c3d103a5bd2798f24",
+   "twin_sha256": "6041598a9ea12935094da9190af534de2f86b8033e10f811ab5731f35d28769c",
+   "pages": 4,
+   "pdfium_visual_chars": 4758,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 37,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 27,
+    "python_bidi_agree": 27,
+    "rust_bidi_agree": 27
+   }
+  },
+  {
+   "doc_id": "report-20361133",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "f7da7a43b7b6da67f50a3d5bfb0e1713288d0ea2b26d5417ac128c1995ffe7c2",
+   "producer_result_sha256": "af1eac51f69324d9c2f78514b2fcb4ef38a39e09513ad66544d50814660a9135",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "efedb1fe93edb5e68589c168ce7e86a7f937d1bcb5328b15689e656558e24eed",
+   "twin_sha256": "eb9e2aae3004e7a4209b150839b5e86306fb662dc02b191ac407838c844c0fe3",
+   "pages": 3,
+   "pdfium_visual_chars": 4729,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 37,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 27,
+    "python_bidi_agree": 25,
+    "rust_bidi_agree": 25
+   }
+  },
+  {
+   "doc_id": "report-20361133",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "f7da7a43b7b6da67f50a3d5bfb0e1713288d0ea2b26d5417ac128c1995ffe7c2",
+   "producer_result_sha256": "af1eac51f69324d9c2f78514b2fcb4ef38a39e09513ad66544d50814660a9135",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "54c786bff7927a78b0dc5e4d10ba517e7080581d8f054e584138c3e5c6d136f2",
+   "twin_sha256": "e7cbb718e738eaa97fccd58437ec53ef414905b1cfe8c9a61f7892f9f65c5128",
+   "pages": 4,
+   "pdfium_visual_chars": 4758,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 4
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 37,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 26,
+    "python_bidi_agree": 26,
+    "rust_bidi_agree": 26
+   }
+  },
+  {
+   "doc_id": "report-20361134",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "764ce6af6974059069c1a987af13c37e19f08b9b0f7a720648c18e581ca1fa67",
+   "producer_result_sha256": "fce6149e1e8ae9241080cfd3b7d00fe050bb74be2dabc3c84f064f10b1f21101",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "645081ab8cfe9aafe82331ff2e928d8217e74701f6ad2d4469515e7c4c8ff443",
+   "twin_sha256": "5f6052d87f900d327bd37353c917e105d52996606598076a9576532d9b093da2",
+   "pages": 2,
+   "pdfium_visual_chars": 2476,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 20,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 15,
+    "python_bidi_agree": 15,
+    "rust_bidi_agree": 15
+   }
+  },
+  {
+   "doc_id": "report-20361134",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "764ce6af6974059069c1a987af13c37e19f08b9b0f7a720648c18e581ca1fa67",
+   "producer_result_sha256": "fce6149e1e8ae9241080cfd3b7d00fe050bb74be2dabc3c84f064f10b1f21101",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "9e45e92c4eaed625c78732e274d9b680d8986325843900389c935ded0ed3ec90",
+   "twin_sha256": "b95f27b31287fb32f4b1259676137c8b013fa8a610c1ebfefe4c246346e0054c",
+   "pages": 2,
+   "pdfium_visual_chars": 2476,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 20,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 15,
+    "python_bidi_agree": 14,
+    "rust_bidi_agree": 14
+   }
+  },
+  {
+   "doc_id": "report-20361134",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "764ce6af6974059069c1a987af13c37e19f08b9b0f7a720648c18e581ca1fa67",
+   "producer_result_sha256": "fce6149e1e8ae9241080cfd3b7d00fe050bb74be2dabc3c84f064f10b1f21101",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "f3945de780fa2a706502c9756fca25906df15f75ac2d198e2a3b66bd8ed72a31",
+   "twin_sha256": "5e19f2935b6c341071d9d044dd3254056bcebf3ba51e969b448be60cb7af0f4d",
+   "pages": 2,
+   "pdfium_visual_chars": 2438,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 20,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 15,
+    "python_bidi_agree": 15,
+    "rust_bidi_agree": 15
+   }
+  },
+  {
+   "doc_id": "report-20361135",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "37b952da04166c41cfafae54fa823d91d1c82893626ca346e6fbc0495db925cf",
+   "producer_result_sha256": "48780632bf86348a0939c9d80ec6b9d58f496532d020ad2a14ce00e1017d4a44",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "dc1026dc701bfa5f2f79766e936a811e314fd89f1a03c77cc8e634f8761389c1",
+   "twin_sha256": "2581167a732dab07fc706e025764bdb6c1819293eded7e40fb2eb04d36cf0ffd",
+   "pages": 2,
+   "pdfium_visual_chars": 3867,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 32,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 26,
+    "python_bidi_agree": 26,
+    "rust_bidi_agree": 26
+   }
+  },
+  {
+   "doc_id": "report-20361135",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "37b952da04166c41cfafae54fa823d91d1c82893626ca346e6fbc0495db925cf",
+   "producer_result_sha256": "48780632bf86348a0939c9d80ec6b9d58f496532d020ad2a14ce00e1017d4a44",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "7d33d808f91666a17fa6fffc131426c9212ee59e5040bca579ebf03ee2a874ce",
+   "twin_sha256": "80f4170eb843609d4f7264da76c5a3856a4fe5c19e6f0742f0c1e003fcfceed2",
+   "pages": 2,
+   "pdfium_visual_chars": 3867,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 32,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 26,
+    "python_bidi_agree": 26,
+    "rust_bidi_agree": 26
+   }
+  },
+  {
+   "doc_id": "report-20361135",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "37b952da04166c41cfafae54fa823d91d1c82893626ca346e6fbc0495db925cf",
+   "producer_result_sha256": "48780632bf86348a0939c9d80ec6b9d58f496532d020ad2a14ce00e1017d4a44",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "9067a9f36d5e7245c0bd918ad1c1e19f9600952173148a646d91a94f9ed14f47",
+   "twin_sha256": "82ed571f6400d8f18394e5e1a885b1aa56aad8ebca4c699a13cb9fb378f1e03e",
+   "pages": 3,
+   "pdfium_visual_chars": 3890,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 32,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 25,
+    "python_bidi_agree": 25,
+    "rust_bidi_agree": 25
+   }
+  },
+  {
+   "doc_id": "report-20361136",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "a04c89e2d4e69645b74b152b735e6e8392e02cb0afe0a310575450c6e324187e",
+   "producer_result_sha256": "cd1105fde979ae0644388668d5a99423b3641183c2f00b5f7968623b8f042add",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "3f943d06dcb7e3343558400bb951f7cc1e3aeeaac23e1800521653c3bc2a0de7",
+   "twin_sha256": "645342335f03d37e2322cf45f3b95381934b6933e104d52e945ca40af174eb28",
+   "pages": 2,
+   "pdfium_visual_chars": 2061,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 25,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 20,
+    "python_bidi_agree": 20,
+    "rust_bidi_agree": 20
+   }
+  },
+  {
+   "doc_id": "report-20361136",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "a04c89e2d4e69645b74b152b735e6e8392e02cb0afe0a310575450c6e324187e",
+   "producer_result_sha256": "cd1105fde979ae0644388668d5a99423b3641183c2f00b5f7968623b8f042add",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "bf3e1fdd408ce1f00daa6d92712c5a77d4b16bd754fed4b11bb7b751fedca296",
+   "twin_sha256": "8bac397a0636afaa49fa9719918b3c60e31ebd0eb06291c492f98088fd8a7c1e",
+   "pages": 2,
+   "pdfium_visual_chars": 2061,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 25,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 19,
+    "python_bidi_agree": 19,
+    "rust_bidi_agree": 19
+   }
+  },
+  {
+   "doc_id": "report-20361136",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "a04c89e2d4e69645b74b152b735e6e8392e02cb0afe0a310575450c6e324187e",
+   "producer_result_sha256": "cd1105fde979ae0644388668d5a99423b3641183c2f00b5f7968623b8f042add",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "b371ada67381eef76712abf87a61f615504ba2eabab69bb972250395752391fe",
+   "twin_sha256": "e6ac7bb0e45a7600f3b8b41153e21482f02bdbfd16cf5fc3470e9c6ba08215fb",
+   "pages": 2,
+   "pdfium_visual_chars": 2061,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 25,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 20,
+    "python_bidi_agree": 20,
+    "rust_bidi_agree": 20
+   }
+  },
+  {
+   "doc_id": "report-20361137",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "8e6f8cd08f39433a70293719ce2c9f5ebd2f5e63755839fa390cc2a7ff77edd6",
+   "producer_result_sha256": "abadcbe1c575af54cd4249201ceb0d8666f271ed5f122f0bc48840d0ce5e7254",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "adb76ff9618c5af5fc004414cb9c7c10688d5a086d6407c50a89ad733da8829a",
+   "twin_sha256": "6f952e7e9a82eb346adfa62047d75316ea99abef7333925a6f1ffbadec4e170a",
+   "pages": 2,
+   "pdfium_visual_chars": 2363,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 28,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 23,
+    "python_bidi_agree": 23,
+    "rust_bidi_agree": 23
+   }
+  },
+  {
+   "doc_id": "report-20361137",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "8e6f8cd08f39433a70293719ce2c9f5ebd2f5e63755839fa390cc2a7ff77edd6",
+   "producer_result_sha256": "abadcbe1c575af54cd4249201ceb0d8666f271ed5f122f0bc48840d0ce5e7254",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "e16410c3c21762a3106adc5dba0883b57c6cb9054452831ae39ec5bae313d535",
+   "twin_sha256": "51d23cce29d630f1e8319b375caf292a3d41adca526421a28577ca4ca924a46e",
+   "pages": 2,
+   "pdfium_visual_chars": 2363,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 28,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 22,
+    "python_bidi_agree": 22,
+    "rust_bidi_agree": 22
+   }
+  },
+  {
+   "doc_id": "report-20361137",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "8e6f8cd08f39433a70293719ce2c9f5ebd2f5e63755839fa390cc2a7ff77edd6",
+   "producer_result_sha256": "abadcbe1c575af54cd4249201ceb0d8666f271ed5f122f0bc48840d0ce5e7254",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "847ccd2592b1b00080d2b75ad85b43400ec56e50248f815cbda0c36ec1b858c2",
+   "twin_sha256": "07170ade7a871ab8f30dfec23b96e28d4abe9a8724751ba63caf4b1dd5b13a7c",
+   "pages": 2,
+   "pdfium_visual_chars": 2363,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 28,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 22,
+    "python_bidi_agree": 22,
+    "rust_bidi_agree": 22
+   }
+  },
+  {
+   "doc_id": "report-20361138",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "9155f30347adc18c83bab611a309c53475310dca10eff3021df0e4708bdf6fd6",
+   "producer_result_sha256": "c62b432df6cdedf5792f7f48ebeea17527ba12f83ada59d2c98d15fe175e72da",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "c34cf4526c90a3f775432ee80abd83007511b6b40d724279ff160b82610f01b9",
+   "twin_sha256": "253e5646a13f011874de0a43f20ba5a4c8f7c8ee4620d901c11e42ae69fcf34c",
+   "pages": 3,
+   "pdfium_visual_chars": 3917,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 29,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 20,
+    "python_bidi_agree": 20,
+    "rust_bidi_agree": 20
+   }
+  },
+  {
+   "doc_id": "report-20361138",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "9155f30347adc18c83bab611a309c53475310dca10eff3021df0e4708bdf6fd6",
+   "producer_result_sha256": "c62b432df6cdedf5792f7f48ebeea17527ba12f83ada59d2c98d15fe175e72da",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "7fc9ebe165bc8d5d6f6933ac401cf45bc2c37fd5f3d675598fc25834174eafe3",
+   "twin_sha256": "88b14e77f83b81515f062a3e8ee0e2445e0cf40b47341ad02ea3161e8fe3c8cd",
+   "pages": 3,
+   "pdfium_visual_chars": 3878,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 29,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 20,
+    "python_bidi_agree": 19,
+    "rust_bidi_agree": 19
+   }
+  },
+  {
+   "doc_id": "report-20361138",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "9155f30347adc18c83bab611a309c53475310dca10eff3021df0e4708bdf6fd6",
+   "producer_result_sha256": "c62b432df6cdedf5792f7f48ebeea17527ba12f83ada59d2c98d15fe175e72da",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "471e914f6edd151d7460a1aafc231666817f784dd051b60e59d5473d07d27b7c",
+   "twin_sha256": "903acbaa3017e62258c38e1c2535d5e07398a25b0efc3ec00833b2f636b06e16",
+   "pages": 3,
+   "pdfium_visual_chars": 3878,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 29,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 20,
+    "python_bidi_agree": 20,
+    "rust_bidi_agree": 20
+   }
+  },
+  {
+   "doc_id": "report-20361139",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "94389282f31a708c112709fdd32ddf23406d5db17ba2bad360d59267529da3b4",
+   "producer_result_sha256": "09c1b760c614fa39bf2a38ae8d244bb73bb08cc09ddd3b8793607801795027f0",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "df464b2a73430b8e43192478fa24db63bac87d5a656a9858e2aec3f69eb2c4f9",
+   "twin_sha256": "0509bacb7fedcdfa17748c70f4fa9635970ba558c11ff6f61817aa04b655e472",
+   "pages": 2,
+   "pdfium_visual_chars": 2632,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 31,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 25,
+    "python_bidi_agree": 25,
+    "rust_bidi_agree": 25
+   }
+  },
+  {
+   "doc_id": "report-20361139",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "94389282f31a708c112709fdd32ddf23406d5db17ba2bad360d59267529da3b4",
+   "producer_result_sha256": "09c1b760c614fa39bf2a38ae8d244bb73bb08cc09ddd3b8793607801795027f0",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "116fcad8ddeeb5e8a5d4e8ba466fd272bbf03ff31e60d1ec82ae43ed5dd22d5c",
+   "twin_sha256": "aae4ac356d06525e49fecb94b56b4bcdff589156840a2ddec6f0a14a14431ec5",
+   "pages": 2,
+   "pdfium_visual_chars": 2632,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 31,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 25,
+    "python_bidi_agree": 24,
+    "rust_bidi_agree": 24
+   }
+  },
+  {
+   "doc_id": "report-20361139",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "94389282f31a708c112709fdd32ddf23406d5db17ba2bad360d59267529da3b4",
+   "producer_result_sha256": "09c1b760c614fa39bf2a38ae8d244bb73bb08cc09ddd3b8793607801795027f0",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "d142b38b70a4472044f5e16c1bf5dfc45e4d4a7982e92ab24faa93e08a115bfb",
+   "twin_sha256": "86eb317f29cf178a27891494d64603da15a6ed38be838e27511a3b661984cc32",
+   "pages": 2,
+   "pdfium_visual_chars": 2632,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 31,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 23,
+    "python_bidi_agree": 23,
+    "rust_bidi_agree": 23
+   }
+  },
+  {
+   "doc_id": "report-20361140",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "11211ece6994d39e71fe0e0e2b91ebb206d4c4f482bbf26c2016d44d7c20df32",
+   "producer_result_sha256": "f522f31a7e61ff3efa3356939790db0a7f8e967a1377454a520ace1f43377fbf",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "1e2a24ec03fb53020ff8092c0823ed7db08ce4d059eb836366d7195e787625a4",
+   "twin_sha256": "f0f234b34a710c4cf553ab63f2bc160c8def14892c6acb2426fb8674e7597af8",
+   "pages": 2,
+   "pdfium_visual_chars": 2460,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 30,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 25,
+    "python_bidi_agree": 25,
+    "rust_bidi_agree": 25
+   }
+  },
+  {
+   "doc_id": "report-20361140",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "11211ece6994d39e71fe0e0e2b91ebb206d4c4f482bbf26c2016d44d7c20df32",
+   "producer_result_sha256": "f522f31a7e61ff3efa3356939790db0a7f8e967a1377454a520ace1f43377fbf",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "6436b2df6c2ad38ed60ab6089045c7b63d9e2d0ccd823ff0b9507608533a9e76",
+   "twin_sha256": "2de6bd85c31b605cba797e0c1366de10bdb631412b9e87f017826adb044753fb",
+   "pages": 2,
+   "pdfium_visual_chars": 2460,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 30,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 25,
+    "python_bidi_agree": 25,
+    "rust_bidi_agree": 25
+   }
+  },
+  {
+   "doc_id": "report-20361140",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "11211ece6994d39e71fe0e0e2b91ebb206d4c4f482bbf26c2016d44d7c20df32",
+   "producer_result_sha256": "f522f31a7e61ff3efa3356939790db0a7f8e967a1377454a520ace1f43377fbf",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "19d457dd6ef9563a6678760780b28a1099c3b3a55415dd122759353a42f55ca5",
+   "twin_sha256": "bc73b177e4622d34cce11b58aa071945a7ff6a9f9ea822fbcad0693d5e7f4537",
+   "pages": 2,
+   "pdfium_visual_chars": 2460,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 30,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 23,
+    "python_bidi_agree": 23,
+    "rust_bidi_agree": 23
+   }
+  },
+  {
+   "doc_id": "report-20361141",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "c66bdb009baf250a95bf0a1f9c43f3f73c6f722de7ca38e78a9c01e92e12ebb2",
+   "producer_result_sha256": "9b6af170a283b7c18864058dabe7a62d40b048e176d26deed871f5cc62a7b04b",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "f2892bcf9ccd8edd2de855d4cb038a6f04b59bb4c36a35054ed86b6c379ac548",
+   "twin_sha256": "c8846bc39d4b2965292825d278937a6b0c1ed173efa6711a59dd5c4ab63bec7b",
+   "pages": 2,
+   "pdfium_visual_chars": 3063,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 36,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 29,
+    "python_bidi_agree": 29,
+    "rust_bidi_agree": 29
+   }
+  },
+  {
+   "doc_id": "report-20361141",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "c66bdb009baf250a95bf0a1f9c43f3f73c6f722de7ca38e78a9c01e92e12ebb2",
+   "producer_result_sha256": "9b6af170a283b7c18864058dabe7a62d40b048e176d26deed871f5cc62a7b04b",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "d6e86e3b7f1b875d622947b3cebd61a9b466ad662e8c8007ea82732ee950ab19",
+   "twin_sha256": "54ca9cded8bf8834df1500458b704620b5b1bbd2cc6f551e55a72fbba74dd922",
+   "pages": 2,
+   "pdfium_visual_chars": 3063,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 2
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 36,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 29,
+    "python_bidi_agree": 29,
+    "rust_bidi_agree": 29
+   }
+  },
+  {
+   "doc_id": "report-20361141",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "c66bdb009baf250a95bf0a1f9c43f3f73c6f722de7ca38e78a9c01e92e12ebb2",
+   "producer_result_sha256": "9b6af170a283b7c18864058dabe7a62d40b048e176d26deed871f5cc62a7b04b",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "3d8713c5613a3a666b94e9d1c218156741389afab9ca969e914320bb6a3c46b5",
+   "twin_sha256": "853a4aa589a065b1c41034b9f6bac91793d616cc961fb61ac7af4baedf1cdeb8",
+   "pages": 3,
+   "pdfium_visual_chars": 3027,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 36,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 29,
+    "python_bidi_agree": 29,
+    "rust_bidi_agree": 29
+   }
+  },
+  {
+   "doc_id": "report-20361142",
+   "producer": "word",
+   "producer_version": "16.115",
+   "tree_sha256": "37d95782d0e1e83653b70bfabaa51cba7ffcfc4cf4262661b141eb31f890487b",
+   "producer_result_sha256": "fdd3b3f5ccfaec8bd371913e171cdc148959af5d8be7a55f5fc6736d8cff09dc",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "d5555ef3fe07379cf2b52babf2afa8c7cba4d95bc72811a13f63882102fc8cd0",
+   "twin_sha256": "58e155973a79d25478e0a741ea26436856f75fa1fecdfcf30f234dd2897ab1e1",
+   "pages": 3,
+   "pdfium_visual_chars": 3709,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 46,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 37,
+    "python_bidi_agree": 37,
+    "rust_bidi_agree": 37
+   }
+  },
+  {
+   "doc_id": "report-20361142",
+   "producer": "lo",
+   "producer_version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb",
+   "tree_sha256": "37d95782d0e1e83653b70bfabaa51cba7ffcfc4cf4262661b141eb31f890487b",
+   "producer_result_sha256": "fdd3b3f5ccfaec8bd371913e171cdc148959af5d8be7a55f5fc6736d8cff09dc",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "cddf1696999c4b5cf3980ea5e144961f7c55d5c665fbc4f18e9693fa1470c6bd",
+   "twin_sha256": "64a2a29022aef7e2aa7c8542a1e4c1306b656465830efdbc9b0442e283d81036",
+   "pages": 3,
+   "pdfium_visual_chars": 3709,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 0,
+     "order": {
+      "different_sequence": 3
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 46,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 37,
+    "python_bidi_agree": 35,
+    "rust_bidi_agree": 35
+   }
+  },
+  {
+   "doc_id": "report-20361142",
+   "producer": "chrome",
+   "producer_version": "Google Chrome for Testing 158.0.8127.36",
+   "tree_sha256": "37d95782d0e1e83653b70bfabaa51cba7ffcfc4cf4262661b141eb31f890487b",
+   "producer_result_sha256": "fdd3b3f5ccfaec8bd371913e171cdc148959af5d8be7a55f5fc6736d8cff09dc",
+   "status": "paired",
+   "version_basis": "per_document_plain_and_twin_receipts",
+   "plain_sha256": "a7d51d37f5f396bad31f08e358dc35661c558e6141166b9cf16f32ec29c854a1",
+   "twin_sha256": "3b8556c3aabecc2b97775d1219189eb92b995c0ddf076dbc029442690b5e3e8f",
+   "pages": 4,
+   "pdfium_visual_chars": 3687,
+   "readers": {
+    "pdfminer": {
+     "missing": 0,
+     "extra": 52,
+     "order": {
+      "different_inventory": 3,
+      "different_sequence": 1
+     }
+    },
+    "poppler": {
+     "missing": 0,
+     "extra": 52,
+     "order": {
+      "different_inventory": 3,
+      "different_sequence": 1
+     }
+    },
+    "pymupdf": {
+     "missing": 0,
+     "extra": 52,
+     "order": {
+      "different_inventory": 3,
+      "different_sequence": 1
+     }
+    }
+   },
+   "ltr_slots": {
+    "forward": 46,
+    "reversed": 0,
+    "unresolved": 0,
+    "visual_lines_compared": 37,
+    "python_bidi_agree": 37,
+    "rust_bidi_agree": 37
+   }
+  }
+ ]
+}

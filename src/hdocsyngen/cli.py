@@ -84,6 +84,13 @@ def cmd_pilot_summary(a) -> int:
     return 0
 
 
+def cmd_pilot_readback(a) -> int:
+    from .pilot_readback import run
+
+    print(json.dumps(run(a.run), ensure_ascii=False, indent=1))
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="hdocsyngen")
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -112,6 +119,9 @@ def main(argv: list[str] | None = None) -> int:
     ps = sub.add_parser("pilot-summary")
     ps.add_argument("out")
     ps.set_defaults(func=cmd_pilot_summary)
+    pr = sub.add_parser("pilot-readback", help="audit saved synthetic pilot PDFs without rerunning producers")
+    pr.add_argument("run", type=Path, help="saved pilot directory")
+    pr.set_defaults(func=cmd_pilot_readback)
     a = ap.parse_args(argv)
     if a.cmd == "pdf-readback" and (a.tree is None) != (a.twin is None):
         r.error("--tree and --twin must be supplied together")

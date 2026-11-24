@@ -38,9 +38,9 @@
   including when Hebrew around them reads right to left. The audit counts forward, reversed and unresolved tokens.
   A wrapped token or unreadable twin colour can be unresolved. Repeated copies are counted at block level. On the
   plain PDF, pdfminer, Poppler and PyMuPDF are compared with the PDFium visual slots
-  for character coverage per page. This comparison ignores whitespace, bidi controls and bracket mirroring, and
-  decomposes ligatures and combining marks. Each reader can legitimately return a different sequence. P9 and P10
-  receive the same page-level audit.
+  for character coverage per page and emitted sequence when the character inventories agree. This comparison
+  ignores whitespace, bidi controls and bracket mirroring, and decomposes ligatures and combining marks. Each
+  reader can legitimately return a different sequence. P9 and P10 receive the same page-level audit.
 - **Single-line bidi order:** when a block with LTR tokens fits one baseline and its characters match the tree,
   the audit compares the observed sequence with both Python BiDi implementations, using a Hebrew base direction
   and LTR embeddings for English and numeric runs. Each implementation's result is recorded separately.
@@ -89,6 +89,9 @@ LTR tokens.
 ```bash
 hdocsyngen pdf-readback plain.pdf --tree source.tree.json --twin colour-twin.pdf
 ```
+
+For the whole saved producer matrix, run `hdocsyngen pilot-readback runs/pilot-v0`. See the
+[CC0 four-reader audit](pilot_v0_reader_audit.md) for the per-document evidence and interpretation.
 
 Pilot outputs are for training or calibration under the applicable data approvals. Keep Reshumot out of any CC0 set
 and retain each input's provenance. A CC0 prose pool alone does not establish CC0 for the resulting documents.

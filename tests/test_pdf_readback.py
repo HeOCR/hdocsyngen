@@ -46,7 +46,7 @@ def test_full_visual_line_keeps_ltr_and_rtl_orders():
 def test_readers_are_compared_per_page_even_with_an_empty_page(monkeypatch):
     monkeypatch.setattr(pdfcheck, "_chars", lambda _: [(1, glyph("ﬁ", 2, 50)), (3, glyph("ש", 2, 50))])
     monkeypatch.setattr(pdfcheck, "_stream_chars", lambda _: [(1, glyph("f", 2, 50)), (1, glyph("i", 3, 50))])
-    monkeypatch.setattr(pdfcheck, "poppler_pages", lambda _: ["f\u200fi", "", "ש"])
+    monkeypatch.setattr(pdfcheck, "poppler_pages", lambda _: ["i\u200ff", "", "ש"])
     monkeypatch.setattr(pdfcheck, "mupdf_pages", lambda _: ["fi", "", "X"])
 
     pages = pdfcheck.read_text_layer(Path("fixture.pdf"))["pages"]
@@ -57,3 +57,29 @@ def test_readers_are_compared_per_page_even_with_an_empty_page(monkeypatch):
     assert pages[2]["readers"]["pdfminer"] == {"chars": 0, "missing": 1, "extra": 0}
     assert pages[2]["readers"]["poppler"] == {"chars": 1, "missing": 0, "extra": 0}
     assert pages[2]["readers"]["pymupdf"] == {"chars": 1, "missing": 1, "extra": 1}
+
+    assert pages[0]["reader_order"] == {
+        "pdfminer": "same_sequence", "poppler": "different_sequence", "pymupdf": "same_sequence",
+    }
+    assert pages[1]["reader_order"] == dict.fromkeys(("pdfminer", "poppler", "pymupdf"), "empty")
+    assert pages[2]["reader_order"] == {
+        "pdfminer": "different_inventory", "poppler": "same_sequence", "pymupdf": "different_inventory",
+    }
+
+
+def test_pilot_pdf_requires_matching_version_and_bytes(tmp_path):
+    from hashlib import sha256
+
+    from hdocsyngen.pilot_readback import _pdf_from_receipt
+
+    path = tmp_path / "saved.pdf"
+    path.write_bytes(b"invented PDF fixture")
+    receipt = {"version": "fixture 2", "outputs": {
+        "pdf": {"path": path.name, "sha256": sha256(path.read_bytes()).hexdigest()}
+    }}
+    assert _pdf_from_receipt(tmp_path, receipt, "fixture 2") == path
+    with pytest.raises(ValueError, match="version"):
+        _pdf_from_receipt(tmp_path, receipt, "fixture 3")
+    path.write_bytes(b"changed fixture")
+    with pytest.raises(ValueError, match="differs from the producer receipt"):
+        _pdf_from_receipt(tmp_path, receipt, "fixture 2")

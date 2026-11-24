@@ -307,17 +307,25 @@ def _ltr_slots(doc: Document, twin_glyphs: list[tuple[int, Glyph]]) -> dict[str,
     return checks
 
 
-def _readback_chars(text: str) -> Counter:
-    # NFKD compares decomposed marks even when a reader emitted them in a different order.
-    return _fold_brackets(Counter(c for c in unicodedata.normalize("NFKD", text)
-                                  if not c.isspace() and unicodedata.category(c) != "Cf"))
+def _readback_sequence(text: str) -> str:
+    return "".join(c for c in unicodedata.normalize("NFKD", text).translate(_BRACKET_CLASSES)
+                   if not c.isspace() and unicodedata.category(c) != "Cf")
+
+
+def _reader_order(reference: str, observed: str, missing: int, extra: int) -> str:
+    if missing or extra:
+        return "different_inventory"
+    if not reference:
+        return "empty"
+    return "same_sequence" if reference == observed else "different_sequence"
 
 
 def read_text_layer(pdf: Path, doc: Document | None = None, twin: Path | None = None) -> dict:
     """Audit text-layer coverage per page and physical LTR token order in the colour twin.
 
-    Reader deltas are relative to PDFium's visual slots. The tree and the existing block survival checks remain
-    the reference; e.g. three readers can agree on the same damaged Unicode map. The audit contains counts only.
+    Reader deltas and sequence comparisons use PDFium's physical slots. A sequence difference is only classified
+    when normalized character inventories agree. Physical order and emitted reader order can legitimately differ.
+    The tree and its block survival checks remain the reference. The audit emits no extracted text.
     """
     if (doc is None) != (twin is None):
         raise ValueError("both the tree and its colour twin are required for the LTR check")
@@ -332,13 +340,16 @@ def read_text_layer(pdf: Path, doc: Document | None = None, twin: Path | None = 
         raise ValueError(f"read-back page count differs: Poppler {len(poppler)}, PyMuPDF {len(mupdf)}")
     pages = []
     for i, (poppler_text, mupdf_text) in enumerate(zip(poppler, mupdf, strict=True), 1):
-        reference = _readback_chars("\n".join(_visual_lines(visual[i])))
-        readers = {}
+        sequence = _readback_sequence("\n".join(_visual_lines(visual[i])))
+        reference = Counter(sequence)
+        readers, order = {}, {}
         for name, text in (("pdfminer", "".join(stream[i])), ("poppler", poppler_text), ("pymupdf", mupdf_text)):
-            chars = _readback_chars(text)
-            readers[name] = {"chars": chars.total(), "missing": (reference - chars).total(),
-                             "extra": (chars - reference).total()}
-        pages.append({"page": i, "pdfium_visual_chars": reference.total(), "readers": readers})
+            observed = _readback_sequence(text)
+            chars = Counter(observed)
+            missing, extra = (reference - chars).total(), (chars - reference).total()
+            readers[name] = {"chars": chars.total(), "missing": missing, "extra": extra}
+            order[name] = _reader_order(sequence, observed, missing, extra)
+        pages.append({"page": i, "pdfium_visual_chars": reference.total(), "readers": readers, "reader_order": order})
     result = {"pages": pages}
     if doc is not None and twin is not None:
         result["ltr_slots"] = _ltr_slots(doc, list(_chars(twin)))
