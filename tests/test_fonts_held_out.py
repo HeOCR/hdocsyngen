@@ -1,4 +1,4 @@
-"""Held-out fonts (niqqud print test, 2026-11-19) never reach a training render."""
+"""Fonts reserved for held-out print tests never reach a training render."""
 import json
 from types import SimpleNamespace
 
@@ -27,17 +27,20 @@ def _tiny_font(path, family):
 def test_exclusion_list_is_the_shared_one():
     data = json.loads(F.EXCLUSION_PATH.read_text(encoding="utf-8"))
     assert data["schema"] == "heocr_font_exclusion.v1"
-    assert F.HELD_OUT_FAMILIES == {"Drugulin CLM", "Simple CLM"}
+    assert F.HELD_OUT_FAMILIES == {
+        "Drugulin CLM", "Simple CLM", "Aharoni CLM", "Ellinia CLM", "Keter YG", "Shofar", "Yehuda CLM",
+    }
+    assert len(F.HELD_OUT_SHA256) == 23
     assert all(len(s) == 64 for s in F.HELD_OUT_SHA256)
 
 
 def test_scan_drops_held_out_families_unless_eval(tmp_path, monkeypatch):
-    _tiny_font(tmp_path / "SimpleCLM-Medium.ttf", "Simple CLM")
+    _tiny_font(tmp_path / "AharoniCLM-Book.ttf", "Aharoni CLM")
     _tiny_font(tmp_path / "Alef-Regular.ttf", "Alef")
     monkeypatch.delenv(F.EVAL_ENV, raising=False)
     assert F.Registry.scan([tmp_path]).families() == ["Alef"]
     monkeypatch.setenv(F.EVAL_ENV, "1")
-    assert F.Registry.scan([tmp_path]).families() == ["Alef", "Simple CLM"]
+    assert F.Registry.scan([tmp_path]).families() == ["Aharoni CLM", "Alef"]
 
 
 def test_scan_drops_a_held_out_file_by_sha256(tmp_path, monkeypatch):
