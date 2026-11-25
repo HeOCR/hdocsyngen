@@ -135,3 +135,18 @@ def test_pilot_readback_checks_result_and_tree_before_parsing(tmp_path, monkeypa
     manifest_path.write_text(json.dumps(manifest))
     with pytest.raises(ValueError, match="Source tree differs"):
         pilot_readback.run(tmp_path)
+
+
+def test_libreoffice_label_failure_keeps_native_receipt(tmp_path, monkeypatch):
+    from hdocsyngen import pilot, producers
+
+    def unavailable(*args, **kwargs):
+        assert kwargs["outputs"] == ("txt",)
+        raise producers.ProducerError("TXT export timeout")
+
+    monkeypatch.setattr(producers, "lo_convert", unavailable)
+    plain = {"version": "fixture LO", "outputs": {"pdf": {"path": "native.pdf"}}}
+    result = {"plain": plain}
+    assert pilot._lo_label_export(None, tmp_path / "invented.docx", tmp_path,
+                                  {"version": "fixture LO"}, result) is None
+    assert result == {"plain": plain, "label_export_error": "TXT export timeout"}

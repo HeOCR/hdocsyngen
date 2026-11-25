@@ -89,6 +89,12 @@ aborts the pilot. The manifest binds the per-document result hashes and the
 reader replay checks the tree, writer input, build, and PDF against those
 receipts. Legacy pilots still replay using their recorded version pins.
 
+The pilot runs LibreOffice's optional numbering-label TXT export separately
+from the PDF and re-saved DOCX. If the TXT filter fails or times out, the
+result and summary record the sidecar failure and continue checking the PDF
+and DOCX. That document retains model-basis labels without a producer-label
+comparison.
+
 A saved PDF can be audited without rerunning its producer. Supply the tree and colour twin together to also check
 LTR tokens.
 

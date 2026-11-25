@@ -59,6 +59,24 @@ def _label_diffs(doc, producer: dict[str, str]) -> dict:
     return dict(out)
 
 
+def _lo_label_export(doc, source: Path, folder: Path, pin: dict[str, str], result: dict) -> dict | None:
+    # A TXT filter hang must not discard the independently verified PDF/DOCX.
+    try:
+        receipt = P.lo_convert(source, folder, outputs=("txt",), timeout=45)
+    except P.VersionChanged:
+        raise
+    except P.ProducerError as exc:
+        result["label_export_error"] = str(exc)
+        return None
+    P.require_receipt_version("lo", receipt, pin)
+    if receipt["input_sha256"] != result["plain"]["input_sha256"]:
+        raise ValueError("LibreOffice label source differs from the PDF source")
+    result["label_export"] = receipt
+    label_file = folder / receipt["outputs"]["txt"]["path"]
+    labels, _ = producer_labels(doc, read_export(label_file))
+    return labels
+
+
 def producer_gold(g: dict, producer: str, r: dict, pdf_name: str) -> dict:
     """The gold for one producer's PDF: the tree gold plus the observed layers (design note §3.2): `label_producer`
     (the scored reference, eval), the pages of every block, `not_rendered`, and the twin's geometry shift."""
@@ -136,11 +154,11 @@ def run_doc(template: str, seed: int, pool: TextPool, reg: F.Registry, out: Path
                 resaved = d / "word" / f"{doc_id}.word.docx"
                 labels, unmatched = producer_labels(doc, read_export(d / "word" / f"{doc_id}.word.labels.tsv"))
             elif prod == "lo":
-                r["plain"] = P.lo_convert(plain_docx, d / "lo")
+                r["plain"] = P.lo_convert(plain_docx, d / "lo", outputs=("pdf", "docx"))
                 r["twin"] = P.lo_convert(twin_docx, d / "lo", outputs=("pdf",))
                 plain_pdf, twin_pdf = d / "lo" / f"{doc_id}.lo.pdf", d / "lo" / f"{doc_id}.twin.lo.pdf"
                 resaved = d / "lo" / f"{doc_id}.lo.docx"
-                labels, unmatched = producer_labels(doc, read_export(d / "lo" / f"{doc_id}.lo.txt"))
+                labels = _lo_label_export(doc, plain_docx, d / "lo", version_pin, r)
             elif prod == "chrome":
                 r["plain"] = P.chrome_convert(plain_html, d / "chrome")
                 r["twin"] = P.chrome_convert(twin_html, d / "chrome")
@@ -245,6 +263,7 @@ def summary(out: Path) -> dict:
                 a["docs"]["error"] += 1
                 continue
             pc = r["pdf_check"]
+            a["docs"]["label_export_error"] += int("label_export_error" in r)
             a["docs"]["gold_ok"] += int(not pc["problems"])
             a["docs"]["font_fail"] += int(any("font" in p for p in pc["problems"]))
             a["docs"]["geometry_fail"] += int(any("geometry" in p for p in pc["problems"]))
