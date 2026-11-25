@@ -26,3 +26,11 @@ The generated source trees, PDFs and page records are local artifacts. The pilot
 The [readback receipt](native_pilot_audit.json) covers 48 newly authored trees. Each producer verified all 48 PDFs, covering 93 pages and 1,023 lines per producer. The complete run replayed 144 PDFs, 279 pages and 3,069 lines. It recorded 837 punctuation changes with a painted glyph witness for each change.
 
 The local protected-text check found zero matches across 936 distinct rendered lines and page units. The source pool was screened before tree generation. This pilot used Alef and David Libre and ran on the Mac at $0. The exact PDFs and page GT are retained for review under the local manifest pinned in the receipt.
+
+## Modern page layout
+
+Pass `--layout-plan layout.json` to verify one structured page per tree. The JSON object maps each tree ID to the first left-column body block ID for a two-column page, or `null` for a single-column page. Word and LibreOffice use native DOCX columns. Chrome uses an explicit RTL CSS column grid. The body supports literal numbered lists and letterhead styles. The verifier also checks one running head, one footer with a PAGE field, and one short footnote.
+
+The verifier assigns PDFium glyphs to the declared physical regions and checks every line against the corresponding logical block. Its order is header, right column, left column, footnote, footer. Raised footnote numbers are joined to their visible baseline. Numeric fields are checked against the actual page number. The amendment-3-style rules still apply to each eligible punctuation transition.
+
+`layout_record.image_record` exports the verified page in the `heocr_document.v1` contract. The ordered blocks carry region and line boxes in top-left points at the actual image DPI. Each line also carries its projected pixel polygon. The clean view uses native PDF coordinates. A Scanifier or 3D caller supplies the polygons from its warp or mesh projection. The image, native PDF, and exact logical text are bound in the pilot intake inventory. The contract can support layout and reading-order calibration and the separate TRAIN intake.

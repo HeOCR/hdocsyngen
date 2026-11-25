@@ -118,7 +118,8 @@ def _embedded_faces(family: str, faces: tuple[FontFile, ...]) -> str:
     return "\n".join(rules)
 
 
-def write(doc: Document, twin: bool = False, *, embedded_fonts: tuple[FontFile, ...] = ()) -> bytes:
+def write(doc: Document, twin: bool = False, *, embedded_fonts: tuple[FontFile, ...] = (),
+          page_layout: bool = False, second_column_at: str | None = None) -> bytes:
     colours = twin_colours(doc) if twin else {}
     nums = {n.id: n for n in doc.nums}
     note_no, seen_nums = {}, set()
@@ -159,7 +160,11 @@ def write(doc: Document, twin: bool = False, *, embedded_fonts: tuple[FontFile, 
         return f'<{tag} id="{p.id}"{classes(p)}{style(p)}>{_runs(p.runs, p.notes, note_no)}</{tag}>'
 
     body = []
+    if second_column_at is not None:
+        body.append('<main class="page-columns"><section>')
     for b in doc.body:
+        if b.id == second_column_at:
+            body.append("</section><section>")
         if isinstance(b, PageBreak):
             body.append('<div class="pb"></div>')
         elif isinstance(b, Table):
@@ -189,6 +194,8 @@ def write(doc: Document, twin: bool = False, *, embedded_fonts: tuple[FontFile, 
                         + f"<tbody>{'' if (thead and b.repeat_header) else thead}{tbody}</tbody></table>")
         else:
             body.append(para(b))
+    if second_column_at is not None:
+        body.append("</section></main>")
     if doc.notes:
         by_id = {n.id: n for n in doc.notes}
         items = []
@@ -241,6 +248,14 @@ thead {{ display: table-header-group; }} tr {{ break-inside: avoid; }}
 .nref {{ font-size: 0.7em; }}
 .pb {{ break-after: page; }}
 {_numbering_css(doc)}
+"""
+    if page_layout:
+        css += """
+.page-columns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10mm; }
+.notes { position: fixed; bottom: 0; inset-inline: 0; }
+.notes hr { margin-inline-start: 0; }
+.letterhead { border-bottom: .5pt solid #555; padding-bottom: .35em; margin-bottom: .75em; font-weight: bold; }
+.list { margin-inline-start: 4mm; }
 """
     policy = ""
     if embedded_fonts:
