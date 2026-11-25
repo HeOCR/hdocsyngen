@@ -45,11 +45,14 @@ The codes come from heocr-agent-wiki `records/tables/phase0-2026-11-25`.
     - **Value:** the whole value as printed. Multi-line values are joined with one space, and an unfilled field is `""`, never null.
     - Checkbox values are `checked` or `unchecked`. A choice value is the printed option text.
   - **`section`:** `{title?, children, pages}`. A section may nest inside another section, but doesn't have to.
-  - **`group`:** `{columns}`, layout only (side-by-side sections or fields). The tree metric flattens a group into its section.
+  - **`group`:** `{columns, children}`, layout only (side-by-side sections or fields): `columns` is the number of columns, and `children` lists column 0 (the right one) top to bottom, then the next column, as heocr-bench `docs/forms.md` has it. The tree metric flattens a group into its section.
   - **Generated values** are fictional (`values.py`). Generated IDs fail the check digit.
 - **Scoring:** defined in heocr-bench.
   - **Field/value F1:** fields are matched one-to-one within each form by a Hungarian assignment on label similarity, then each match is checked for exact label and value after normalisation. The scorer strips one trailing colon or dash from labels. Results are pooled per document, with a document bootstrap.
   - **Section-tree similarity:** TEDS over form → section → field-label nodes, with values excluded.
+- **Implementation (PR 5):** the `forms` template (`templates/forms.py`) draws a form with ordinary blocks: headings for section titles, paragraphs for line fields, check marks and choices, and tables for box and cell fields and for item tables inside a form. The structure goes in `Document.forms` (tree) and `gold["forms"]`, where each field names the paragraphs that print it. `form_export.export(gold, producer_gold=None)` writes `hdoc_form.v1`, with pages taken from a producer layer.
+  - **Check marks** are "[X]"/"[ ]" or "(X)"/"( )": none of the open Hebrew families draws ☐/☒, and `fit_font` needs one family for every character.
+  - **Values** are only fictional: the standard sample names of Israeli forms, "לדוגמה" places, `values.py` IDs, dates, amounts and example.com addresses. There are no phone numbers.
 - **Generated forms are DEV and training only.** The same schema serves the real held-out gold, but generated forms are never scored as results.
 
 ## Gold conventions for 0032 (agreed with eval, 2026-11-25)
