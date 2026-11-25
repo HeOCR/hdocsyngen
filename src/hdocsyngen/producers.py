@@ -1,4 +1,4 @@
-"""Producer drivers (design note §1): Word for Mac (P1), LibreOffice (P2) and Chrome for Testing (P5).
+"""Producer drivers (design note §1): Word for Mac (P1), LibreOffice (P2) and local Chrome (P5).
 
 Every call returns a record: tool, version, options, input and output sha256, seconds. Versions are read before and
 after each call; a change raises `VersionChanged`, and the caller aborts and reruns the batch (lead's rule: Microsoft
@@ -9,6 +9,7 @@ Word for Mac is sandboxed. Inputs are copied into its container folder and outpu
 from __future__ import annotations
 
 import hashlib
+from contextlib import contextmanager
 import os
 import plistlib
 import shutil
@@ -19,6 +20,7 @@ from pathlib import Path
 
 WORD_APP = Path("/Applications/Microsoft Word.app")
 WORD_WORKDIR = Path.home() / "Library/Containers/com.microsoft.Word/Data/hdocsyngen-pilot"
+CHROME_APP = Path("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
 
 
 class ProducerError(RuntimeError):
@@ -68,49 +70,89 @@ LABELS_SCRIPT = """
 """
 
 
-def word_convert(docx: Path, out_dir: Path, outputs=("pdf", "docx", "labels"), timeout: int = 240) -> dict:
-    """Open `docx` in Word; save it as PDF and as a Word-written DOCX; read every paragraph's list string (the label
-    Word renders) into `<stem>.word.labels.tsv`. Word's plain-text export is not used: it writes 8-bit text."""
-    v0 = word_version()
+@contextmanager
+def _word_bridge():
+    # Serialize local automation and give every call its own sandbox files.
+    import fcntl
+
     WORD_WORKDIR.mkdir(parents=True, exist_ok=True)
+    with (WORD_WORKDIR / ".automation.lock").open("a") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        with tempfile.TemporaryDirectory(prefix=".export-", dir=WORD_WORKDIR) as scratch:
+            yield Path(scratch)
+
+
+def word_convert(docx: Path, out_dir: Path, outputs=("pdf", "docx", "labels"), timeout: int = 240) -> dict:
+    """Use Word's local save-as PDF or DOCX and native list strings."""
+    formats = {"pdf": "format PDF", "docx": "format document"}
+    if set(outputs) - (formats.keys() | {"labels"}):
+        raise ValueError("Unsupported Word export")
     stem = docx.stem
-    src = WORD_WORKDIR / docx.name
-    shutil.copyfile(docx, src)
-    targets = {"pdf": (WORD_WORKDIR / f"{stem}.word.pdf", "format PDF"),
-               "docx": (WORD_WORKDIR / f"{stem}.word.docx", "format document")}
-    saves = "\n".join(f'  save as d file name "{targets[o][0]}" file format {targets[o][1]}'
-                      for o in outputs if o in targets)
-    labels = LABELS_SCRIPT if "labels" in outputs else '  set out to ""\n'
-    t0 = time.time()
-    got = _osa(f'''tell application "Microsoft Word"
-  open file name "{src}"
-  set d to active document
-{labels}
-{saves}
-  close d saving no
-  return out
-end tell''', timeout)
-    secs = time.time() - t0
-    v1 = word_version()
-    if v1 != v0:
-        raise VersionChanged(f"Word {v0} -> {v1}")
     out_dir.mkdir(parents=True, exist_ok=True)
     files = {}
-    for o in outputs:
-        if o == "labels":
-            dst = out_dir / f"{stem}.word.labels.tsv"
-            dst.write_text(got + "\n", encoding="utf-8")
-        else:
-            p = targets[o][0]
-            if not p.exists():
-                raise ProducerError(f"Word wrote no {o} for {docx.name}")
-            dst = out_dir / p.name
-            shutil.move(p, dst)
-        files[o] = {"path": dst.name, "sha256": _sha(dst)}
-    src.unlink()
-    return {"producer": "word_mac", "version": v1, "bundle_version": word_bundle_version(),
-            "options": {"save_as": [o for o in outputs if o in targets], "pdf_route": "save as PDF (Quartz)"},
-            "input_sha256": _sha(docx), "outputs": files, "seconds": round(secs, 2)}
+    with _word_bridge() as bridge:
+        v0, b0 = word_version(), word_bundle_version()
+        # Word can already have an unrelated document with the same name.
+        src = bridge / f"{bridge.name}-{stem}.docx"
+        shutil.copyfile(docx, src)
+        targets = {
+            ext: bridge / (f"{src.stem}.word.docx" if ext == "docx" else f"{stem}.word.pdf")
+            for ext in outputs if ext in formats
+        }
+
+        def filepath(path: Path) -> str:
+            escaped = str(path).replace(chr(92), chr(92) * 2).replace('"', chr(92) + '"')
+            return f'"{escaped}"'
+
+        saves = []
+        for ext, path in targets.items():
+            saves.append(f"    save as d file name {filepath(path)} file format {formats[ext]}")
+            if ext == "docx":
+                renamed = f"document {filepath(Path(path.name))}"
+                saves.append(f"    if exists {renamed} then set d to {renamed}")
+        save_script = "\n".join(saves)
+        labels = LABELS_SCRIPT if "labels" in outputs else '  set out to ""\n'
+        script = f'''tell application "Microsoft Word"
+  open file name {filepath(src)} without add to recent files
+  set d to document {filepath(Path(src.name))}
+  try
+{labels}
+{save_script}
+  on error messageText number messageNumber
+    try
+      if exists d then close d saving no
+    end try
+    error messageText number messageNumber
+  end try
+  set closeStatus to "closed"
+  try
+    if exists d then close d saving no
+  on error messageText number messageNumber
+    if messageNumber is not -1708 then error messageText number messageNumber
+    set closeStatus to "close_event_unsupported"
+  end try
+  return closeStatus & linefeed & out
+end tell'''
+        t0 = time.monotonic()
+        close_status, _, got = _osa(script, timeout).partition("\n")
+        secs = time.monotonic() - t0
+        v1, b1 = word_version(), word_bundle_version()
+        if (v0, b0) != (v1, b1):
+            raise VersionChanged(f"Word {v0} ({b0}) -> {v1} ({b1})")
+        if any(not path.is_file() for path in targets.values()):
+            raise ProducerError(f"Word wrote incomplete exports for {docx.name}")
+        for output in outputs:
+            ext = "labels.tsv" if output == "labels" else output
+            dst = out_dir / f"{stem}.word.{ext}"
+            if output == "labels":
+                dst.write_text(got + "\n", encoding="utf-8")
+            else:
+                shutil.copyfile(targets[output], dst)
+            files[output] = {"path": dst.name, "sha256": _sha(dst)}
+    return {"producer": "word_mac", "version": v1, "bundle_version": b1,
+            "options": {"save_as": list(targets), "pdf_route": "save as PDF (Quartz)"},
+            "input_sha256": _sha(docx), "outputs": files, "seconds": round(secs, 2),
+            "word_close_status": close_status}
 
 
 # ---------------------------------------------------------------- LibreOffice (P2)
@@ -132,7 +174,7 @@ def lo_convert(docx: Path, out_dir: Path, outputs=("pdf", "docx", "txt"), timeou
         for o in outputs:
             flt, ext = filters[o]
             t0 = time.time()
-            _run([SOFFICE, f"-env:UserInstallation=file://{profile}", "--headless", "--norestore",
+            _run([SOFFICE, f"-env:UserInstallation={Path(profile).as_uri()}", "--headless", "--norestore",
                   "--convert-to", flt, "--outdir", tmp, str(docx)], timeout)
             secs += time.time() - t0
             p = Path(tmp) / f"{docx.stem}{ext}"
@@ -148,13 +190,18 @@ def lo_convert(docx: Path, out_dir: Path, outputs=("pdf", "docx", "txt"), timeou
             "input_sha256": _sha(docx), "outputs": files, "seconds": round(secs, 2)}
 
 
-# ---------------------------------------------------------------- Chrome for Testing (P5)
+# ---------------------------------------------------------------- local Chrome (P5)
 
 def chrome_binary() -> Path:
     env = os.environ.get("HDOCSYNGEN_CHROME")
-    if not env:
-        raise ProducerError("set HDOCSYNGEN_CHROME to a pinned Chrome for Testing binary")
-    return Path(env)
+    if env:
+        return Path(env)
+    if CHROME_APP.is_file():
+        return CHROME_APP
+    installed = shutil.which("google-chrome")
+    if installed:
+        return Path(installed)
+    raise ProducerError("Set HDOCSYNGEN_CHROME to a local Chrome binary")
 
 
 def chrome_version() -> str:
@@ -164,19 +211,24 @@ def chrome_version() -> str:
 def chrome_convert(html: Path, out_dir: Path, timeout: int = 120) -> dict:
     v0 = chrome_version()
     out_dir.mkdir(parents=True, exist_ok=True)
-    dst = out_dir / f"{html.stem}.chrome.pdf"
-    opts = ["--headless=new", "--disable-gpu", "--no-first-run", "--no-default-browser-check",
-            "--no-pdf-header-footer", "--run-all-compositor-stages-before-draw"]
-    with tempfile.TemporaryDirectory() as profile:
-        t0 = time.time()
-        _run([str(chrome_binary()), *opts, f"--user-data-dir={profile}", f"--print-to-pdf={dst}",
-              html.resolve().as_uri()], timeout)
-        secs = time.time() - t0
-    if not dst.exists():
-        raise ProducerError(f"Chrome wrote no PDF for {html.name}")
-    v1 = chrome_version()
-    if v1 != v0:
-        raise VersionChanged(f"Chrome {v0} -> {v1}")
+    dst = (out_dir / f"{html.stem}.chrome.pdf").resolve()
+    opts = ["--headless", "--disable-gpu", "--no-first-run", "--no-default-browser-check",
+            "--disable-background-networking", "--disable-component-update", "--disable-sync",
+            "--host-resolver-rules=MAP * ~NOTFOUND", "--no-pdf-header-footer",
+            "--run-all-compositor-stages-before-draw"]
+    with tempfile.TemporaryDirectory() as scratch:
+        temp = Path(scratch)
+        fresh_pdf = temp / "output.pdf"
+        t0 = time.monotonic()
+        _run([str(chrome_binary()), *opts, f"--user-data-dir={temp / 'profile'}",
+              f"--print-to-pdf={fresh_pdf}", html.resolve().as_uri()], timeout)
+        secs = time.monotonic() - t0
+        if not fresh_pdf.is_file():
+            raise ProducerError(f"Chrome wrote no PDF for {html.name}")
+        v1 = chrome_version()
+        if v1 != v0:
+            raise VersionChanged(f"Chrome {v0} -> {v1}")
+        shutil.move(fresh_pdf, dst)
     return {"producer": "chrome", "version": v1, "options": {"flags": opts}, "input_sha256": _sha(html),
             "outputs": {"pdf": {"path": dst.name, "sha256": _sha(dst)}}, "seconds": round(secs, 2)}
 

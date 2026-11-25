@@ -99,6 +99,14 @@ def cmd_pilot_matrix(a) -> int:
     return 0
 
 
+def cmd_native_pilot(a) -> int:
+    from .native_pilot import run
+
+    result = run(a.trees, a.font_dir, a.out)
+    print(json.dumps({key: result[key] for key in ("trees", "expected_slots", "verified_slots", "pages")}))
+    return 1 if result["failures"] else 0
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="hdocsyngen")
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -137,6 +145,11 @@ def main(argv: list[str] | None = None) -> int:
     pm.add_argument("--tessdata", type=Path, required=True, help="same directory as TESSDATA_PREFIX")
     pm.add_argument("--limit", type=int, help="only the first N native slots, for timing or smoke tests")
     pm.set_defaults(func=cmd_pilot_matrix)
+    native = sub.add_parser("native-pilot", help="run Word, LibreOffice and Chrome with literal per-page GT")
+    native.add_argument("--trees", type=Path, required=True, help="directory of approved source tree JSON files")
+    native.add_argument("--font-dir", type=Path, action="append", required=True, help="open declared fonts")
+    native.add_argument("--out", type=Path, required=True, help="new local output directory")
+    native.set_defaults(func=cmd_native_pilot)
     a = ap.parse_args(argv)
     if a.cmd == "pdf-readback" and (a.tree is None) != (a.twin is None):
         r.error("--tree and --twin must be supplied together")
