@@ -28,3 +28,45 @@ This is a TRAIN-only engineering pilot. A digest-only spot check flagged
 short or whole-line matches in the rendered trees. The pilot artifacts remain
 local under a TRAIN intake hold pending exact CLEAN. The report records
 producer checks and no OCR accuracy.
+
+## Screened rerun
+
+The independent TRAIN CLEAN held all 48 trees in the first pilot. The pilot now accepts a
+`protected_projections` object containing an absolute local `manifest` path
+and its `sha256`. The manifest uses `hdocsyngen.pilot_projections.v1` and pins
+`helpers` (the local `ph1keys.py` path and SHA-256), `normalizer_sha256`, and
+`layers`. Each layer has a relative `path`, `sha256` and `rows`. Supply
+newline-delimited hex digests for `short_whole_line` and
+`unicode_whole_line`. The `normalized_whole_line` and `six_word` layers
+are optional. Keep the projection files and helper local.
+
+The filter regenerates matching text before writing DOCX or HTML. Tender
+numbers are drawn as linked quantities, prices and subtotals, and the total
+is recalculated. A matching tree is rejected and rebuilt with the next
+deterministic seed. To carry a prior LibreOffice TXT hold, list its original
+slot ID in the pilot spec's `hold_lo_labels`. The new tree assigned to that
+slot retains model-basis numbering.
+
+After the native run, replay each PDF pair with the same projection:
+
+```sh
+hdocsyngen pilot-physical-lines /local/screened-pilot \
+  --out /local/new-private-line-sidecars > /local/physical-lines-receipt.json
+```
+
+The replay reads the plain PDF's glyph positions and uses its colour twin
+to identify the source block for each glyph. The line text comes from the
+tree's logical span, with page fields and visible list and note marks
+checked against the glyphs. It records the one-based page and order,
+source span, plain PDF bounding box in bottom-left PDF points, and text
+and PDF digests. A wrapped cell is represented by its individual source
+spans. The line sidecar is separate from `hdoc_gold.v1`, and a PDF label
+observed here does not upgrade LibreOffice's model-basis label status.
+
+A source or position mismatch and any protected physical-line match hold
+the entire tree across Word, LibreOffice and Chrome. Send the receipt and
+line-sidecar pins for independent CLEAN. An expansion requires its signed
+allowlist.
+
+The screened Chrome route places the note's visible marker on the same line
+as the note text. The plain and twin writers use the same setting.

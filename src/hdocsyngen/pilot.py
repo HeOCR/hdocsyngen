@@ -27,7 +27,9 @@ from . import producers as P
 from .gold import gold
 from .labels import producer_labels, read_export
 from .numbering import model_labels
+from .pilot_filter import PilotFilter
 from .templates import build
+from .templates import tender
 from .textpool import TextPool
 from .tree import dumps, validate
 from .verify import verify_docx
@@ -122,11 +124,11 @@ def producer_gold(g: dict, producer: str, r: dict, pdf_name: str) -> dict:
 
 def run_doc(template: str, seed: int, pool: TextPool, reg: F.Registry, out: Path,
             version_pins: dict[str, dict[str, str]],
-            image: bool, grain: bool) -> dict:
-    doc_id = f"{template}-{seed}"
+            image: bool, grain: bool, *, source=None, hold_lo_label: bool = False) -> dict:
+    doc = source if source is not None else build(template, f"{template}-{seed}", seed, pool)
+    doc_id = doc.doc_id
     d = out / doc_id
     d.mkdir(parents=True, exist_ok=True)
-    doc = build(template, doc_id, seed, pool)
     font_files = F.fit_font(doc, reg, random.Random(seed))
     problems = validate(doc)
     if problems:
@@ -136,7 +138,8 @@ def run_doc(template: str, seed: int, pool: TextPool, reg: F.Registry, out: Path
     gold_doc = gold(doc, tj)
     files = {"tree.json": tj.encode(), "gold.json": json.dumps(gold_doc, ensure_ascii=False, indent=1).encode(),
              "docx": DOCX.write(doc), "twin.docx": DOCX.write(doc, twin=True),
-             "html": HTML.write(doc), "twin.html": HTML.write(doc, twin=True)}
+             "html": HTML.write(doc, inline_note_marks=source is not None),
+             "twin.html": HTML.write(doc, twin=True, inline_note_marks=source is not None)}
     for name, b in files.items():
         (d / f"{doc_id}.{name}").write_bytes(b)
     rec = {"doc_id": doc_id, "template": template, "seed": seed, "font": doc.meta.font, "font_files": font_files,
@@ -158,7 +161,11 @@ def run_doc(template: str, seed: int, pool: TextPool, reg: F.Registry, out: Path
                 r["twin"] = P.lo_convert(twin_docx, d / "lo", outputs=("pdf",))
                 plain_pdf, twin_pdf = d / "lo" / f"{doc_id}.lo.pdf", d / "lo" / f"{doc_id}.twin.lo.pdf"
                 resaved = d / "lo" / f"{doc_id}.lo.docx"
-                labels = _lo_label_export(doc, plain_docx, d / "lo", version_pin, r)
+                if hold_lo_label:
+                    r["label_export_error"] = "Model basis retained by prior pilot hold"
+                    labels = None
+                else:
+                    labels = _lo_label_export(doc, plain_docx, d / "lo", version_pin, r)
             elif prod == "chrome":
                 r["plain"] = P.chrome_convert(plain_html, d / "chrome")
                 r["twin"] = P.chrome_convert(twin_html, d / "chrome")
@@ -219,6 +226,10 @@ def run(spec: dict, out: Path) -> dict:
     if spec.get("pool_sha256") and spec["pool_sha256"] != pool_sha:
         raise ValueError(f"pool sha256 {pool_sha} is not the pinned {spec['pool_sha256']}")
     pool = TextPool.load(spec["pool"], spec.get("require_licence"))
+    filtering = spec.get("protected_projections")
+    if filtering is not None and spec.get("intended_split") != "train":
+        raise ValueError("Protected-projection pilot runs require an explicit TRAIN split")
+    guard = PilotFilter(Path(filtering["manifest"]), filtering["sha256"]) if filtering is not None else None
     reg = F.Registry.scan([Path(p).expanduser() for p in spec["fonts_dirs"]])
     producers = spec.get("producers", ["word", "lo", "chrome"])
     if not producers or len(set(producers)) != len(producers):
@@ -231,11 +242,20 @@ def run(spec: dict, out: Path) -> dict:
                            "sha256": f.sha256, "licence": F.OPEN_FAMILIES[f.family]} for f in reg.files],
                 "docs": []}
     n = 0
+    if guard:
+        manifest["protected_projections"] = guard.pins
+        manifest["rejected_source_trees"] = 0
     for template, count in spec["templates"].items():
         for i in range(count):
             seed = spec["seed_base"] + (0 if template == "tender" else 100_000) + i
+            source = None
+            hold_lo_label = f"{template}-{seed}" in spec.get("hold_lo_labels", ())
+            if guard:
+                source, rejected = _screened_source(guard, template, seed, pool)
+                manifest["rejected_source_trees"] += rejected
+                seed = source.meta.seed
             rec = run_doc(template, seed, pool, reg, out, pins, image=n < spec.get("image_sample", 0),
-                          grain=n < spec.get("grain_sample", 0))
+                          grain=n < spec.get("grain_sample", 0), source=source, hold_lo_label=hold_lo_label)
             result_path = f"{rec['doc_id']}/{rec['doc_id']}.result.json"
             manifest["docs"].append({"doc_id": rec["doc_id"], "result": result_path,
                                      "result_sha256": _sha((out / result_path).read_bytes())})
@@ -249,6 +269,19 @@ def run(spec: dict, out: Path) -> dict:
     manifest["producer_builds_after"] = final_pins
     (out / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=1))
     return manifest
+
+
+def _screened_source(guard: PilotFilter, template: str, seed: int, pool: TextPool):
+    for attempt in range(256):
+        trial_seed = seed + attempt * 1_000_000
+        doc_id = f"{template}-{trial_seed}"
+        if template == "tender":
+            doc = tender.build(doc_id, trial_seed, pool, reject_cell=lambda value: bool(guard.hits(value)))
+        else:
+            doc = build(template, doc_id, trial_seed, pool)
+        if guard.prepare(doc):
+            return doc, attempt
+    raise ValueError(f"No projection-disjoint source tree for {template}-{seed}")
 
 
 def summary(out: Path) -> dict:

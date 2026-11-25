@@ -1,5 +1,6 @@
 """`tender`: a tender or call-for-bids look. Invented structure; prose from the pool; values generated."""
 from __future__ import annotations
+from collections.abc import Callable
 
 from ..textpool import TextPool
 from ..tree import Document, Furniture, Num, NumRef, Run
@@ -11,7 +12,7 @@ SECTION_TITLES = ["הגדרות", "כללי", "תנאי סף", "היקף העב�
 UNITS = ["יח'", "מ\"ר", "מ\"א", "ק\"ג", "שעה", "חודש", "קומפלט", "טון"]
 
 
-def build(doc_id: str, seed: int, pool: TextPool) -> Document:
+def build(doc_id: str, seed: int, pool: TextPool, *, reject_cell: Callable[[str], bool] | None = None) -> Document:
     b = Builder(doc_id, seed, pool)
     rng = b.rng
     ref = V.tender_ref(rng)
@@ -61,11 +62,18 @@ def build(doc_id: str, seed: int, pool: TextPool) -> Document:
         if group_at is not None and i == group_at:
             merges[(len(rows), 0)] = (1, 6)
             rows.append([pool.phrase(rng, 2, 5)] + [""] * 5)
-        qty = rng.randint(1, 500)
-        price = rng.randint(10, 20_000)
+        # Draw the linked figures together so quantity, price, subtotal and total still reconcile.
+        for _ in range(1000):
+            qty = rng.randint(1, 500)
+            price = rng.randint(10, 20_000)
+            item = V.item_no(rng)
+            figures = [f"{qty:,}", f"{price:,}", f"{qty * price:,}"]
+            if reject_cell is None or not any(reject_cell(v) for v in (item, *figures)):
+                break
+        else:
+            raise ValueError("No eligible tender table figures for this seed")
         total += qty * price
-        rows.append([V.item_no(rng), pool.phrase(rng, 2, 7), rng.choice(UNITS), f"{qty:,}", f"{price:,}",
-                     f"{qty * price:,}"])
+        rows.append([item, pool.phrase(rng, 2, 7), rng.choice(UNITS), *figures])
     merges[(len(rows), 0)] = (1, 5)
     rows.append(['סה"כ'] + [""] * 4 + [f"{total:,}"])
     body.append(table_from_rows(b, rows, merges=merges, ruled=rng.choice(["all", "all", "header", "rows"]),
