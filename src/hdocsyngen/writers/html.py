@@ -119,7 +119,8 @@ def _embedded_faces(family: str, faces: tuple[FontFile, ...]) -> str:
 
 
 def write(doc: Document, twin: bool = False, *, embedded_fonts: tuple[FontFile, ...] = (),
-          page_layout: bool = False, second_column_at: str | None = None) -> bytes:
+          page_layout: bool = False, second_column_at: str | None = None,
+          cell_colours: dict[tuple[str, int, int], str] | None = None) -> bytes:
     colours = twin_colours(doc) if twin else {}
     nums = {n.id: n for n in doc.nums}
     note_no, seen_nums = {}, set()
@@ -184,8 +185,12 @@ def write(doc: Document, twin: bool = False, *, embedded_fonts: tuple[FontFile, 
                     tag = "th" if cell.header else "td"
                     span = (f' rowspan="{cell.rowspan}"' if cell.rowspan > 1 else "") + \
                            (f' colspan="{cell.colspan}"' if cell.colspan > 1 else "")
+                    marker = ""
+                    if cell_colours is not None and (b.id, r, c) in cell_colours:
+                        colour = escape(cell_colours[(b.id, r, c)], quote=True)
+                        marker = f' style="background-color: {colour}; print-color-adjust: exact; -webkit-print-color-adjust: exact"'
                     inner = "".join(para(p, "div") for p in cell.paragraphs)
-                    tds.append(f"<{tag}{span}>{inner}</{tag}>")
+                    tds.append(f"<{tag}{span}{marker}>{inner}</{tag}>")
                 rows_html.append((r, f"<tr>{''.join(tds)}</tr>"))
             thead = "".join(h for r, h in rows_html if r in head_rows)
             tbody = "".join(h for r, h in rows_html if r not in head_rows)

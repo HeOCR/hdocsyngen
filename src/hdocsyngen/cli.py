@@ -107,9 +107,27 @@ def cmd_native_pilot(a) -> int:
     return 1 if result["failures"] else 0
 
 
+def cmd_render_table_geometry(a) -> int:
+    from .fonts import Registry
+    from .table_geometry import render
+
+    tree = loads(a.tree.read_text(encoding="utf-8"))
+    registry = Registry.scan(a.font_dir)
+    faces = tuple(face for face in registry.files if face.family == tree.meta.font)
+    result = render(tree, faces, a.out)
+    (a.out / "table-geometry.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(json.dumps({"pages": len(result["pages"]), "logical_tables": len(result["tables"])}))
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="hdocsyngen")
     sub = ap.add_subparsers(dest="cmd", required=True)
+    geom = sub.add_parser("render-table-geometry", help="render native Chrome tables and verify exact printed cell geometry")
+    geom.add_argument("tree", type=Path)
+    geom.add_argument("--font-dir", action="append", required=True, type=Path)
+    geom.add_argument("--out", required=True, type=Path)
+    geom.set_defaults(func=cmd_render_table_geometry)
     b = sub.add_parser("build")
     b.add_argument("--template", choices=TEMPLATES, required=True)
     b.add_argument("--seed", type=int, required=True)
