@@ -5,7 +5,9 @@
 - **Field:** `{type, id, label, value, kind, slot, pages}`. The label and value are as printed, and an unfilled
   field's value is `""`. A checkbox's value is `checked` or `unchecked`; a choice's is the marked option's text.
 - **Table:** the table as `heocr_table.v1` (`table_export.to_heocr_table`).
-- **Group:** `{type, columns}`, layout only (fields side by side).
+- **Group:** `{type, columns, children}`, layout only: `columns` is the number of side-by-side columns and
+  `children` lists column 0 (the right one, read first in RTL) top to bottom, then column 1, as heocr-bench's forms
+  scorer walks it.
 
 Pages come from a producer layer's block pages: a field's pages are those of the paragraphs that print it, and a
 section's pages are the union over its children. Without a producer layer they are `null`. The tree's internal
@@ -38,12 +40,9 @@ def _children(children: list[dict], tables: dict, pages) -> tuple[list[dict], li
             out.append({"type": "table", "table": to_heocr_table(t, _pages(cell_ids, pages))})
             ids += cell_ids
         elif ch["type"] == "group":
-            columns = []
-            for column in ch["columns"]:
-                kids, kid_ids = _children(column, tables, pages)
-                columns.append(kids)
-                ids += kid_ids
-            out.append({"type": "group", "columns": columns})
+            kids, kid_ids = _children(ch["children"], tables, pages)
+            out.append({"type": "group", "columns": ch["columns"], "children": kids})
+            ids += kid_ids
         elif ch["type"] == "section":
             section, kid_ids = _section(ch, tables, pages)
             out.append(section)

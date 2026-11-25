@@ -322,9 +322,8 @@ def form_fields(children: list[dict]):
     for ch in children:
         if ch["type"] == "field":
             yield ch
-        elif ch["type"] == "group":
-            for column in ch["columns"]:
-                yield from form_fields(column)
+        elif ch["type"] == "group":            # {"columns": n, "children": [...]}, as heocr-bench reads it
+            yield from form_fields(ch["children"])
         elif ch["type"] == "section":
             yield from form_fields(ch["children"])
 

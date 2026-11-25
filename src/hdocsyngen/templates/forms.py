@@ -88,8 +88,15 @@ class Form:
 
     def __init__(self, b: Builder, title: str):
         self.b, self.n = b, 0
-        self.checked, self.unchecked = b.rng.choice(MARKS)
         self.record = {"id": b.id("f"), "title": title, "sections": []}
+        self.checked, self.unchecked = b.rng.choice(MARKS)
+        self.used: set[str] = set()      # labels are drawn without replacement within a form
+
+    def draw(self, labels: list, k: int) -> list:
+        free = [x for x in labels if (x[0] if isinstance(x, tuple) else x) not in self.used]
+        picked = self.b.rng.sample(free, min(k, len(free)))
+        self.used |= {x[0] if isinstance(x, tuple) else x for x in picked}
+        return picked
 
     def field(self, label: str, kind: str, slot: str, value: str, paragraphs: list[str]) -> dict:
         self.n += 1
@@ -100,13 +107,17 @@ class Form:
         return self.b.rng.random() >= 0.2
 
 
-def _labels(b: Builder, k: int) -> list[str]:
-    return b.rng.sample([label for label in FIELDS if label != "הערות"], k) + (["הערות"] if b.rng.random() < 0.3 else [])
+def _labels(f: Form, k: int) -> list[str]:
+    picked = f.draw([label for label in FIELDS if label != "הערות"], k)
+    return picked + (f.draw(["הערות"], 1) if f.b.rng.random() < 0.3 else [])
 
 
 def lines(f: Form) -> tuple[list, list]:
     b, blocks, children = f.b, [], []
-    for label in _labels(b, b.rng.randint(2, 5)):
+    labels = _labels(f, b.rng.randint(2, 5))
+    if not labels:
+        return checks(f)      # this form's field labels are used up
+    for label in labels:
         sep = b.rng.choice([": ", ":  ", " - "])
         value = _value(b, label) if f.filled() else []
         p = b.para([Run(label + sep), *(value or [Run(BLANK)])])
@@ -126,7 +137,9 @@ def _pair_rows(f: Form, labels: list[str]) -> tuple[list[list], list[tuple[str, 
 
 def boxes(f: Form) -> tuple[list, list]:
     b = f.b
-    labels = _labels(b, b.rng.randint(2, 6))
+    labels = _labels(f, b.rng.randint(2, 6))
+    if not labels:
+        return checks(f)
     rows, fields = _pair_rows(f, labels)
     grouped = len(rows) >= 4 and b.rng.random() < 0.5
     if grouped:          # two label/value pairs per row: a group of two columns
@@ -148,7 +161,8 @@ def boxes(f: Form) -> tuple[list, list]:
                                                        by_pos[(r, c)].paragraphs[0].id]))
     if grouped:
         half = (len(rows) + 1) // 2
-        children = [{"type": "group", "columns": [out[:half], out[half:]], "table": t.id}]
+        # column 0 is the right one (read first in RTL); each column top to bottom
+        children = [{"type": "group", "columns": 2, "children": out, "table": t.id}]
     else:
         children = [*out]
     return [t], children
@@ -156,7 +170,9 @@ def boxes(f: Form) -> tuple[list, list]:
 
 def cells(f: Form) -> tuple[list, list]:
     b = f.b
-    labels = _labels(b, b.rng.randint(2, 5))
+    labels = _labels(f, b.rng.randint(2, 5))
+    if not labels:
+        return checks(f)
     rows, fields = _pair_rows(f, labels)
     t = table_from_rows(b, [[lab for lab, _ in rows], [val for _, val in rows]], header_rows=1, ruled="all")
     by_pos = {(c.r, c.c): c for c in t.cells}
@@ -166,7 +182,10 @@ def cells(f: Form) -> tuple[list, list]:
 
 def checks(f: Form) -> tuple[list, list]:
     b, blocks, children = f.b, [], []
-    for label in b.rng.sample(CHECK_LABELS, b.rng.randint(2, 4)):
+    labels = f.draw(CHECK_LABELS, b.rng.randint(2, 4))
+    if not labels:
+        return choice(f)
+    for label in labels:
         on = b.rng.random() < 0.5
         p = b.para([Run(f"{f.checked if on else f.unchecked} {label}")])
         blocks.append(p)
@@ -176,7 +195,7 @@ def checks(f: Form) -> tuple[list, list]:
 
 def choice(f: Form) -> tuple[list, list]:
     b = f.b
-    label, options = b.rng.choice(CHOICES)
+    label, options = (f.draw(CHOICES, 1) or [b.rng.choice(CHOICES)])[0]
     marked = b.rng.choice(options) if f.filled() else None
     marks = "  ".join(f"{f.checked if o == marked else f.unchecked} {o}" for o in options)
     p = b.para([Run(f"{label}: {marks}")])

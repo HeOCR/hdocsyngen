@@ -45,7 +45,7 @@ The codes come from heocr-agent-wiki `records/tables/phase0-2026-11-25`.
     - **Value:** the whole value as printed. Multi-line values are joined with one space, and an unfilled field is `""`, never null.
     - Checkbox values are `checked` or `unchecked`. A choice value is the printed option text.
   - **`section`:** `{title?, children, pages}`. A section may nest inside another section, but doesn't have to.
-  - **`group`:** `{columns}`, layout only (side-by-side sections or fields). The tree metric flattens a group into its section.
+  - **`group`:** `{columns, children}`, layout only (side-by-side sections or fields): `columns` is the number of columns, and `children` lists column 0 (the right one) top to bottom, then the next column, as heocr-bench `docs/forms.md` has it. The tree metric flattens a group into its section.
   - **Generated values** are fictional (`values.py`). Generated IDs fail the check digit.
 - **Scoring:** defined in heocr-bench.
   - **Field/value F1:** fields are matched one-to-one within each form by a Hungarian assignment on label similarity, then each match is checked for exact label and value after normalisation. The scorer strips one trailing colon or dash from labels. Results are pooled per document, with a document bootstrap.

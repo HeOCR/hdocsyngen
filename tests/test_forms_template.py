@@ -91,9 +91,8 @@ def test_export_is_hdoc_form_v1_with_tables_groups_and_pages(pool, docs):
                 if ch["type"] == "table":
                     assert ch["table"]["schema"] == "heocr_table.v1"
                 if ch["type"] == "group":
-                    assert len(ch["columns"]) == 2
-                    for column in ch["columns"]:
-                        walk(column)
+                    assert ch["columns"] == 2 and ch["children"]
+                    walk(ch["children"])
         for s in form["sections"]:
             walk(s["children"])
     assert seen == {"field", "table", "group"}
@@ -106,6 +105,38 @@ def test_export_is_hdoc_form_v1_with_tables_groups_and_pages(pool, docs):
     fields = [ch for s in form["sections"] for ch in s["children"] if ch["type"] == "field"]
     assert all(f["pages"] in ([1], [2], [1, 2]) for f in fields)
     assert form["sections"][0]["pages"][0] == 1
+
+
+def _bench_fields(form):
+    """heocr-bench forms.fields() (src/heocr_bench/forms.py @ 910fd566), copied in spirit: the scorer's walk over
+    section children, groups and nested sections through `children` only."""
+    out = []
+
+    def walk(children):
+        for ch in children:
+            kind = ch.get("type")
+            if kind == "field":
+                out.append(ch)
+            elif kind in ("group", "section"):
+                walk(ch.get("children", []))
+    for section in form.get("sections", []):
+        walk(section.get("children", []))
+    return out
+
+
+def test_the_scorer_sees_every_field_of_the_tree(docs):
+    grouped = 0
+    for doc in docs:
+        (form,) = export(gold(doc, dumps(doc)))
+        assert [f["id"] for f in _bench_fields(form)] == [f["id"] for f in _fields(doc)]
+        grouped += sum(1 for s in form["sections"] for ch in s["children"] if ch["type"] == "group")
+    assert grouped >= 1
+
+
+def test_labels_are_not_repeated_within_a_form(docs):
+    for doc in docs:
+        labels = [(f["label"], f["kind"]) for f in _fields(doc) if f["kind"] not in ("signature", "date", "choice")]
+        assert len(labels) == len(set(labels))
 
 
 def test_a_form_is_deterministic_per_seed(pool):
