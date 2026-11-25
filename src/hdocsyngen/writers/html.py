@@ -12,7 +12,13 @@ With `twin=True` every block gets its near-black twin colour (tree.twin_colours)
 """
 from __future__ import annotations
 
+from base64 import b64encode
+from hashlib import sha256
 from html import escape
+from io import BytesIO
+from pathlib import Path
+
+from ..fonts import FontFile
 
 from ..layout import printed
 from ..tree import Document, Heading, PageBreak, Paragraph, Run, Table, text_of, twin_colours
@@ -88,7 +94,31 @@ def _runs(runs: list[Run], anchors, note_no: dict[str, int]) -> str:
     return "".join(out)
 
 
-def write(doc: Document, twin: bool = False) -> bytes:
+def _embedded_faces(family: str, faces: tuple[FontFile, ...]) -> str:
+    from fontTools.ttLib import TTFont
+
+    rules = []
+    for face in faces:
+        blob = Path(face.path).read_bytes()
+        if face.family != family or sha256(blob).hexdigest() != face.sha256:
+            raise ValueError("Embedded face differs from the document font pin")
+        with TTFont(BytesIO(blob)) as font:
+            mime = "font/otf" if font.sfntVersion == "OTTO" else "font/ttf"
+            italic = "italic" if font["head"].macStyle & 2 else "normal"
+            weight = font["OS/2"].usWeightClass
+            if "fvar" in font:
+                for axis in font["fvar"].axes:
+                    if axis.axisTag == "wght":
+                        weight = f"{axis.minValue:g} {axis.maxValue:g}"
+        data = b64encode(blob).decode("ascii")
+        rules.append(
+            f'@font-face {{ font-family: "{family}"; font-style: {italic}; font-weight: {weight}; '
+            f'src: url(data:{mime};base64,{data}); }}'
+        )
+    return "\n".join(rules)
+
+
+def write(doc: Document, twin: bool = False, *, embedded_fonts: tuple[FontFile, ...] = ()) -> bytes:
     colours = twin_colours(doc) if twin else {}
     nums = {n.id: n for n in doc.nums}
     note_no, seen_nums = {}, set()
@@ -212,6 +242,14 @@ thead {{ display: table-header-group; }} tr {{ break-inside: avoid; }}
 .pb {{ break-after: page; }}
 {_numbering_css(doc)}
 """
+    policy = ""
+    if embedded_fonts:
+        css = _embedded_faces(m.font, embedded_fonts) + css
+        css += "html { font-synthesis: none; font-variant-ligatures: none; hyphens: none; }"
+        policy = (
+            "<meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'none'; "
+            "style-src 'unsafe-inline'; font-src data:; base-uri 'none'; form-action 'none'\">"
+        )
     html = (f'<!DOCTYPE html>\n<html lang="he" dir="rtl"><head><meta charset="utf-8">'
-            f"<title>{escape(doc.doc_id)}</title><style>{css}</style></head><body>{''.join(body)}</body></html>\n")
+            f"{policy}<title>{escape(doc.doc_id)}</title><style>{css}</style></head><body>{''.join(body)}</body></html>\n")
     return html.encode("utf-8")

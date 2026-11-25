@@ -1,0 +1,59 @@
+{
+  "documents": 48,
+  "native_manifest_sha256": "74fada0d42d5affa5b317e1ed575a99ae8a6e2678a1a94c8792e4e4819ae7d18",
+  "pages": 279,
+  "pdfs_replayed": 144,
+  "producer_versions": {
+    "chrome": {
+      "version": "Google Chrome 158.0.8127.38"
+    },
+    "lo": {
+      "version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb"
+    },
+    "word": {
+      "bundle_version": "16.115.26112215",
+      "version": "16.115.2"
+    }
+  },
+  "producers": {
+    "chrome": {
+      "U+005D->U+005B": 93,
+      "U+201C->U+201D": 93,
+      "U+201D->U+201C": 93,
+      "lines": 1023,
+      "pages": 93,
+      "slots": 48,
+      "word_close_event_unsupported": 0
+    },
+    "lo": {
+      "U+005D->U+005B": 93,
+      "U+201C->U+201D": 93,
+      "U+201D->U+201C": 93,
+      "lines": 1023,
+      "pages": 93,
+      "slots": 48,
+      "word_close_event_unsupported": 0
+    },
+    "word": {
+      "U+005B->U+005D": 93,
+      "U+201C->U+201D": 93,
+      "U+201D->U+201C": 93,
+      "lines": 1023,
+      "pages": 93,
+      "slots": 48,
+      "word_close_event_unsupported": 48
+    }
+  },
+  "protected_unit_hits": 0,
+  "reader_versions": {
+    "PyMuPDF": "1.27.2.3",
+    "pdfium": "159.0.8149.0@sourcebuild-toolchained",
+    "pdfminer.six": "20260107",
+    "poppler": "pdftotext version 26.07.0",
+    "pypdfium2": "5.15.2",
+    "python-bidi": "0.6.12"
+  },
+  "rendered_logical_units": 936,
+  "scope": "Generated native pilot, local exact readback. Independent release review separate.",
+  "source_screen_sha256": "ee17057ebdf175c620ef46ebb91742540b9f008817a00c930304184e86a706c0"
+}

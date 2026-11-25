@@ -23,6 +23,8 @@ hdocsyngen build --template tender --seed 7 --count 3 --pool pool.jsonl --requir
 hdocsyngen verify-docx out/tender-7.tree.json resaved/tender-7.docx
 ```
 
+The [native producer pilot](docs/native_pilot.md) checks literal page text from Word, LibreOffice and Chrome.
+
 **Text:**
 - The pool is a JSONL file, `{"id", "text", "licence", "source"}`, chosen and decontaminated by the caller.
 - Every document records the pool entries it used and their licences.
