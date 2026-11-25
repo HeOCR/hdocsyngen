@@ -254,6 +254,7 @@ thead {{ display: table-header-group; }} tr {{ break-inside: avoid; }}
 .page-columns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10mm; }
 .notes { position: fixed; bottom: 0; inset-inline: 0; }
 .notes hr { margin-inline-start: 0; }
+.note > div { display: inline; }
 .letterhead { border-bottom: .5pt solid #555; padding-bottom: .35em; margin-bottom: .75em; font-weight: bold; }
 .list { margin-inline-start: 4mm; }
 """

@@ -35,8 +35,11 @@ def _versions():
     }
 
 
-def run(tree_root: Path, font_dirs: list[Path], output: Path, layout_plan: Path | None = None) -> dict:
+def run(tree_root: Path, font_dirs: list[Path], output: Path, layout_plan: Path | None = None,
+        *, routes: tuple[str, ...] = NATIVE) -> dict:
     """Run all three producers for every tree, and emit page GT from verified PDFs."""
+    if not routes or len(set(routes)) != len(routes) or set(routes) - set(NATIVE):
+        raise ValueError("Unknown or repeated native producer routes")
     tree_paths = sorted(tree_root.glob("*.json"))
     if not tree_paths:
         raise ValueError("No source tree JSON files found")
@@ -85,7 +88,7 @@ def run(tree_root: Path, font_dirs: list[Path], output: Path, layout_plan: Path 
             "lo": (producers.lo_convert, docx_path, {"outputs": ("pdf",)}),
             "chrome": (producers.chrome_convert, html_path, {}),
         }
-        for route in NATIVE:
+        for route in routes:
             convert, render_source, opts = calls[route]
             try:
                 receipt = convert(render_source, folder.resolve(), **opts)
@@ -131,7 +134,7 @@ def run(tree_root: Path, font_dirs: list[Path], output: Path, layout_plan: Path 
         "reader_versions": readers,
         "trees": len(trees),
         "verified_slots": len(rows),
-        "expected_slots": len(trees) * len(NATIVE),
+        "expected_slots": len(trees) * len(routes),
         "pages": sum(row["pages"] for row in rows),
         "rows": rows,
         "failures": failures,
