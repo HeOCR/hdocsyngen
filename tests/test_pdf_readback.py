@@ -83,3 +83,70 @@ def test_pilot_pdf_requires_matching_version_and_bytes(tmp_path):
     path.write_bytes(b"changed fixture")
     with pytest.raises(ValueError, match="differs from the producer receipt"):
         _pdf_from_receipt(tmp_path, receipt, "fixture 2")
+
+
+def test_pilot_pdf_checks_word_build_and_input(tmp_path):
+    from hashlib import sha256
+
+    from hdocsyngen.pilot_readback import _pdf_from_receipt
+    from hdocsyngen.producers import VersionChanged, require_receipt_version
+
+    path = tmp_path / "saved.pdf"
+    path.write_bytes(b"invented PDF fixture")
+    build = {"version": "fixture 2", "bundle_version": "fixture 2.1"}
+    receipt = {**build, "input_sha256": "a" * 64, "outputs": {
+        "pdf": {"path": path.name, "sha256": sha256(path.read_bytes()).hexdigest()}
+    }}
+    require_receipt_version("word", receipt, build)
+    assert _pdf_from_receipt(tmp_path, receipt, "fixture 2", build=build, input_sha256="a" * 64) == path
+    # A build update within the same marketing version must fail live and in readback.
+    changed = {**receipt, "bundle_version": "fixture 2.2"}
+    with pytest.raises(VersionChanged, match="producer build"):
+        require_receipt_version("word", changed, build)
+    with pytest.raises(ValueError, match="build"):
+        _pdf_from_receipt(tmp_path, changed, "fixture 2", build=build)
+    with pytest.raises(ValueError, match="input differs"):
+        _pdf_from_receipt(tmp_path, receipt, "fixture 2", build=build, input_sha256="b" * 64)
+
+
+def test_pilot_readback_checks_result_and_tree_before_parsing(tmp_path, monkeypatch):
+    from hashlib import sha256
+    import json
+    from subprocess import CompletedProcess
+
+    pytest.importorskip("pypdfium2")
+    from hdocsyngen import pilot_readback
+
+    monkeypatch.setattr(pilot_readback.subprocess, "run", lambda *_, **__: CompletedProcess([], 0))
+    record = tmp_path / "fixture.result.json"
+    tree = tmp_path / "fixture.tree.json"
+    tree.write_bytes(b"changed source fixture")
+    record.write_text(json.dumps({"sources": {"tree.json": "a" * 64}}))
+    pin = {"word": {"version": "fixture 2", "bundle_version": "fixture 2.1"}}
+    manifest = {"schema": "hdocsyngen_pilot.v0",
+                "producer_builds": pin, "producer_builds_after": pin,
+                "versions": {"word": "fixture 2"}, "versions_after": {"word": "fixture 2"},
+                "docs": [{"doc_id": "fixture", "result": record.name, "result_sha256": "b" * 64}]}
+    manifest_path = tmp_path / "manifest.json"
+    manifest_path.write_text(json.dumps(manifest))
+    with pytest.raises(ValueError, match="Result record differs"):
+        pilot_readback.run(tmp_path)
+    manifest["docs"][0]["result_sha256"] = sha256(record.read_bytes()).hexdigest()
+    manifest_path.write_text(json.dumps(manifest))
+    with pytest.raises(ValueError, match="Source tree differs"):
+        pilot_readback.run(tmp_path)
+
+
+def test_libreoffice_label_failure_keeps_native_receipt(tmp_path, monkeypatch):
+    from hdocsyngen import pilot, producers
+
+    def unavailable(*args, **kwargs):
+        assert kwargs["outputs"] == ("txt",)
+        raise producers.ProducerError("TXT export timeout")
+
+    monkeypatch.setattr(producers, "lo_convert", unavailable)
+    plain = {"version": "fixture LO", "outputs": {"pdf": {"path": "native.pdf"}}}
+    result = {"plain": plain}
+    assert pilot._lo_label_export(None, tmp_path / "invented.docx", tmp_path,
+                                  {"version": "fixture LO"}, result) is None
+    assert result == {"plain": plain, "label_export_error": "TXT export timeout"}

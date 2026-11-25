@@ -4,7 +4,7 @@
 
 | Route | Driver | Pin | Outputs |
 |---|---|---|---|
-| P1 Word for Mac | AppleScript (`osascript`). The work folder is Word's container, `~/Library/Containers/com.microsoft.Word/Data/hdocsyngen-pilot/`; outputs are copied out. | `get version` before and after every call; a change raises `VersionChanged` and the run is rerun | PDF (`save as … format PDF`, Quartz), Word-written DOCX, and each paragraph's list string (`*.word.labels.tsv`) |
+| P1 Word for Mac | AppleScript (`osascript`). The work folder is Word's container, `~/Library/Containers/com.microsoft.Word/Data/hdocsyngen-pilot/`; outputs are copied out. | Word's reported version and app bundle build before and after every call, recorded per document | PDF (`save as … format PDF`, Quartz), Word-written DOCX, and each paragraph's list string (`*.word.labels.tsv`) |
 | P2 LibreOffice | `soffice --headless` with a fresh `-env:UserInstallation` per call | `soffice --version` before and after | PDF, LibreOffice-written DOCX, UTF-8 text |
 | P5 Chrome for Testing | `--headless=new --print-to-pdf`, with a fresh profile per call. The binary is set by `HDOCSYNGEN_CHROME`. | `--version` before and after | PDF |
 | P9 print to image | pypdfium2 render, optional seeded grain and mottle, JPEG, img2pdf wrap | tool versions recorded | image-only PDF (+ page JPEGs) |
@@ -83,6 +83,18 @@ hdocsyngen pilot --spec spec.json --out runs/pilot-v0
 hdocsyngen pilot-summary runs/pilot-v0
 ```
 
+Use an empty output directory for a new pilot. Each plain and colour-twin
+export must match the producer build pinned at the start of the run. A change
+aborts the pilot. The manifest binds the per-document result hashes and the
+reader replay checks the tree, writer input, build, and PDF against those
+receipts. Legacy pilots still replay using their recorded version pins.
+
+The pilot runs LibreOffice's optional numbering-label TXT export separately
+from the PDF and re-saved DOCX. If the TXT filter fails or times out, the
+result and summary record the sidecar failure and continue checking the PDF
+and DOCX. That document retains model-basis labels without a producer-label
+comparison.
+
 A saved PDF can be audited without rerunning its producer. Supply the tree and colour twin together to also check
 LTR tokens.
 
@@ -126,3 +138,5 @@ to continue in the same output directory. A complete slot resumes only
 if its source, tool and artifact hashes still match. Use a new output
 directory when the recipe or tool versions change. The output contains
 generation and reader diagnostics. It is for synthetic pilot analysis.
+
+[Native TRAIN producer matrix follow-up](producer_matrix_train_pilot.md) records the current three-producer pilot and its hold.

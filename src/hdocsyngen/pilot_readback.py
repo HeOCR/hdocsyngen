@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from collections import Counter
-from hashlib import file_digest
+from hashlib import file_digest, sha256
 from importlib.metadata import version
 import json
 from pathlib import Path
@@ -26,9 +26,13 @@ def _owned_file(root: Path, name: str) -> Path:
     return path
 
 
-def _pdf_from_receipt(root: Path, receipt: dict, expected_version: str) -> Path:
-    if receipt["version"] != expected_version:
-        raise ValueError("Producer version differs from the pilot pin")
+def _pdf_from_receipt(root: Path, receipt: dict, expected_version: str, *,
+                      build: dict | None = None, input_sha256: str | None = None) -> Path:
+    build = {"version": expected_version} if build is None else build
+    if any(receipt.get(key) != value for key, value in build.items()):
+        raise ValueError("Producer version or build differs from the pilot pin")
+    if input_sha256 is not None and receipt.get("input_sha256") != input_sha256:
+        raise ValueError("Producer input differs from the pilot source digest")
     asset = receipt["outputs"]["pdf"]
     path = _owned_file(root, asset["path"])
     if _sha(path) != asset["sha256"]:
@@ -78,6 +82,11 @@ def run(root: Path) -> dict:
     if manifest["schema"] != "hdocsyngen_pilot.v0" or manifest["versions"] != manifest["versions_after"]:
         raise ValueError("Pilot manifest is unsupported or its producer versions changed")
     versions = {key: value for key, value in manifest["versions"].items() if value is not None}
+    builds = manifest.get("producer_builds")
+    if builds is not None and (builds != manifest.get("producer_builds_after")
+                               or {k: v["version"] for k, v in builds.items()} != versions
+                               or ("word" in builds and not builds["word"].get("bundle_version"))):
+        raise ValueError("Pilot build pins changed or are incomplete")
     entries = manifest["docs"]
     if len({entry["doc_id"] for entry in entries}) != len(entries):
         raise ValueError("Duplicate document IDs in pilot manifest")
@@ -89,9 +98,17 @@ def run(root: Path) -> dict:
     for entry in entries:
         doc_id = entry["doc_id"]
         result_path = _owned_file(root, entry["result"])
-        result = json.loads(result_path.read_bytes())
+        result_bytes = result_path.read_bytes()
+        result_sha = sha256(result_bytes).hexdigest()
+        if (builds is not None or "result_sha256" in entry) and entry.get("result_sha256") != result_sha:
+            raise ValueError(f"Result record differs from the pilot manifest: {doc_id}")
+        result = json.loads(result_bytes)
         tree_path = _owned_file(result_path.parent, f"{doc_id}.tree.json")
-        tree = loads(tree_path.read_text(encoding="utf-8"))
+        tree_bytes = tree_path.read_bytes()
+        tree_sha = sha256(tree_bytes).hexdigest()
+        if result["sources"].get("tree.json") != tree_sha:
+            raise ValueError(f"Source tree differs from the producer result: {doc_id}")
+        tree = loads(tree_bytes.decode("utf-8"))
         if doc_id != result["doc_id"] or doc_id != tree.doc_id or set(result["producers"]) != set(versions):
             raise ValueError(f"Tree, producer roster, or result identity differs: {doc_id}")
         for producer, pinned_version in versions.items():
@@ -100,10 +117,17 @@ def run(root: Path) -> dict:
             if not folder.is_relative_to(result_path.parent):
                 raise ValueError(f"Producer directory outside its pilot document: {doc_id}")
             row = {"doc_id": doc_id, "producer": producer, "producer_version": pinned_version,
-                   "tree_sha256": _sha(tree_path), "producer_result_sha256": _sha(result_path)}
+                   "tree_sha256": tree_sha, "producer_result_sha256": result_sha}
             if "error" not in result_row:
-                plain = _pdf_from_receipt(folder, result_row["plain"], pinned_version)
-                twin = _pdf_from_receipt(folder, result_row["twin"], pinned_version)
+                build = builds[producer] if builds else None
+                ext = "html" if producer == "chrome" else "docx"
+                source = result["sources"]
+                plain = _pdf_from_receipt(folder, result_row["plain"], pinned_version, build=build,
+                                          input_sha256=source[ext])
+                twin = _pdf_from_receipt(folder, result_row["twin"], pinned_version, build=build,
+                                         input_sha256=source[f"twin.{ext}"])
+                if build and producer == "word":
+                    row["producer_bundle_version"] = build["bundle_version"]
                 row.update(status="paired",
                            version_basis="per_document_plain_and_twin_receipts",
                            plain_sha256=_sha(plain), twin_sha256=_sha(twin),
@@ -111,7 +135,7 @@ def run(root: Path) -> dict:
             else:
                 # Historical LibreOffice TXT failures may leave the plain PDF before the receipt is written.
                 saved = folder / f"{doc_id}.{producer}.pdf"
-                if producer == "lo" and saved.is_file():
+                if builds is None and producer == "lo" and saved.is_file():
                     plain = _owned_file(folder, saved.name)
                     if not _metadata_version_matches(plain, pinned_version):
                         raise ValueError(f"Partial PDF producer metadata does not match the pilot pin: {doc_id}")
