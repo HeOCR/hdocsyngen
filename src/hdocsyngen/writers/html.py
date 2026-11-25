@@ -119,7 +119,7 @@ def _embedded_faces(family: str, faces: tuple[FontFile, ...]) -> str:
 
 
 def write(doc: Document, twin: bool = False, *, embedded_fonts: tuple[FontFile, ...] = (),
-          page_layout: bool = False, second_column_at: str | None = None) -> bytes:
+          page_layout: bool = False, second_column_at: str | None = None, inline_note_marks: bool = False) -> bytes:
     colours = twin_colours(doc) if twin else {}
     nums = {n.id: n for n in doc.nums}
     note_no, seen_nums = {}, set()
@@ -249,6 +249,8 @@ thead {{ display: table-header-group; }} tr {{ break-inside: avoid; }}
 .pb {{ break-after: page; }}
 {_numbering_css(doc)}
 """
+    if inline_note_marks and not page_layout:
+        css += ".note > div:first-of-type { display: inline; }"
     if page_layout:
         css += """
 .page-columns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10mm; }

@@ -91,6 +91,13 @@ def cmd_pilot_readback(a) -> int:
     return 0
 
 
+def cmd_pilot_physical_lines(a) -> int:
+    from .pilot_lines import audit
+
+    print(json.dumps(audit(a.run, a.out), ensure_ascii=True, indent=1))
+    return 0
+
+
 def cmd_pilot_matrix(a) -> int:
     from .pilot_matrix import run
 
@@ -138,6 +145,10 @@ def main(argv: list[str] | None = None) -> int:
     pr = sub.add_parser("pilot-readback", help="audit saved synthetic pilot PDFs without rerunning producers")
     pr.add_argument("run", type=Path, help="saved pilot directory")
     pr.set_defaults(func=cmd_pilot_readback)
+    lines = sub.add_parser("pilot-physical-lines", help="verify wrapped TRAIN reference lines")
+    lines.add_argument("run", type=Path, help="saved projection-screened pilot directory")
+    lines.add_argument("--out", type=Path, required=True, help="new private directory for exact line sidecars")
+    lines.set_defaults(func=cmd_pilot_physical_lines)
     pm = sub.add_parser("pilot-matrix", help="run the implemented downstream routes on audited native PDFs")
     pm.add_argument("run", type=Path, help="saved pilot directory")
     pm.add_argument("--native-audit", type=Path, required=True, help="pilot-readback JSON for this pilot")
