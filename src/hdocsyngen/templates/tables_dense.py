@@ -11,6 +11,9 @@ own cell. Variants, drawn per matrix:
 - a one-line header above the name column (half the matrices; then it is header row 0);
 - values: whole numbers (2–120) or half steps (5.0–40.5);
 - rulings: none, or rows.
+
+Names are one word and pages are landscape, so each diagonal label fits its value column (a wrapped label has no
+unique glyph order for the geometry verifier).
 """
 from __future__ import annotations
 
@@ -20,12 +23,13 @@ from . import Builder, table_from_rows
 from .tables import _label
 
 ROWS = (15, 22)
+NAME_WIDTH = 3.0  # the name column, in value-column widths
 
 
 def staircase(b: Builder) -> Table:
     rng = b.rng
     n = rng.randint(*ROWS)
-    names = [_label(b, 1, 2) for _ in range(n)]
+    names = [_label(b, 1, 1) for _ in range(n)]  # one word: a diagonal label fits its value column
     halves = rng.random() < 0.5
 
     def value() -> str:
@@ -45,7 +49,10 @@ def staircase(b: Builder) -> Table:
         if k < n - 1:
             row.append(names[k])
         rows.append(row + [""] * (cols - len(row)))
-    return table_from_rows(b, rows, header_rows=header_rows, ruled=rng.choice(["none", "none", "rows"]))
+    table = table_from_rows(b, rows, header_rows=header_rows, ruled=rng.choice(["none", "none", "rows"]))
+    # The name column is wide; value columns are narrow, as printed matrices are (equal widths wrap every name).
+    table.col_widths = [NAME_WIDTH] + [1.0] * (cols - 1)
+    return table
 
 
 def build(doc_id: str, seed: int, pool: TextPool) -> Document:
@@ -58,5 +65,6 @@ def build(doc_id: str, seed: int, pool: TextPool) -> Document:
         body.append(staircase(b))
     furniture = Furniture(header=[b.para([Run(title)], align="end")],
                           footer=[b.para([Run("1", "num", field="page")], align="center")])
-    return Document(doc_id=doc_id, meta=b.meta("tables_dense", "tables"), body=body, notes=b.notes,
-                    furniture=furniture)
+    meta = b.meta("tables_dense", "tables")
+    meta.orientation = "landscape"  # room for 15-22 value columns
+    return Document(doc_id=doc_id, meta=meta, body=body, notes=b.notes, furniture=furniture)
