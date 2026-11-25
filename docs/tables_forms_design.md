@@ -64,3 +64,21 @@ The codes come from heocr-agent-wiki `records/tables/phase0-2026-11-25`.
 - **(e) A cross-page table** is one table. A repeated header is kept once, and `pages` is `[first, last]`. `page_breaks` records the logical row index at which each new page starts, for the stitch measure; it comes from `table_export.page_breaks` on a producer layer.
 - **(f) Footnote markers** stay in the cell text as printed. The footnote text below the table is not part of the table.
 - **(g) Empty cells** are explicit (`""`), and merged header cells follow the print.
+
+## Layer faults (PR 3): `hdocsyngen.layer_faults`
+
+A post-process on producer PDFs. The page looks the same and the gold stays unchanged; only the text layer changes.
+
+- **How:** the producer's text is turned into outlines (Ghostscript `-dNoOutputFonts`). For `hidden_ocr` the page is rasterised instead. An invisible text layer (render mode 3) is then written over it from the producer's own characters, positions and order, with the faults applied. The layer font must be an open family and never a held-out one; this is checked.
+- **Faults:**
+  - `visual_order` (F9): each Hebrew word's letters sit at mirrored positions, so a reader gets the word backwards.
+  - `split_runs` (F5): about 30% of the words get a gap inside them, so readers break them.
+  - `drop_dots`: a decimal point between digits is drawn but missing from the layer.
+  - `hidden_ocr` (F1): an image-only page with an invisible layer up to 1.5 pt off.
+- **Record:** `OUT.faults.json` holds the faults, seed, font and per-page counts.
+- **Check:** `layer_faults.check(original, faulted)` reports, per page, the share of visibly changed pixels and the characters the layer lost or gained.
+- **Known limit:** a rebuild with no faults reads the same as the producer's page, except around brackets that RTL text mirrors (`(1)`). There pdfium orders the rebuilt runs differently. heocr's bracket repair covers that case.
+- **Use:**
+  - CLI: `python -m hdocsyngen.layer_faults IN.pdf OUT.pdf --font FONT --faults visual_order,split_runs --seed S`.
+  - Install with the `faults` extra, plus Ghostscript.
+  - TRAIN pages made with it go through heocr-clean as usual.
