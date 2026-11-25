@@ -138,3 +138,5 @@ to continue in the same output directory. A complete slot resumes only
 if its source, tool and artifact hashes still match. Use a new output
 directory when the recipe or tool versions change. The output contains
 generation and reader diagnostics. It is for synthetic pilot analysis.
+
+[Native TRAIN producer matrix follow-up](producer_matrix_train_pilot.md) records the current three-producer pilot and its hold.
