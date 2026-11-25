@@ -50,6 +50,9 @@ The codes come from heocr-agent-wiki `records/tables/phase0-2026-11-25`.
 - **Scoring:** defined in heocr-bench.
   - **Field/value F1:** fields are matched one-to-one within each form by a Hungarian assignment on label similarity, then each match is checked for exact label and value after normalisation. The scorer strips one trailing colon or dash from labels. Results are pooled per document, with a document bootstrap.
   - **Section-tree similarity:** TEDS over form → section → field-label nodes, with values excluded.
+- **Implementation (PR 5):** the `forms` template (`templates/forms.py`) draws a form with ordinary blocks: headings for section titles, paragraphs for line fields, check marks and choices, and tables for box and cell fields and for item tables inside a form. The structure goes in `Document.forms` (tree) and `gold["forms"]`, where each field names the paragraphs that print it. `form_export.export(gold, producer_gold=None)` writes `hdoc_form.v1`, with pages taken from a producer layer.
+  - **Check marks** are "[X]"/"[ ]" or "(X)"/"( )": none of the open Hebrew families draws ☐/☒, and `fit_font` needs one family for every character.
+  - **Values** are only fictional: the standard sample names of Israeli forms, "לדוגמה" places, `values.py` IDs, dates, amounts and example.com addresses. There are no phone numbers.
 - **Generated forms are DEV and training only.** The same schema serves the real held-out gold, but generated forms are never scored as results.
 
 ## Gold conventions for 0032 (agreed with eval, 2026-11-25)

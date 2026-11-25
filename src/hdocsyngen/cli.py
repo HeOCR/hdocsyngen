@@ -1,6 +1,6 @@
 """hdocsyngen command line.
 
-  hdocsyngen build --template tender --seed 7 --pool pool.jsonl --out out/   # tree, gold and DOCX for one or more seeds
+  hdocsyngen build --template tender --seed 7 --pool pool.jsonl --out out/   # tree, gold and DOCX for one or more seeds (templates: tender, report, tables, forms)
   hdocsyngen verify-docx tree.json file.docx                               # check a (producer-saved) DOCX against a tree
 """
 from __future__ import annotations

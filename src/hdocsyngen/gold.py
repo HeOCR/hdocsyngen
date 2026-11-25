@@ -145,4 +145,5 @@ def gold(doc: Document, tree_json: str | None = None) -> dict:
     return {"schema": GOLD_SCHEMA, "doc_id": doc.doc_id, "template": doc.meta.template, "look": doc.meta.look,
             "seed": doc.meta.seed, "text_sources": doc.meta.text_sources,
             "reading_order": order, "blocks": blocks, "tables": tables, "notes": notes, "furniture": furniture,
+            **({"forms": [dict(f) for f in doc.forms]} if doc.forms else {}),
             "label_basis": "model", "lineage": lineage}
