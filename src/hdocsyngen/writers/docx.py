@@ -25,6 +25,7 @@ PAGE = {"A4": (11906, 16838), "Letter": (12240, 15840)}
 DOCX_EPOCH = (1980, 1, 1, 0, 0, 0)
 XML_DECL = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n'
 JC = {"start": None, "justify": "both", "center": "center", "end": "end"}
+PAGE_STYLE = {"list": "PageList", "letterhead": "PageLetterhead"}
 STYLE_OF = {"title": "Title"}
 
 
@@ -166,7 +167,7 @@ def _table(t: Table, notes: _Notes, kinds: dict[str, str], text_width: int) -> s
     return f"<w:tbl>{tblpr}<w:tblGrid>{grid}</w:tblGrid>{''.join(rows)}</w:tbl>"
 
 
-def _styles(doc: Document) -> str:
+def _styles(doc: Document, page_layout: bool = False) -> str:
     f = escape(doc.meta.font)
     sz = int(doc.meta.font_size_pt * 2)
     heads = "".join(
@@ -179,6 +180,14 @@ def _styles(doc: Document) -> str:
         return (f'<w:style w:type="{kind}" w:styleId="{sid}"><w:name w:val="{name}"/>'
                 + ('<w:basedOn w:val="Normal"/>' if kind == "paragraph" else "")
                 + (f"<w:pPr>{ppr}</w:pPr>" if ppr else "") + (f"<w:rPr>{rpr}</w:rPr>" if rpr else "") + "</w:style>")
+    page_styles = ""
+    if page_layout:
+        page_styles = (
+            simple("PageLetterhead", "page letterhead",
+                   '<w:pBdr><w:bottom w:val="single" w:sz="4" w:space="4" w:color="555555"/></w:pBdr>'
+                   '<w:spacing w:after="180"/>', '<w:b/><w:bCs/>')
+            + simple("PageList", "page list", '<w:ind w:right="230"/><w:spacing w:after="75"/>')
+        )
     small = f'<w:sz w:val="{sz - 4}"/><w:szCs w:val="{sz - 4}"/>'
     sup = '<w:vertAlign w:val="superscript"/>'
     return (XML_DECL + f'<w:styles {NS}><w:docDefaults><w:rPrDefault><w:rPr>'
@@ -189,6 +198,7 @@ def _styles(doc: Document) -> str:
             f'<w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:qFormat/>'
             f'<w:pPr><w:bidi/></w:pPr></w:style>'
             + heads
+            + page_styles
             + simple("Title", "Title", '<w:jc w:val="center"/><w:spacing w:after="200"/>',
                      f'<w:b/><w:bCs/><w:sz w:val="{sz + 12}"/><w:szCs w:val="{sz + 12}"/>')
             + simple("FootnoteText", "footnote text", '<w:spacing w:after="0"/>', small)
@@ -250,7 +260,8 @@ def _hf(paras, tag: str, style: str, notes, kinds) -> str:
     return XML_DECL + f"<w:{tag} {NS}>{body}</w:{tag}>"
 
 
-def write(doc: Document, twin: bool = False) -> bytes:
+def write(doc: Document, twin: bool = False, *, page_layout: bool = False,
+          second_column_at: str | None = None) -> bytes:
     """The DOCX. With `twin`, every block's runs get its near-black twin colour (tree.twin_colours)."""
     COLOURS.clear()
     if twin:
@@ -264,12 +275,15 @@ def write(doc: Document, twin: bool = False) -> bytes:
     text_width = pw - 2 * margin
     body = []
     for b in doc.body:
+        if b.id == second_column_at:
+            body.append('<w:p><w:r><w:br w:type="column"/></w:r></w:p>')
         if isinstance(b, PageBreak):
             body.append('<w:p><w:r><w:br w:type="page"/></w:r></w:p>')
         elif isinstance(b, Table):
             body.append(_table(b, notes, kinds, text_width))
         else:
-            body.append(_para(b, notes, kinds))
+            style = PAGE_STYLE.get(b.style) if page_layout and isinstance(b, Paragraph) else None
+            body.append(_para(b, notes, kinds, style))
     orient = ' w:orient="landscape"' if doc.meta.orientation == "landscape" else ""
     cols = f'<w:cols w:num="{doc.meta.columns}" w:space="567"/>' if doc.meta.columns > 1 else '<w:cols w:space="708"/>'
     sect = (f'<w:sectPr><w:headerReference w:type="default" r:id="rIdHeader1"/>'
@@ -326,7 +340,7 @@ def write(doc: Document, twin: bool = False) -> bytes:
            '<Application>hdocsyngen</Application></Properties>')
     parts = [("[Content_Types].xml", ct), ("_rels/.rels", root_rels), ("docProps/core.xml", core),
              ("docProps/app.xml", app), ("word/document.xml", document), ("word/_rels/document.xml.rels", rels),
-             ("word/styles.xml", _styles(doc)), ("word/numbering.xml", _numbering(doc)),
+             ("word/styles.xml", _styles(doc, page_layout)), ("word/numbering.xml", _numbering(doc)),
              ("word/settings.xml", settings), ("word/footnotes.xml", footnotes), ("word/endnotes.xml", endnotes),
              ("word/header1.xml", header), ("word/footer1.xml", footer)]
     buf = io.BytesIO()

@@ -10,6 +10,7 @@ import re
 from . import producers
 from .fonts import EXCLUSION_PATH, Registry
 from .literal_verify import declared_glyphs, literal, reader_versions, source_pages, verify_pdf
+from .page_verify import body_columns, verify_page
 from .tree import loads, text_of
 from .writers import docx, html
 
@@ -34,11 +35,15 @@ def _versions():
     }
 
 
-def run(tree_root: Path, font_dirs: list[Path], output: Path) -> dict:
+def run(tree_root: Path, font_dirs: list[Path], output: Path, layout_plan: Path | None = None,
+        *, routes: tuple[str, ...] = NATIVE) -> dict:
     """Run all three producers for every tree, and emit page GT from verified PDFs."""
+    if not routes or len(set(routes)) != len(routes) or set(routes) - set(NATIVE):
+        raise ValueError("Unknown or repeated native producer routes")
     tree_paths = sorted(tree_root.glob("*.json"))
     if not tree_paths:
         raise ValueError("No source tree JSON files found")
+    plan = json.loads(layout_plan.read_bytes()) if layout_plan else None
     registry = Registry.scan(font_dirs)
     trees = []
     seen = set()
@@ -48,40 +53,50 @@ def run(tree_root: Path, font_dirs: list[Path], output: Path) -> dict:
         if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]*", tree.doc_id) or tree.doc_id in seen:
             raise ValueError("Unsafe or duplicate document ID")
         seen.add(tree.doc_id)
-        pages = source_pages(tree)
+        second_column_at = None
+        if plan is not None:
+            second_column_at = plan[tree.doc_id]
+            pages = body_columns(tree, second_column_at)
+            pages += [tree.furniture.header, tree.furniture.footer, *(note.paragraphs for note in tree.notes)]
+        else:
+            pages = source_pages(tree)
         faces = tuple(font for font in registry.files if font.family == tree.meta.font)
         declared = declared_glyphs(tree.meta.font, faces)
         if set(literal("".join(text_of(block) for page in pages for block in page))) - set().union(*declared.values()):
             raise ValueError(f"{tree.doc_id}: declared font coverage is incomplete")
-        trees.append((tree, source, faces))
+        trees.append((tree, source, faces, second_column_at))
 
+    if plan is not None and set(plan) != seen:
+        raise ValueError("Layout plan and tree IDs differ")
     versions = _versions()
     readers = reader_versions()
     output.mkdir(mode=0o700)
     rows = []
     failures = []
-    for tree, source, faces in trees:
+    for tree, source, faces, second_column_at in trees:
         folder = output / tree.doc_id
         folder.mkdir(mode=0o700)
         source_path = folder / f"{tree.doc_id}.tree.json"
         source_path.write_bytes(source)
         docx_path = folder / f"{tree.doc_id}.docx"
-        docx_path.write_bytes(docx.write(tree))
+        docx_path.write_bytes(docx.write(tree, page_layout=plan is not None, second_column_at=second_column_at))
         html_path = folder / f"{tree.doc_id}.html"
-        html_path.write_bytes(html.write(tree, embedded_fonts=faces))
+        html_path.write_bytes(html.write(tree, embedded_fonts=faces, page_layout=plan is not None,
+                                        second_column_at=second_column_at))
         calls = {
             "word": (producers.word_convert, docx_path, {"outputs": ("pdf",)}),
             "lo": (producers.lo_convert, docx_path, {"outputs": ("pdf",)}),
             "chrome": (producers.chrome_convert, html_path, {}),
         }
-        for route in NATIVE:
+        for route in routes:
             convert, render_source, opts = calls[route]
             try:
                 receipt = convert(render_source, folder.resolve(), **opts)
                 if any(receipt[k] != pin for k, pin in versions[route].items()):
                     raise producers.VersionChanged(f"{route} version differs from the run pin")
                 pdf = folder / receipt["outputs"]["pdf"]["path"]
-                audit = verify_pdf(pdf, tree, faces)
+                audit = (verify_page(pdf, tree, faces, second_column_at) if plan is not None
+                         else verify_pdf(pdf, tree, faces))
                 if audit["pdf_sha256"] != receipt["outputs"]["pdf"]["sha256"] or not audit["pdf_producer_signature"]:
                     raise ValueError("Missing PDF producer signature or PDF changed during verification")
             except (producers.VersionChanged, KeyboardInterrupt):
@@ -119,10 +134,12 @@ def run(tree_root: Path, font_dirs: list[Path], output: Path) -> dict:
         "reader_versions": readers,
         "trees": len(trees),
         "verified_slots": len(rows),
-        "expected_slots": len(trees) * len(NATIVE),
+        "expected_slots": len(trees) * len(routes),
         "pages": sum(row["pages"] for row in rows),
         "rows": rows,
         "failures": failures,
     }
+    if layout_plan:
+        result["layout_plan_sha256"] = _sha(layout_plan)
     _write(output / "manifest.json", result)
     return result

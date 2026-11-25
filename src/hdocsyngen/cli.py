@@ -102,7 +102,7 @@ def cmd_pilot_matrix(a) -> int:
 def cmd_native_pilot(a) -> int:
     from .native_pilot import run
 
-    result = run(a.trees, a.font_dir, a.out)
+    result = run(a.trees, a.font_dir, a.out, a.layout_plan)
     print(json.dumps({key: result[key] for key in ("trees", "expected_slots", "verified_slots", "pages")}))
     return 1 if result["failures"] else 0
 
@@ -149,6 +149,8 @@ def main(argv: list[str] | None = None) -> int:
     native.add_argument("--trees", type=Path, required=True, help="directory of approved source tree JSON files")
     native.add_argument("--font-dir", type=Path, action="append", required=True, help="open declared fonts")
     native.add_argument("--out", type=Path, required=True, help="new local output directory")
+    native.add_argument("--layout-plan", type=Path,
+                        help="JSON object mapping one-page tree IDs to the first left-column block ID or null")
     native.set_defaults(func=cmd_native_pilot)
     a = ap.parse_args(argv)
     if a.cmd == "pdf-readback" and (a.tree is None) != (a.twin is None):
