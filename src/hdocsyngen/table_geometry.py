@@ -7,13 +7,14 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 from .fonts import FontFile
+from .form_export import export as export_forms
 from .gold import gold
 from .layout import blocks_meta, printed
 from .literal_verify import _verified_lines, _visual_rows, declared_glyphs
 from .pdfcheck import _chars
 from .readers.literal_pdf import painted_pages, position_index
 from .table_export import to_heocr_table
-from .tree import Cell, Document, Table, dumps, validate
+from .tree import Cell, Document, Heading, Paragraph, Table, dumps, twin_colours, validate
 
 
 @dataclass(frozen=True)
@@ -53,8 +54,8 @@ def marker_css(markers: tuple[CellMarker, ...]) -> dict[tuple[str, int, int], st
 
 
 def _trace(page):
-    return [(span["font"], span["size"], span["chars"]) for span in page.get_texttrace()
-            if span["type"] in (0, 1) and span["opacity"] > 0]
+    return [(span["font"], span["size"], char) for span in page.get_texttrace()
+            if span["type"] in (0, 1) and span["opacity"] > 0 for char in span["chars"]]
 
 
 def _visible_boxes(page, marker_by_colour):
@@ -124,16 +125,82 @@ def _table_gold(tree, printed_pages):
     return result
 
 
+def _block_boxes(tree, twin, painted, declared):
+    """Read standalone printed form blocks from their twin paragraph colours."""
+    colour = twin_colours(tree)
+    paragraphs = {b.id: b for b in tree.body if isinstance(b, (Heading, Paragraph))}
+    by_colour = {colour[key]: key for key in paragraphs}
+    slots = defaultdict(list)
+    for page, glyph in _chars(twin):
+        if not glyph.text.isspace() and glyph.rgb in by_colour:
+            slots[page, by_colour[glyph.rgb]].append(glyph)
+    observed = defaultdict(list)
+    seen = set()
+    for (page, key), glyphs in slots.items():
+        if key in seen:
+            raise ValueError(f"Standalone form block {key} spans pages")
+        seen.add(key)
+        lines = list(_verified_lines(_visual_rows(glyphs), [paragraphs[key]], position_index(painted[page-1]), declared))
+        observed[page].append({"id": key, "lines": lines})
+    if seen != paragraphs.keys():
+        raise ValueError("A standalone form block has no printed glyph witness")
+    return observed
+
+
+def _form_gold(tree, printed_pages, tables):
+    authored = gold(tree)
+    block_pages = defaultdict(set)
+    for page in printed_pages:
+        parts = defaultdict(list)
+        for cell in page["cells"]:
+            for block in cell["paragraph_ids"]:
+                parts[block].append(cell["bbox_pt"])
+        height = page["size_pt"][1]
+        for block in page["form_blocks"]:
+            boxes = [line["bbox_pt_bottom_left"] for line in block["lines"]]
+            block["bbox_pt"] = [min(b[0] for b in boxes), height - max(b[3] for b in boxes),
+                                max(b[2] for b in boxes), height - min(b[1] for b in boxes)]
+            parts[block["id"]].append(block["bbox_pt"])
+        for block in parts:
+            block_pages[block].add(page["page"])
+        page["fields"] = []
+        for form in authored["forms"]:
+            for field in _children(form["sections"], "field"):
+                boxes = sorted({tuple(box) for block in field["paragraphs"] for box in parts.get(block, [])})
+                if boxes:
+                    page["fields"].append({"field_id": field["id"], "boxes_pt": boxes})
+
+    for form in authored["forms"]:
+        for field in _children(form["sections"], "field"):
+            if not field["paragraphs"] or any(b not in block_pages for b in field["paragraphs"]):
+                raise ValueError(f"Form field {field['id']} is missing a printed source block")
+    output = export_forms(authored, {"blocks": [{"id": key, "pages": sorted(where)}
+                                                 for key, where in block_pages.items()]})
+    by_id = {table["id"]: table for table in tables}
+    for form in output:
+        for child in _children(form["sections"], "table"):
+            child["table"] = by_id[child["table"]["id"]]
+    return output
+
+
+def _children(nodes, wanted):
+    for node in nodes:
+        if node.get("type") == wanted:
+            yield node
+        yield from _children(node.get("children", ()), wanted)
+
+
 def observe(pdf: Path, twin: Path, tree: Document, faces: tuple[FontFile, ...]) -> dict:
     """Require position-identical twin glyphs and literal readback inside each cell."""
     import pymupdf
 
     cells = markers(tree)
-    if not cells:
-        raise ValueError("Table geometry requires at least one source table")
+    if not cells and not tree.forms:
+        raise ValueError("Structure geometry requires a source table or form")
     by_colour = {marker.colour: marker for marker in cells}
     declared = declared_glyphs(tree.meta.font, faces)
     _, painted = painted_pages(pdf)
+    form_blocks = _block_boxes(tree, twin, painted, declared) if tree.forms else {}
     glyphs = defaultdict(list)
     for page, glyph in _chars(pdf):
         if not glyph.text.isspace():
@@ -157,13 +224,16 @@ def observe(pdf: Path, twin: Path, tree: Document, faces: tuple[FontFile, ...]) 
                     "span": [marker.cell.rowspan, marker.cell.colspan],
                     "header": marker.cell.header,
                     "bbox_pt": list(box),
+                    "paragraph_ids": [p.id for p in marker.cell.paragraphs],
                     "lines": verified,
                 })
             rows.sort(key=lambda row: (row["bbox_pt"][1], -row["bbox_pt"][2]))
-            observed.append({"page": index + 1, "size_pt": list(page.rect.br), "cells": rows})
+            observed.append({"page": index + 1, "size_pt": list(page.rect.br), "cells": rows,
+                             "form_blocks": form_blocks.get(index + 1, [])})
     if checked_keys != {marker.key for marker in cells}:
         raise ValueError("The geometry twin did not paint every printed cell")
-    return {"tables": _table_gold(tree, observed), "pages": observed}
+    tables = _table_gold(tree, observed)
+    return {"tables": tables, "forms": _form_gold(tree, observed, tables) if tree.forms else [], "pages": observed}
 
 
 def render(tree: Document, faces: tuple[FontFile, ...], output: Path) -> dict:
@@ -173,15 +243,16 @@ def render(tree: Document, faces: tuple[FontFile, ...], output: Path) -> dict:
 
     if problems := validate(tree):
         raise ValueError(f"Invalid input tree: {problems[0]}")
-    if not markers(tree):
-        raise ValueError("Table geometry requires at least one source table")
+    if not markers(tree) and not tree.forms:
+        raise ValueError("Structure geometry requires a source table or form")
     declared_glyphs(tree.meta.font, faces)
     output.mkdir(exist_ok=False, parents=True)
     with TemporaryDirectory(prefix=".table-geometry-", dir=output.parent) as directory:
         scratch = Path(directory)
         native_html, twin_html = scratch / "native.html", scratch / "geometry.html"
         native_html.write_bytes(write(tree, embedded_fonts=faces))
-        twin_html.write_bytes(write(tree, embedded_fonts=faces, cell_colours=marker_css(markers(tree))))
+        twin_html.write_bytes(write(tree, twin=bool(tree.forms), embedded_fonts=faces,
+                                   cell_colours=marker_css(markers(tree))))
         native = chrome_convert(native_html, scratch)
         twin = chrome_convert(twin_html, scratch)
         if native["version"] != twin["version"]:

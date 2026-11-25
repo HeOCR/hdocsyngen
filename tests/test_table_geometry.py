@@ -1,6 +1,6 @@
 import pytest
 
-from hdocsyngen.table_geometry import _table_gold, marker_css, markers
+from hdocsyngen.table_geometry import _form_gold, _table_gold, marker_css, markers
 from hdocsyngen.templates import Builder, table_from_rows
 from hdocsyngen.textpool import TextPool
 from hdocsyngen.tree import Document
@@ -53,3 +53,19 @@ def test_continuation_counts_repeated_header_once_and_rejects_a_split_rowspan():
             page(1, [m for m in physical if m.cell.r < 2]),
             page(2, [m for m in physical if m.cell.r != 1]),
         ])
+
+
+def test_blank_form_value_keeps_its_cell_anchor():
+    tree, table = make_table([["כינוי", ""]], header_rows=0)
+    ids = [cell.paragraphs[0].id for cell in table.cells]
+    tree.forms = [{"id": "form-1", "title": "טופס מדגמי", "sections": [{
+        "title": None, "children": [{"type": "field", "id": "name", "kind": "text", "slot": "box",
+                                      "label": "כינוי", "value": "", "paragraphs": ids}],
+    }]}]
+    regions = [{"paragraph_ids": [key], "bbox_pt": [x, 30, x + 45, 50]}
+               for key, x in zip(ids, (80, 35), strict=True)]
+    printed = {"page": 1, "size_pt": [210, 297], "form_blocks": [], "cells": regions}
+    result, = _form_gold(tree, [printed], [])
+    field, = result["sections"][0]["children"]
+    assert field["value"] == "" and field["pages"] == [1]
+    assert printed["fields"] == [{"field_id": "name", "boxes_pt": [(35, 30, 80, 50), (80, 30, 125, 50)]}]
