@@ -22,6 +22,8 @@ test = ["pytest>=8"]
 fonts = ["fonttools==4.68.0"]
 pdf = ["pdfminer.six==20260107", "pypdfium2==5.15.2", "numpy>=2", "pillow>=11"]
 readback = ["PyMuPDF==1.27.2.3", "python-bidi==0.6.12"]
+# layer faults (PR 3): an invisible text layer over outlined or rasterised producer pages; Ghostscript must be on PATH
+faults = ["reportlab==5.1.1", "pypdf==7.1.1", "pypdfium2==5.15.2", "pillow>=11", "numpy>=2"]
 
 [project.scripts]
 hdocsyngen = "hdocsyngen.cli:main"
