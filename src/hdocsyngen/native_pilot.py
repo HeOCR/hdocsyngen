@@ -27,14 +27,6 @@ def _write(path: Path, payload: dict) -> None:
     path.write_text(data, encoding="utf-8")
 
 
-def _versions():
-    return {
-        "word": {"version": producers.word_version(), "bundle_version": producers.word_bundle_version()},
-        "lo": {"version": producers.lo_version()},
-        "chrome": {"version": producers.chrome_version()},
-    }
-
-
 def run(tree_root: Path, font_dirs: list[Path], output: Path, layout_plan: Path | None = None,
         *, routes: tuple[str, ...] = NATIVE) -> dict:
     """Run all three producers for every tree, and emit page GT from verified PDFs."""
@@ -68,7 +60,7 @@ def run(tree_root: Path, font_dirs: list[Path], output: Path, layout_plan: Path 
 
     if plan is not None and set(plan) != seen:
         raise ValueError("Layout plan and tree IDs differ")
-    versions = _versions()
+    versions = {route: producers.version_snapshot(route) for route in routes}
     readers = reader_versions()
     output.mkdir(mode=0o700)
     rows = []
@@ -92,8 +84,7 @@ def run(tree_root: Path, font_dirs: list[Path], output: Path, layout_plan: Path 
             convert, render_source, opts = calls[route]
             try:
                 receipt = convert(render_source, folder.resolve(), **opts)
-                if any(receipt[k] != pin for k, pin in versions[route].items()):
-                    raise producers.VersionChanged(f"{route} version differs from the run pin")
+                producers.require_receipt_version(route, receipt, versions[route])
                 pdf = folder / receipt["outputs"]["pdf"]["path"]
                 audit = (verify_page(pdf, tree, faces, second_column_at) if plan is not None
                          else verify_pdf(pdf, tree, faces))
@@ -125,7 +116,9 @@ def run(tree_root: Path, font_dirs: list[Path], output: Path, layout_plan: Path 
                 "lines": sum(len(page["lines"]) for page in audit["pages"]),
                 "check_methods": dict(Counter(page["check_method"] for page in audit["pages"])),
             })
-    if _versions() != versions:
+            if route == "word":
+                rows[-1]["bundle_version"] = receipt["bundle_version"]
+    if {route: producers.version_snapshot(route) for route in routes} != versions:
         raise producers.VersionChanged("Native producer version changed during the pilot")
     result = {
         "schema": "hdocsyngen.native_pilot.v1",

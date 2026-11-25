@@ -102,7 +102,8 @@ def producer_gold(g: dict, producer: str, r: dict, pdf_name: str) -> dict:
     return out
 
 
-def run_doc(template: str, seed: int, pool: TextPool, reg: F.Registry, out: Path, producers: list[str],
+def run_doc(template: str, seed: int, pool: TextPool, reg: F.Registry, out: Path,
+            version_pins: dict[str, dict[str, str]],
             image: bool, grain: bool) -> dict:
     doc_id = f"{template}-{seed}"
     d = out / doc_id
@@ -125,7 +126,7 @@ def run_doc(template: str, seed: int, pool: TextPool, reg: F.Registry, out: Path
            "producers": {}}
     plain_docx, twin_docx = d / f"{doc_id}.docx", d / f"{doc_id}.twin.docx"
     plain_html, twin_html = d / f"{doc_id}.html", d / f"{doc_id}.twin.html"
-    for prod in producers:
+    for prod, version_pin in version_pins.items():
         r: dict = {}
         try:
             if prod == "word":
@@ -147,6 +148,8 @@ def run_doc(template: str, seed: int, pool: TextPool, reg: F.Registry, out: Path
                 resaved, labels, unmatched = None, None, None
             else:
                 raise ValueError(prod)
+            for kind in ("plain", "twin"):
+                P.require_receipt_version(prod, r[kind], version_pin)
             if resaved is not None:
                 r["resaved_docx_check"] = verify_docx(doc, resaved.read_bytes())
             if labels is not None:
@@ -178,6 +181,9 @@ def run_doc(template: str, seed: int, pool: TextPool, reg: F.Registry, out: Path
         except P.VersionChanged:
             raise
         except Exception as e:                                   # a producer failure is a result, not a crash
+            for kind in ("plain", "twin"):
+                if kind in r:
+                    P.require_receipt_version(prod, r[kind], version_pin)
             r["error"] = f"{type(e).__name__}: {e}"
             r["traceback"] = traceback.format_exc(limit=3)
         rec["producers"][prod] = r
@@ -189,17 +195,20 @@ def run(spec: dict, out: Path) -> dict:
     if not shutil.which("pdftotext") or any(find_spec(module) is None for module in ("pymupdf", "bidi")):
         raise RuntimeError("pilot text read-back needs pdftotext (Poppler) and the readback extra")
     out.mkdir(parents=True, exist_ok=True)
+    if any(out.iterdir()):
+        raise ValueError("Use an empty output directory for the producer pilot")
     pool_sha = _sha(Path(spec["pool"]).read_bytes())
     if spec.get("pool_sha256") and spec["pool_sha256"] != pool_sha:
         raise ValueError(f"pool sha256 {pool_sha} is not the pinned {spec['pool_sha256']}")
     pool = TextPool.load(spec["pool"], spec.get("require_licence"))
     reg = F.Registry.scan([Path(p).expanduser() for p in spec["fonts_dirs"]])
     producers = spec.get("producers", ["word", "lo", "chrome"])
-    versions0 = {"word": P.word_version() if "word" in producers else None,
-                 "lo": P.lo_version() if "lo" in producers else None,
-                 "chrome": P.chrome_version() if "chrome" in producers else None}
+    if not producers or len(set(producers)) != len(producers):
+        raise ValueError("Missing or repeated pilot producers")
+    pins = {prod: P.version_snapshot(prod) for prod in producers}
+    versions0 = {prod: pins[prod]["version"] if prod in pins else None for prod in ("word", "lo", "chrome")}
     manifest = {"schema": "hdocsyngen_pilot.v0", "hdocsyngen": __version__, "spec": spec,
-                "pool_sha256": pool_sha, "versions": versions0,
+                "pool_sha256": pool_sha, "versions": versions0, "producer_builds": pins,
                 "fonts": [{"family": f.family, "file": Path(f.path).name, "postscript": f.postscript,
                            "sha256": f.sha256, "licence": F.OPEN_FAMILIES[f.family]} for f in reg.files],
                 "docs": []}
@@ -207,16 +216,19 @@ def run(spec: dict, out: Path) -> dict:
     for template, count in spec["templates"].items():
         for i in range(count):
             seed = spec["seed_base"] + (0 if template == "tender" else 100_000) + i
-            rec = run_doc(template, seed, pool, reg, out, producers, image=n < spec.get("image_sample", 0),
+            rec = run_doc(template, seed, pool, reg, out, pins, image=n < spec.get("image_sample", 0),
                           grain=n < spec.get("grain_sample", 0))
-            manifest["docs"].append({"doc_id": rec["doc_id"], "result": f"{rec['doc_id']}/{rec['doc_id']}.result.json"})
+            result_path = f"{rec['doc_id']}/{rec['doc_id']}.result.json"
+            manifest["docs"].append({"doc_id": rec["doc_id"], "result": result_path,
+                                     "result_sha256": _sha((out / result_path).read_bytes())})
             n += 1
             (out / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=1))
-    versions1 = {k: (getattr(P, f"{k}_version")() if v else None) for k, v in
-                 {"word": versions0["word"], "lo": versions0["lo"], "chrome": versions0["chrome"]}.items()}
-    if versions1 != versions0:
-        raise P.VersionChanged(f"{versions0} -> {versions1}")
-    manifest["versions_after"] = versions1
+    final_pins = {prod: P.version_snapshot(prod) for prod in pins}
+    if final_pins != pins:
+        raise P.VersionChanged(f"{pins} -> {final_pins}")
+    manifest["versions_after"] = {prod: final_pins[prod]["version"] if prod in final_pins else None
+                                  for prod in versions0}
+    manifest["producer_builds_after"] = final_pins
     (out / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=1))
     return manifest
 

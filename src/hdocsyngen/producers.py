@@ -59,6 +59,22 @@ def word_bundle_version() -> str:
     return plistlib.loads((WORD_APP / "Contents/Info.plist").read_bytes())["CFBundleVersion"]
 
 
+def version_snapshot(route: str) -> dict[str, str]:
+    """Identify a producer build using the same keys as an export receipt."""
+    if route == "word":
+        return {"version": word_version(), "bundle_version": word_bundle_version()}
+    if route == "lo":
+        return {"version": lo_version()}
+    if route == "chrome":
+        return {"version": chrome_version()}
+    raise ValueError(f"Unsupported producer: {route}")
+
+
+def require_receipt_version(route: str, receipt: dict, pin: dict[str, str]) -> None:
+    if any(receipt.get(key) != value for key, value in pin.items()):
+        raise VersionChanged(f"{route} export differs from the run's producer build")
+
+
 LABELS_SCRIPT = """
   set out to ""
   repeat with i from 1 to (count of paragraphs of d)

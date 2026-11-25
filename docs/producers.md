@@ -4,7 +4,7 @@
 
 | Route | Driver | Pin | Outputs |
 |---|---|---|---|
-| P1 Word for Mac | AppleScript (`osascript`). The work folder is Word's container, `~/Library/Containers/com.microsoft.Word/Data/hdocsyngen-pilot/`; outputs are copied out. | `get version` before and after every call; a change raises `VersionChanged` and the run is rerun | PDF (`save as … format PDF`, Quartz), Word-written DOCX, and each paragraph's list string (`*.word.labels.tsv`) |
+| P1 Word for Mac | AppleScript (`osascript`). The work folder is Word's container, `~/Library/Containers/com.microsoft.Word/Data/hdocsyngen-pilot/`; outputs are copied out. | Word's reported version and app bundle build before and after every call, recorded per document | PDF (`save as … format PDF`, Quartz), Word-written DOCX, and each paragraph's list string (`*.word.labels.tsv`) |
 | P2 LibreOffice | `soffice --headless` with a fresh `-env:UserInstallation` per call | `soffice --version` before and after | PDF, LibreOffice-written DOCX, UTF-8 text |
 | P5 Chrome for Testing | `--headless=new --print-to-pdf`, with a fresh profile per call. The binary is set by `HDOCSYNGEN_CHROME`. | `--version` before and after | PDF |
 | P9 print to image | pypdfium2 render, optional seeded grain and mottle, JPEG, img2pdf wrap | tool versions recorded | image-only PDF (+ page JPEGs) |
@@ -82,6 +82,12 @@ export HDOCSYNGEN_TOOLS_BIN=".../hdocsyngen-pilot-env/.venv/bin"
 hdocsyngen pilot --spec spec.json --out runs/pilot-v0
 hdocsyngen pilot-summary runs/pilot-v0
 ```
+
+Use an empty output directory for a new pilot. Each plain and colour-twin
+export must match the producer build pinned at the start of the run. A change
+aborts the pilot. The manifest binds the per-document result hashes and the
+reader replay checks the tree, writer input, build, and PDF against those
+receipts. Legacy pilots still replay using their recorded version pins.
 
 A saved PDF can be audited without rerunning its producer. Supply the tree and colour twin together to also check
 LTR tokens.
