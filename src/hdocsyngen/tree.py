@@ -150,6 +150,7 @@ class Document:
     furniture: Furniture = field(default_factory=Furniture)
     abstract_nums: list[AbstractNum] = field(default_factory=list)
     nums: list[Num] = field(default_factory=list)
+    forms: list[dict] = field(default_factory=list)   # hdoc_form.v1 structure over body blocks (templates/forms.py)
     schema: str = SCHEMA
 
 
@@ -200,7 +201,8 @@ def from_dict(d: dict) -> Document:
                             footer=[_para(p) for p in d["furniture"]["footer"]]),
         abstract_nums=[AbstractNum(id=a["id"], levels=[Level(**lv) for lv in a["levels"]]) for a in d["abstract_nums"]],
         nums=[Num(id=n["id"], abstract=n["abstract"], start_override={int(k): v for k, v in n["start_override"].items()})
-              for n in d["nums"]])
+              for n in d["nums"]],
+        forms=d.get("forms", []))
 
 
 def loads(s: str) -> Document:
@@ -307,6 +309,48 @@ def validate(doc: Document) -> list[str]:
                     problems.append(f"{b.id}: side-by-side blocks cannot have body row spans")
                 if b.rows - n_head < b.blocks:
                     problems.append(f"{b.id}: fewer body rows than blocks")
+    problems += _validate_forms(doc)
+    return problems
+
+
+FIELD_KINDS = ("text", "number", "date", "checkbox", "choice", "signature")
+FIELD_SLOTS = ("line", "box", "cell")
+
+
+def form_fields(children: list[dict]):
+    """Every field under a section's children, groups and nested sections included, in order."""
+    for ch in children:
+        if ch["type"] == "field":
+            yield ch
+        elif ch["type"] == "group":            # {"columns": n, "children": [...]}, as heocr-bench reads it
+            yield from form_fields(ch["children"])
+        elif ch["type"] == "section":
+            yield from form_fields(ch["children"])
+
+
+def _validate_forms(doc: Document) -> list[str]:
+    problems: list[str] = []
+    paras = {p.id for _, p in iter_paragraphs(doc)}
+    tables = {b.id for b in doc.body if isinstance(b, Table)}
+    for form in doc.forms:
+        seen: set[str] = set()
+        for section in form["sections"]:
+            for ch in section["children"]:
+                if ch["type"] == "table" and ch["table"] not in tables:
+                    problems.append(f"{form['id']}: missing table {ch['table']}")
+            for f in form_fields(section["children"]):
+                if f["id"] in seen:
+                    problems.append(f"{form['id']}: duplicate field {f['id']}")
+                seen.add(f["id"])
+                if f["kind"] not in FIELD_KINDS or f["slot"] not in FIELD_SLOTS:
+                    problems.append(f"{f['id']}: kind {f['kind']!r} / slot {f['slot']!r}")
+                if not isinstance(f["value"], str):
+                    problems.append(f"{f['id']}: value must be a string")
+                if f["kind"] == "checkbox" and f["value"] not in ("checked", "unchecked"):
+                    problems.append(f"{f['id']}: checkbox value {f['value']!r}")
+                missing = [p for p in f["paragraphs"] if p not in paras]
+                if missing or not f["paragraphs"]:
+                    problems.append(f"{f['id']}: printed by missing paragraphs {missing}")
     return problems
 
 
