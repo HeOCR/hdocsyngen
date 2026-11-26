@@ -7,7 +7,7 @@ from hashlib import sha256
 import json
 from pathlib import Path
 
-from . import pdfcheck
+from . import layout, pdfcheck
 from .literal_verify import _source_visual, _visual_rows, literal
 from .pilot_filter import PilotFilter
 from .pilot_readback import _owned_file, _pdf_from_receipt, _sha
@@ -23,6 +23,7 @@ class Line:
     source_span: tuple[int, int]
     label: str = ""
     marks: list[tuple[int, str]] = field(default_factory=list)
+    table_panel: int | None = None
 
     @property
     def bbox(self):
@@ -105,16 +106,71 @@ def _parts(rows, block, label):
     return output
 
 
+def _panel(origin_x: float, page_width: float, panels: int) -> int:
+    # Both writers give the table the full body width with equal side margins.
+    margin = 72 * 2 / 2.54
+    fraction = (page_width - margin - origin_x) / (page_width - 2 * margin)
+    return min(panels - 1, max(0, int(fraction * panels)))
+
+
+def _table_parts(block, by_page, page_widths, table, cell, panels, label=""):
+    """Verify each printed header copy independently and keep its RTL panel identity."""
+    repeated = cell.header and table.repeat_header
+    if panels and cell.header:
+        lines = []
+        for page, glyphs in sorted(by_page.items()):
+            copies = defaultdict(list)
+            for glyph in glyphs:
+                copies[_panel(glyph.origin[0], page_widths[page], table.blocks)].append(glyph)
+            if set(copies) != set(range(table.blocks)):
+                raise ValueError(f"Missing or misplaced side-by-side header copy: {block.id}")
+            for panel, values in sorted(copies.items()):
+                rows = [(page, row) for row in _visual_rows(values)]
+                lines.extend(replace(line, table_panel=panel) for line in _parts(rows, block, label))
+        if not lines and literal(text_of(block)):
+            raise ValueError(f"Missing side-by-side header: {block.id}")
+        return lines
+
+    rows = [(page, row) for page, glyphs in sorted(by_page.items()) for row in _visual_rows(glyphs)]
+    if repeated and len(by_page) > 1:
+        return [line for page, glyphs in sorted(by_page.items())
+                for line in _parts([(page, row) for row in _visual_rows(glyphs)], block, label)]
+    lines = _parts(rows, block, label)
+    if panels:
+        panel = (cell.r - panels["header_rows"]) // panels["rows_per_block"]
+        for line in lines:
+            if any(_panel(g.origin[0], page_widths[line.page], table.blocks) != panel for g in line.glyphs):
+                raise ValueError(f"Body cell is in the wrong side-by-side panel: {block.id}")
+            line.table_panel = panel
+    return lines
+
+
+def _recover_bare_field(loose, expected, container, page_height, block_id):
+    """Recover a single black Office page counter in the reserved margin."""
+    def in_margin(glyph):
+        y = glyph.origin[1]
+        return y < 45 if container == "footer" else y > page_height - 45
+
+    rows = _visual_rows([glyph for glyph in loose if in_margin(glyph)])
+    candidates = [row for row in rows if "".join(g.text for g in row) == expected]
+    if len(candidates) != 1:
+        raise ValueError(f"Missing or ambiguous page counter: {block_id}")
+    return candidates[0]
+
+
 def physical_lines(doc, plain: Path, twin: Path, gold: dict, pdf_sha: str) -> list[dict]:
     """Return exact logical line texts with plain-PDF geometry and source identities."""
     import pypdfium2 as pdfium
 
     with pdfium.PdfDocument(str(plain)) as pdf:
-        pages = len(pdf)
+        sizes = {i + 1: pdf.get_page_size(i) for i in range(len(pdf))}
+    pages = len(sizes)
+    page_widths = {page: size[0] for page, size in sizes.items()}
     colours = {colour_index(rgb): pid for pid, rgb in twin_colours(doc).items()}
     blocks = {block.id: (container, block) for container, block in iter_paragraphs(doc)}
-    cells = {p.id: f"{table.id}:{cell.r}:{cell.c}" for table in doc.body if isinstance(table, Table)
-             for cell in table.cells for p in cell.paragraphs}
+    table_cells = {p.id: (table, cell) for table in doc.body if isinstance(table, Table)
+                   for cell in table.cells for p in cell.paragraphs}
+    panels = {table.id: layout.blocks_meta(table) for table in doc.body if isinstance(table, Table)}
     labels = {item["id"]: item.get("label_producer") or item.get("label_model", "")
               for item in gold["blocks"]}
     by_block = defaultdict(lambda: defaultdict(list))
@@ -131,14 +187,23 @@ def physical_lines(doc, plain: Path, twin: Path, gold: dict, pdf_sha: str) -> li
         for page in range(1, pages + 1):
             glyphs = by_block[pid][page]
             if not glyphs:
-                raise ValueError(f"Missing coloured furniture on page {page}: {pid}")
-            recovered = [g for g in loose[page] if g.text.isdecimal()
-                         and any(abs(g.origin[1] - c.origin[1]) < 1.1 for c in glyphs)]
+                if any(literal(run.text) for run in block.runs if not run.field):
+                    raise ValueError(f"Missing coloured furniture on page {page}: {pid}")
+                expected = literal(text_of(_printed_block(block, page, pages)))
+                recovered = _recover_bare_field(loose[page], expected, container, sizes[page][1], pid)
+            else:
+                recovered = [g for g in loose[page] if g.text.isdecimal()
+                             and any(abs(g.origin[1] - c.origin[1]) < 1.1 for c in glyphs)]
             glyphs += recovered
             loose[page] = [g for g in loose[page] if g not in recovered]
 
     lines = []
     for pid, (container, block) in blocks.items():
+        if pid in table_cells and not block.notes:
+            table, cell = table_cells[pid]
+            lines.extend(_table_parts(block, by_block[pid], page_widths, table, cell, panels[table.id],
+                                      labels.get(pid, "").strip()))
+            continue
         rows = []
         lifted_marks = []
         for page, glyphs in sorted(by_block[pid].items()):
@@ -157,14 +222,7 @@ def physical_lines(doc, plain: Path, twin: Path, gold: dict, pdf_sha: str) -> li
                 line_rows = [(pg, row) for pg, row in rows if pg == page]
                 lines.extend(_parts(line_rows, _printed_block(block, page, pages), ""))
         else:
-            # A repeated table header has another copy of the same source block.
-            expected = len(pdfcheck._slot_order(text_of(block)))
-            total = sum(len(pdfcheck._slot_order(g.text)) for _, row in rows for g in row)
-            if container.startswith("t") and expected and total > expected:
-                for page in sorted(by_block[pid]):
-                    lines.extend(_parts([(pg, row) for pg, row in rows if pg == page], block, ""))
-            else:
-                lines.extend(_parts(rows, block, labels.get(pid, "").strip()))
+            lines.extend(_parts(rows, block, labels.get(pid, "").strip()))
 
     _attach_furniture_marks(lines, loose, blocks, labels)
     if sum(len(line.marks) for line in lines) != sum(len(block.notes) for _, block in blocks.values()):
@@ -174,8 +232,17 @@ def physical_lines(doc, plain: Path, twin: Path, gold: dict, pdf_sha: str) -> li
     # Preserve tree/table reading order by block, with header first and footer last.
     order = {pid: i for i, pid in enumerate(blocks)}
     rank = {"header": 0, "footer": 2}
-    lines.sort(key=lambda line: (line.page, rank.get(blocks[line.block_id][0], 1),
-                                 order[line.block_id], -line.bbox[3]))
+    table_order = {}
+    for pid, (table, _) in table_cells.items():
+        table_order.setdefault(table.id, order[pid])
+
+    def reading_order(line):
+        pid = line.block_id
+        container = blocks[pid][0]
+        group = table_order[container] if line.table_panel is not None else order[pid]
+        return line.page, rank.get(container, 1), group, line.table_panel or 0, order[pid], -line.bbox[3]
+
+    lines.sort(key=reading_order)
     for line in lines:
         ordinals[line.page] += 1
         body = line.body
@@ -184,9 +251,14 @@ def physical_lines(doc, plain: Path, twin: Path, gold: dict, pdf_sha: str) -> li
         text = (line.label + " " if line.label else "") + body
         if not line.bbox[0] < line.bbox[2] or not line.bbox[1] < line.bbox[3]:
             raise ValueError(f"Empty physical line box: {line.block_id}")
+        cell_ref = {}
+        if line.block_id in table_cells:
+            table, cell = table_cells[line.block_id]
+            cell_ref["cell_id"] = f"{table.id}:{cell.r}:{cell.c}"
+            if line.table_panel is not None:
+                cell_ref["table_panel"] = line.table_panel
         result.append({"page": line.page, "order": ordinals[line.page], "block_id": line.block_id,
-                       "container_id": blocks[line.block_id][0],
-                       **({"cell_id": cells[line.block_id]} if line.block_id in cells else {}),
+                       "container_id": blocks[line.block_id][0], **cell_ref,
                        "source_span": list(line.source_span),
                        "bbox_pt_bottom_left": list(line.bbox), "pdf_sha256": pdf_sha,
                        "text_sha256": sha256(text.encode()).hexdigest(), "text": text})

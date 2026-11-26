@@ -31,7 +31,7 @@ from .pilot_filter import PilotFilter
 from .templates import build
 from .templates import tender
 from .textpool import TextPool
-from .tree import dumps, validate
+from .tree import dumps, loads, validate
 from .verify import verify_docx
 from .writers import docx as DOCX
 from .writers import html as HTML
@@ -124,17 +124,29 @@ def producer_gold(g: dict, producer: str, r: dict, pdf_name: str) -> dict:
 
 def run_doc(template: str, seed: int, pool: TextPool, reg: F.Registry, out: Path,
             version_pins: dict[str, dict[str, str]],
-            image: bool, grain: bool, *, source=None, hold_lo_label: bool = False) -> dict:
+            image: bool, grain: bool, *, source=None, hold_lo_label: bool = False,
+            source_bytes: bytes | None = None) -> dict:
     doc = source if source is not None else build(template, f"{template}-{seed}", seed, pool)
     doc_id = doc.doc_id
     d = out / doc_id
     d.mkdir(parents=True, exist_ok=True)
-    font_files = F.fit_font(doc, reg, random.Random(seed))
+    if source_bytes is None:
+        font_files = F.fit_font(doc, reg, random.Random(seed))
+        tj = dumps(doc)
+    else:
+        tj = source_bytes.decode("utf-8")
+        if source is None or loads(tj) != doc:
+            raise ValueError("Pinned source bytes and input tree differ")
+        font_files = reg.manifest(doc.meta.font)
+        if (doc.meta.font in F.HELD_OUT_FAMILIES
+                or any(face["sha256"] in F.HELD_OUT_SHA256 for face in font_files)):
+            raise F.HeldOutFontError(f"{doc_id}: pinned source uses a held-out font")
+        if not font_files or reg.missing(doc.meta.font, F.doc_chars(doc)):
+            raise ValueError(f"{doc_id}: pinned open font does not cover the source")
     problems = validate(doc)
     if problems:
         return {"doc_id": doc_id, "error": f"invalid tree: {problems[:3]}"}
     allowed = reg.postscript_names(doc.meta.font)
-    tj = dumps(doc)
     gold_doc = gold(doc, tj)
     files = {"tree.json": tj.encode(), "gold.json": json.dumps(gold_doc, ensure_ascii=False, indent=1).encode(),
              "docx": DOCX.write(doc), "twin.docx": DOCX.write(doc, twin=True),
