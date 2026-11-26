@@ -98,6 +98,14 @@ def cmd_pilot_physical_lines(a) -> int:
     return 0
 
 
+def cmd_pilot_structured_readback(a) -> int:
+    from .structured_readback import run
+
+    result = run(a.run, a.out)
+    print(json.dumps({key: result[key] for key in ("expected_slots", "verified_slots")}))
+    return int(result["expected_slots"] != result["verified_slots"])
+
+
 def cmd_pilot_matrix(a) -> int:
     from .pilot_matrix import run
 
@@ -149,6 +157,10 @@ def main(argv: list[str] | None = None) -> int:
     lines.add_argument("run", type=Path, help="saved projection-screened pilot directory")
     lines.add_argument("--out", type=Path, required=True, help="new private directory for exact line sidecars")
     lines.set_defaults(func=cmd_pilot_physical_lines)
+    sr = sub.add_parser("pilot-structured-readback", help="verify native PDF text, tables and forms")
+    sr.add_argument("run", type=Path, help="saved pilot directory")
+    sr.add_argument("--out", type=Path, required=True, help="new private directory for exact line and structure sidecars")
+    sr.set_defaults(func=cmd_pilot_structured_readback)
     pm = sub.add_parser("pilot-matrix", help="run the implemented downstream routes on audited native PDFs")
     pm.add_argument("run", type=Path, help="saved pilot directory")
     pm.add_argument("--native-audit", type=Path, required=True, help="pilot-readback JSON for this pilot")

@@ -1,0 +1,93 @@
+{
+  "by_producer": {
+    "chrome": {
+      "continued_tables": 5,
+      "forms": 24,
+      "held": 0,
+      "lines": 2340,
+      "ltr_slots": {
+        "forward": 1363,
+        "reversed": 0,
+        "unresolved": 0
+      },
+      "native_slots": 48,
+      "pages": 53,
+      "passed": 48,
+      "resaved_docx_diagnostics": 0,
+      "tables": 44
+    },
+    "lo": {
+      "continued_tables": 5,
+      "forms": 24,
+      "held": 0,
+      "lines": 2348,
+      "ltr_slots": {
+        "forward": 1363,
+        "reversed": 0,
+        "unresolved": 0
+      },
+      "native_slots": 48,
+      "pages": 55,
+      "passed": 48,
+      "resaved_docx_diagnostics": 0,
+      "tables": 44
+    },
+    "word": {
+      "continued_tables": 5,
+      "forms": 24,
+      "held": 0,
+      "lines": 2348,
+      "ltr_slots": {
+        "forward": 1363,
+        "reversed": 0,
+        "unresolved": 0
+      },
+      "native_slots": 48,
+      "pages": 55,
+      "passed": 48,
+      "resaved_docx_diagnostics": 0,
+      "tables": 44
+    }
+  },
+  "complete_trees": 48,
+  "cost_usd": 0,
+  "expected_slots": 144,
+  "hold_reasons": {},
+  "manifest_sha256": "bf50c296cb96d8db144494036ef7587593750af5b6dd0a3de090fe241da8a87c",
+  "preclean_candidate_pdfs": 144,
+  "producer_builds": {
+    "chrome": {
+      "version": "Google Chrome 158.0.8127.38"
+    },
+    "lo": {
+      "version": "LibreOffice 26.2.5.2 cd7284b4cbbfeb507e630c1aac019f4157393acb"
+    },
+    "word": {
+      "bundle_version": "16.115.26112215",
+      "version": "16.115.2"
+    }
+  },
+  "reader_versions": {
+    "pdfium": "159.0.8149.0@sourcebuild-toolchained",
+    "pdfminer.six": "20260107",
+    "poppler": "pdftotext version 26.07.0",
+    "pymupdf": "1.27.2.3",
+    "pypdfium2": "5.15.2",
+    "python-bidi": "0.6.12"
+  },
+  "roster_sha256": "219440a1b7e4a32d277e9e1dfb9de060aa197fb04a7c637d8a63caa9f4a37f30",
+  "schema": "hdocsyngen.native_structure_pilot_summary.v1",
+  "source_trees": 48,
+  "structure_audit_sha256": "2e8607462545895dc651f06b7b8ddbe184d75dceba02835ca66929703172ee6d",
+  "tree_variants": {
+    "forms": 24,
+    "grouped_header": 3,
+    "long": 5,
+    "matrix": 3,
+    "row_groups": 3,
+    "sections": 3,
+    "snake": 4,
+    "wrapped": 3
+  },
+  "verified_slots": 144
+}

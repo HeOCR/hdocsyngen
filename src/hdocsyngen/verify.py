@@ -75,6 +75,10 @@ def verify_docx(doc: Document, data: bytes, check_numbering: bool = True) -> lis
         problems.append(f"notes: {len(resolved)} anchors read, {len(note_seq_exp)} expected, or anchor/text differs")
     for kind in ("header", "footer"):
         exp = [text_of(p) for p in getattr(doc.furniture, kind)]
-        if got["furniture"][kind] != exp:
+        observed = got["furniture"][kind]
+        # Empty DOCX header/footer parts contain a placeholder paragraph.
+        if not exp and observed == [""]:
+            observed = []
+        if observed != exp:
             problems.append(f"{kind}: text differs")
     return problems

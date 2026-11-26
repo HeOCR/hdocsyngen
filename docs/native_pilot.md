@@ -34,3 +34,45 @@ Pass `--layout-plan layout.json` to verify one structured page per tree. The JSO
 The verifier assigns PDFium glyphs to the declared physical regions and checks every line against the corresponding logical block. Its order is header, right column, left column, footnote, footer. Raised footnote numbers are joined to their visible baseline. Numeric fields are checked against the actual page number. The amendment-3-style rules still apply to each eligible punctuation transition.
 
 `layout_record.image_record` exports the verified page in the `heocr_document.v1` contract. The ordered blocks carry region and line boxes in top-left points at the actual image DPI. Each line also carries its projected pixel polygon. The clean view uses native PDF coordinates. A Scanifier or 3D caller supplies the polygons from its warp or mesh projection. The image, native PDF, and exact logical text are bound in the pilot intake inventory. The contract can support layout and reading-order calibration and the separate TRAIN intake.
+
+## 0032 tables and forms across all three producers
+
+The design's [§9 native routes](https://github.com/HeOCR/hocrsyngen/blob/main/docs/document_generator_design.md#9-pilot-plan-after-this-note-is-reviewed)
+also support saved pilots with table and form source trees. Use the existing
+`tables` and `forms` generators. A caller replaying a pinned tree can pass
+the original bytes to `pilot.run_doc(source=tree, source_bytes=raw, ...)`.
+The driver checks that the bytes describe the supplied tree and keeps its
+declared open font. Each Word receipt records the app release and bundle
+build for that document.
+
+```sh
+hdocsyngen pilot-structured-readback /path/to/native-pilot --out /path/to/private-structure
+```
+
+The replay verifies the source and writer hashes, both native PDFs, and the
+source DOCX. PDFium starts with the extracted glyph coordinates and sorts each
+physical line left to right. The colour twin identifies the source paragraph,
+and the source span must match the resulting visual glyph sequence. A copied
+header is verified separately in each RTL side-by-side panel. Page-number
+fields are matched to the expected number in the physical margin. PDFMiner,
+Poppler and PyMuPDF cross-check each page's character inventory. Their
+stream orders and the left-to-right token checks are recorded separately.
+A reversed LTR token or incompatible inventory holds the route.
+
+The private sidecars contain the ordered physical lines with their source
+IDs, `heocr_table.v1` logical grids and `hdoc_form.v1` fields. Continued
+tables include observed pages and logical page breaks. Repeated headers
+keep the same logical identity. Blank cells stay explicit. Printed line
+boxes are ink anchors. The Chrome structure geometry work supplies ruled
+cell rectangles where the consumer also needs them.
+
+The audit records source and PDF pins for each verified route and returns a
+failure status if any route is held. Source projections, independent TRAIN
+CLEAN and authorization to stage are handled at intake.
+
+The [48-tree pilot receipt](native_structure_pilot.json) records 144 verified
+PDFs, 163 pages and 7,036 positional lines. It includes 24 table and 24 form
+trees, with 5 continued tables per route. The reader probe found 1,363
+forward LTR token slots per route, with zero reversed or unresolved slots.
+The pilot ran locally at $0. The source trees and generated assets are
+Mac-local and await independent TRAIN CLEAN.
